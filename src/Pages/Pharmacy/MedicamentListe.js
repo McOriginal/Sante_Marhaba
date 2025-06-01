@@ -1,0 +1,248 @@
+import React, { useState } from 'react';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Col,
+  Container,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Row,
+  UncontrolledDropdown,
+} from 'reactstrap';
+import Breadcrumbs from '../../components/Common/Breadcrumb';
+import FormModal from '../components/FormModal';
+
+import LoadingSpiner from '../components/LoadingSpiner';
+import {
+  capitalizeWords,
+  formatPhoneNumber,
+  formatPrice,
+} from '../components/capitalizeFunction';
+
+import { deleteButton } from '../components/AlerteModal';
+import {
+  useAllMedicament,
+  useDeleteMedicament,
+} from '../../Api/queriesMedicament';
+import MedicamentForm from './MedicamentForm';
+import imgMedicament from './../../assets/images/medicament.jpg';
+
+export default function MedicamentListe() {
+  const [form_modal, setForm_modal] = useState(false);
+  const { data: medicaments, isLoading, error } = useAllMedicament();
+  const { mutate: deleteMedicament } = useDeleteMedicament();
+  const [medicamentToUpdate, setMedicamentToUpdate] = useState(null);
+  const [formModalTitle, setFormModalTitle] = useState('Ajouter un Médicament');
+
+  function tog_form_modal() {
+    setForm_modal(!form_modal);
+  }
+  return (
+    <React.Fragment>
+      <div className='page-content'>
+        <Container fluid>
+          <Breadcrumbs title='Pharmacie' breadcrumbItem='Médicaments' />
+
+          {/* -------------------------- */}
+          <FormModal
+            form_modal={form_modal}
+            setForm_modal={setForm_modal}
+            tog_form_modal={tog_form_modal}
+            modal_title={formModalTitle}
+            size='md'
+            bodyContent={
+              <MedicamentForm
+                medicamentToEdit={medicamentToUpdate}
+                tog_form_modal={tog_form_modal}
+              />
+            }
+          />
+
+          {/* -------------------- */}
+          <Row>
+            <Col lg={12}>
+              <Card>
+                <CardBody>
+                  <div id='medicamentList'>
+                    <Row className='g-4 mb-3'>
+                      <Col className='col-sm-auto'>
+                        <div className='d-flex gap-1'>
+                          <Button
+                            color='info'
+                            className='add-btn'
+                            id='create-btn'
+                            onClick={() => {
+                              setMedicamentToUpdate(null);
+                              tog_form_modal();
+                            }}
+                          >
+                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            Ajouter un Médicament
+                          </Button>
+                        </div>
+                      </Col>
+                      <Col className='col-sm'>
+                        <div className='d-flex justify-content-sm-center'>
+                          <div className='search-box ms-2'>
+                            <input
+                              type='text'
+                              className='form-control search'
+                              placeholder='Search...'
+                            />
+                            <i className='ri-search-line search-icon'></i>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+          <Row>
+            {isLoading && <LoadingSpiner />}
+            {error && (
+              <div className='text-danger text-center'>
+                Erreur lors de chargement des données
+              </div>
+            )}
+            {!error && !isLoading && medicaments.length === 0 && (
+              <div className='text-center'>
+                Aucun Médicament dans la pharmacie
+              </div>
+            )}
+            {!error &&
+              !isLoading &&
+              medicaments?.length > 0 &&
+              medicaments?.map((medica) => (
+                <Col md={6}>
+                  <Card
+                    style={{
+                      boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
+                      borderRadius: '15px',
+                      height: '200px',
+                      padding: '10px 20px',
+                      display: 'flex',
+                      gap: '20px',
+                      flexDirection: 'row',
+                      flexWrap: 'nowrap',
+                      alignItems: 'center',
+                      position: 'relative',
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '5%',
+                        right: '5%',
+                      }}
+                    >
+                      <UncontrolledDropdown className='dropdown d-inline-block'>
+                        <DropdownToggle
+                          className='btn btn-soft-secondary btn-sm'
+                          tag='button'
+                        >
+                          <i className='bx bx-caret-down-square fs-2 text-info'></i>
+                        </DropdownToggle>
+                        <DropdownMenu className='dropdown-menu-end'>
+                          <DropdownItem
+                            className='edit-item-btn'
+                            onClick={() => {
+                              setFormModalTitle('Modifier les données');
+                              setMedicamentToUpdate(medica);
+                              tog_form_modal();
+                            }}
+                          >
+                            <i className='ri-pencil-fill align-bottom me-2 text-muted'></i>
+                            Modifier
+                          </DropdownItem>
+                          <DropdownItem
+                            className='remove-item-btn'
+                            onClick={() => {
+                              deleteButton(
+                                medica._id,
+                                medica.name,
+                                deleteMedicament
+                              );
+                            }}
+                          >
+                            {' '}
+                            <i className='ri-delete-bin-fill align-bottom me-2 text-muted'></i>{' '}
+                            Delete{' '}
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    </div>
+                    <img
+                      top
+                      className='img-fluid'
+                      style={{
+                        borderRadius: '15px 15px 0 0',
+                        height: '120px',
+                        width: '30%',
+                        objectFit: 'contain',
+                      }}
+                      src={medica.imageUrl ? medica.imageUrl : imgMedicament}
+                      alt={medica.name}
+                    />
+                    <CardTitle
+                      style={{
+                        position: 'absolute',
+                        bottom: '2%',
+                        left: '20%',
+                        fontSize: '18px',
+                      }}
+                    >
+                      {formatPrice(medica.price)} F
+                    </CardTitle>
+                    <CardBody>
+                      <CardTitle className='fs-6'>
+                        Nom:
+                        <span style={{ color: 'gray' }}>
+                          {' '}
+                          {capitalizeWords(medica.name)}
+                        </span>{' '}
+                      </CardTitle>
+                      <CardTitle className='fs-6'>
+                        Stock:
+                        <span style={{ color: 'gray' }}> {medica?.stock}</span>
+                      </CardTitle>
+                      <CardTitle className='fs-6'>
+                        Date d'arrivée:
+                        <span style={{ color: 'gray' }}>
+                          {' '}
+                          {new Date(medica?.deliveryDate).toLocaleDateString()}
+                        </span>
+                      </CardTitle>
+                      <CardTitle className='fs-6'>
+                        Fournisseur:
+                        <span style={{ color: 'gray' }}>
+                          {' '}
+                          {capitalizeWords(
+                            medica?.fournisseur['firstName']
+                          )}{' '}
+                          {capitalizeWords(medica?.fournisseur['lastName'])}
+                        </span>
+                      </CardTitle>
+                      <CardTitle className='fs-6'>
+                        Tél Fournisseur:
+                        <span style={{ color: 'gray' }}>
+                          {' '}
+                          {formatPhoneNumber(
+                            medica?.fournisseur['phoneNumber']
+                          )}
+                        </span>
+                      </CardTitle>
+                    </CardBody>
+                  </Card>
+                </Col>
+              ))}
+          </Row>
+        </Container>
+      </div>
+    </React.Fragment>
+  );
+}
