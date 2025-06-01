@@ -8,6 +8,7 @@ const traitementRoute = require('./routes/TraitementRoute');
 const chambreRoute = require('./routes/ChambreRoute');
 const medicamentRoute = require('./routes/MedicamentRoute');
 const ordonnanceRoute = require('./routes/OrdonnanceRoute');
+const paiementRoute = require('./routes/PaiementRoute');
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -52,6 +53,9 @@ app.use('/api/medicaments', medicamentRoute);
 
 // Utilisation des routes Ordonnance
 app.use('/api/ordonnances', ordonnanceRoute);
+
+// Utilisation des routes Ordonnance
+app.use('/api/paiements', paiementRoute);
 
 //  Exporter le fichier APP
 module.exports = app;

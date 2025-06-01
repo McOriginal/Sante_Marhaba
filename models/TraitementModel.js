@@ -65,7 +65,7 @@ const traitementSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestampe: true }
+  { timestamps: true }
 );
 
 const Traitement = mongoose.model('Traitement', traitementSchema);

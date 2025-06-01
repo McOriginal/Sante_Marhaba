@@ -5,17 +5,11 @@ const paiementController = require('../controller/PaiementController');
 // Créer
 router.post('/createPaiement', paiementController.createPaiement);
 
-// Trouvez un paiements
-router.get('/getPaiement/:id', paiementController.getPaiement);
-
 // Trouvez tous les paiements
 router.get('/getAllPaiements', paiementController.getAllPaiements);
 
-// Trouvez les paiements d'une etudiant
-router.get(
-  '/getStudentPaiement/:studentId',
-  paiementController.getPaiementsByStudent
-);
+// Trouvez un paiements
+router.get('/getOnePaiement/:id', paiementController.getPaiement);
 
 // Mettre à jour
 router.put('/updatePaiement/:id', paiementController.updatePaiement);

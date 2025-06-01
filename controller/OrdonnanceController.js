@@ -44,8 +44,14 @@ exports.createOrdonnance = async (req, res) => {
 exports.getAllOrdonnances = async (req, res) => {
   try {
     const ordonnances = await Ordonnance.find()
-      .populate('traitement')
+      .populate({
+        path: 'traitement',
+        populate: {
+          path: 'patient',
+        },
+      })
       .populate('items.medicaments');
+    console.log(ordonnances);
     return res.status(201).json(ordonnances);
   } catch (e) {
     return res.status(404).json(e);

@@ -1,37 +1,13 @@
-const Paiement = require('../models/paimentModel');
+const Paiement = require('../models/PaiementModel');
 
 // Enregistrer un paiement
 exports.createPaiement = async (req, res) => {
   try {
     const paiement = await Paiement.create(req.body);
-    res.status(201).json({ status: 'success', data: paiement });
+    res.status(201).json(paiement);
   } catch (err) {
     res.status(400).json({ status: 'error', message: err.message });
   }
-};
-
-// Historique des paiements d’un étudiant
-exports.getPaiement = async (req, res) => {
-  const paiements = await Paiement.findById(req.params.id)
-    .populate('student')
-    .populate('academicYear');
-  res.status(200).json({ status: 'success', data: paiements });
-};
-
-// Historique des paiements d’un étudiant
-exports.getPaiementsByStudent = async (req, res) => {
-  const paiements = await Paiement.find({ student: req.params.studentId })
-    .populate('student')
-    .populate('academicYear');
-  res.status(200).json({ status: 'success', data: paiements });
-};
-
-// Historique des paiements d’un étudiant
-exports.getAllPaiements = async (req, res) => {
-  const paiements = await Paiement.find()
-    .populate('student')
-    .populate('academicYear');
-  res.status(200).json({ status: 'success', data: paiements });
 };
 
 // Mettre à jour un paiement
@@ -41,10 +17,51 @@ exports.updatePaiement = async (req, res) => {
       new: true,
       runValidators: true,
     });
-    res.status(200).json({ status: 'success', data: updated });
+    res.status(200).json(updated);
   } catch (err) {
     res.status(400).json({ status: 'error', message: err.message });
   }
+};
+
+// Historique des paiements d’un étudiant
+exports.getAllPaiements = async (req, res) => {
+  try {
+    const paiements = await Paiement.find()
+      .populate({
+        path: 'traitement',
+        populate: {
+          path: 'patient',
+        },
+      })
+      .populate('ordonnance');
+    return res.status(200).json(paiements);
+  } catch (err) {
+    res.status(400).json({ status: 'error', message: err.message });
+  }
+};
+// Historique des paiements d’un étudiant
+exports.getPaiement = async (req, res) => {
+  try {
+    const paiements = await Paiement.findById(req.params.id)
+      .populate({
+        path: 'traitement',
+        populate: {
+          path: 'patient',
+        },
+      })
+      .populate('ordonnance');
+    return res.status(200).json(paiements);
+  } catch (err) {
+    res.status(400).json({ status: 'error', message: err.message });
+  }
+};
+
+// Historique des paiements d’un étudiant
+exports.getPaiementsByStudent = async (req, res) => {
+  const paiements = await Paiement.find({ student: req.params.studentId })
+    .populate('traitement')
+    .populate('ordonnance');
+  res.status(200).json({ status: 'success', data: paiements });
 };
 
 // Supprimer un paiement
