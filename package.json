@@ -1,0 +1,28 @@
+{
+  "name": "backend_gestion_ecole",
+  "version": "1.0.0",
+  "description": "projet de gestion d'ecole",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/McOriginal/Backend-Gestion-d-ecole.git"
+  },
+  "author": "Cisse Mohamed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/McOriginal/Backend-Gestion-d-ecole/issues"
+  },
+  "homepage": "https://github.com/McOriginal/Backend-Gestion-d-ecole#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2",
+    "nodemon": "^3.1.9"
+  }
+}
