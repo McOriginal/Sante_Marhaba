@@ -66,6 +66,27 @@ const SidebarData = [
   },
 
   // ----------------------------------------------------------------------
+  // Transactions
+  {
+    label: 'Paiements',
+    isMainMenu: true,
+  },
+  {
+    label: 'Transactions',
+    icon: 'mdi mdi-email-outline',
+    subItem: [
+      { sublabel: 'Faire un Paiement', link: '/paiements' },
+      { sublabel: 'Factures', link: '/facture' },
+    ],
+  },
+  {
+    label: 'Paiements',
+    icon: 'mdi mdi-calendar-outline',
+    isHasArrow: true,
+    url: '/paiements',
+  },
+
+  // ----------------------------------------------------------------------
   // Outils Médical
   {
     label: 'Matériels',

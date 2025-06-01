@@ -100,6 +100,8 @@ import Materiels from '../Pages/OutilsMedicals/MaterielsMedical.js';
 import MedicamentListe from '../Pages/Pharmacy/MedicamentListe.js';
 import NewOrdonance from '../Pages/Ordinance/NewOrdonance.js';
 import OrdonnanceListe from '../Pages/Ordinance/OrdonanceListe.js';
+import PaiementsListe from '../Pages/Paiements/PaiementsListe.js';
+import FactureDetails from '../Pages/Paiements/FactureDetails.js';
 
 const authProtectedRoutes = [
   //dashboard
@@ -125,6 +127,12 @@ const authProtectedRoutes = [
 
   // Fournisseurs
   { path: '/fournisseurs', component: <FournisseurListe /> },
+
+  // Transaction et Factures
+  { path: '/paiements', component: <PaiementsListe /> },
+
+  // Factures Liste
+  { path: '/facture/:id', component: <FactureDetails /> },
 
   // Calender
   { path: '/calendar', component: <Calender /> },

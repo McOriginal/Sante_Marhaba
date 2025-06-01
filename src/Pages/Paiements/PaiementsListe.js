@@ -1,32 +1,28 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Row,
-} from 'reactstrap';
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
-import DoctorForm from './DoctorForm';
-import { Link } from 'react-router-dom';
-import { useAllDoctors, useDeleteDoctor } from '../../Api/queriesDoctors';
+import { Link, useNavigate } from 'react-router-dom';
 import LoadingSpiner from '../components/LoadingSpiner';
-import {
-  capitalizeWords,
-  formatPhoneNumber,
-} from '../components/capitalizeFunction';
+import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import { deleteButton } from '../components/AlerteModal';
+import { useAllPaiements, useDeletePaiement } from '../../Api/queriesPaiement';
+import PaiementForm from './PaiementForm';
 
-export default function DoctorsListe() {
+export default function PaiementsListe() {
   const [form_modal, setForm_modal] = useState(false);
-  const { data: doctorsData, isLoading, error } = useAllDoctors();
-  const { mutate: deleteDoctor, isDeleting } = useDeleteDoctor();
-  const [doctorToUpdate, setDoctorToUpdate] = useState(null);
-  const [formModalTitle, setFormModalTitle] = useState('Ajouter un Médecin');
+  const { data: paiementsData, isLoading, error } = useAllPaiements();
+  const { mutate: deletePaiement, isDeleting } = useDeletePaiement();
+  const [paiementToUpdate, setpaiementToUpdate] = useState(null);
+  const [formModalTitle, setFormModalTitle] = useState('Ajouter un Paiement');
 
+  const navigate = useNavigate();
+
+  // Navigation ver la FACTURE avec ID de Paiement
+  const handlePaiementClick = (id) => {
+    navigate(`/facture/${id}`);
+  };
+  // Ouverture de Modal Form
   function tog_form_modal() {
     setForm_modal(!form_modal);
   }
@@ -34,7 +30,7 @@ export default function DoctorsListe() {
     <React.Fragment>
       <div className='page-content'>
         <Container fluid>
-          <Breadcrumbs title='Médecins' breadcrumbItem='List des médecins' />
+          <Breadcrumbs title='Transaction' breadcrumbItem='Paiements' />
 
           {/* -------------------------- */}
           <FormModal
@@ -44,8 +40,8 @@ export default function DoctorsListe() {
             modal_title={formModalTitle}
             size='md'
             bodyContent={
-              <DoctorForm
-                doctorToEdit={doctorToUpdate}
+              <PaiementForm
+                paiementToEdit={paiementToUpdate}
                 tog_form_modal={tog_form_modal}
               />
             }
@@ -56,7 +52,7 @@ export default function DoctorsListe() {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <div id='doctorsList'>
+                  <div id='paiementsList'>
                     <Row className='g-4 mb-3'>
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
@@ -65,12 +61,12 @@ export default function DoctorsListe() {
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
-                              setDoctorToUpdate(null);
+                              setpaiementToUpdate(null);
                               tog_form_modal();
                             }}
                           >
                             <i className='ri-add-line align-bottom me-1'></i>{' '}
-                            Ajouter un Médecin
+                            Ajouter un Paiement
                           </Button>
                         </div>
                       </Col>
@@ -94,99 +90,134 @@ export default function DoctorsListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {doctorsData?.length === 0 && (
+                      {paiementsData?.length === 0 && (
                         <div className='text-center text-mutate'>
-                          Aucun médecin pour le moment !
+                          Aucun paiement enregistrée pour le moment !
                         </div>
                       )}
-                      {!error && !isLoading && (
+                      {!error && !isLoading && paiementsData.length > 0 && (
                         <table
                           className='table align-middle table-nowrap'
-                          id='customerTable'
+                          id='paiementTable'
                         >
                           <thead className='table-light'>
                             <tr>
                               <th scope='col' style={{ width: '50px' }}>
                                 ID
                               </th>
-                              <th className='sort' data-sort='customer_name'>
-                                Nom
+                              <th className='sort' data-sort='paiement_name'>
+                                Patient(e)
                               </th>
-                              <th className='sort' data-sort='email'>
-                                Prénom
-                              </th>
+
                               <th className='sort' data-sort='genre'>
                                 Genre
-                              </th>
-                              <th className='sort' data-sort='speciality'>
-                                Spécialité
-                              </th>
-                              <th className='sort' data-sort='email'>
-                                Adresse Email
                               </th>
                               <th className='sort' data-sort='date'>
                                 Date de naissance
                               </th>
-
-                              <th className='sort' data-sort='adresse'>
-                                Domicile
+                              <th className='sort' data-sort='traitement'>
+                                Maladie Traitée
                               </th>
-                              <th className='sort' data-sort='phone'>
-                                Téléphone
+
+                              <th className='sort' data-sort='totaAmount'>
+                                Somme Payé
+                              </th>
+                              <th className='sort' data-sort='motif'>
+                                Motif de Paiement
+                              </th>
+
+                              <th className='sort' data-sort='paiementDate'>
+                                Date de Paiement
+                              </th>
+
+                              <th className='sort' data-sort='statut'>
+                                Statut
                               </th>
                               <th className='sort' data-sort='action'>
                                 Action
                               </th>
                             </tr>
                           </thead>
-                          {doctorsData?.length > 0 &&
-                            doctorsData?.map((doctor) => (
+                          {paiementsData?.length > 0 &&
+                            paiementsData?.map((paiement) => (
                               <tbody className='list form-check-all text-center'>
-                                <tr key={doctor._id}>
+                                <tr key={paiement._id}>
                                   <th scope='row'></th>
                                   <td
                                     className='id'
                                     style={{ display: 'none' }}
                                   ></td>
                                   <td className='firstName'>
-                                    {capitalizeWords(doctor.firstName)}{' '}
+                                    {capitalizeWords(
+                                      paiement.traitement['patient'].firstName
+                                    )}{' '}
+                                    {capitalizeWords(
+                                      paiement.traitement['patient'].lastName
+                                    )}
                                   </td>
-                                  <td className='firstName'>
-                                    {capitalizeWords(doctor.lastName)}{' '}
+                                  <td className='genre'>
+                                    {capitalizeWords(
+                                      paiement.traitement['patient'].gender
+                                    )}{' '}
                                   </td>
-                                  <td className='gender'>{doctor.gender} </td>
-                                  <td className='speciality'>
-                                    {capitalizeWords(doctor.speciality)}{' '}
-                                  </td>
-                                  <td className='email'>
-                                    {doctor.emailAdresse}{' '}
-                                  </td>
-
-                                  <td className='date'>
+                                  <td>
                                     {new Date(
-                                      doctor.dateOfBirth
+                                      paiement.traitement['patient'].dateOfBirth
                                     ).toLocaleDateString()}{' '}
                                   </td>
 
-                                  <td className='adresse'>
-                                    {capitalizeWords(doctor.adresse)}{' '}
+                                  <td>
+                                    {capitalizeWords(
+                                      paiement.traitement['motif']
+                                    )}
                                   </td>
-                                  <td className='phone'>
-                                    {formatPhoneNumber(doctor.phoneNumber)}
+
+                                  <td className='adresse'>
+                                    {formatPrice(paiement.totalAmount)}
+                                    {' F '}
+                                  </td>
+                                  <td>
+                                    {capitalizeWords(paiement.motifPaiement)}
+                                  </td>
+                                  <td>
+                                    {new Date(
+                                      paiement.createdAt
+                                    ).toLocaleDateString()}
+                                  </td>
+                                  <td>
+                                    <span
+                                      className={`badge badge-soft-${
+                                        paiement.statut === 'payé'
+                                          ? 'success'
+                                          : 'danger'
+                                      } text-uppercase`}
+                                    >
+                                      {paiement.statut}
+                                    </span>
                                   </td>
 
                                   <td>
                                     <div className='d-flex gap-2'>
+                                      <div>
+                                        <button
+                                          className='btn btn-sm btn-secondary show-item-btn'
+                                          data-bs-toggle='modal'
+                                          data-bs-target='#showModal'
+                                          onClick={() => {
+                                            handlePaiementClick(paiement._id);
+                                          }}
+                                        >
+                                          <i className='bx bx-show align-center text-white'></i>
+                                        </button>
+                                      </div>
                                       <div className='edit'>
                                         <button
                                           className='btn btn-sm btn-success edit-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
                                           onClick={() => {
                                             setFormModalTitle(
                                               'Modifier les données'
                                             );
-                                            setDoctorToUpdate(doctor);
+                                            setpaiementToUpdate(paiement);
                                             tog_form_modal();
                                           }}
                                         >
@@ -202,11 +233,10 @@ export default function DoctorsListe() {
                                             data-bs-target='#deleteRecordModal'
                                             onClick={() => {
                                               deleteButton(
-                                                doctor._id,
-                                                doctor.firstName +
-                                                  ' ' +
-                                                  doctor.lastName,
-                                                deleteDoctor
+                                                paiement._id,
+                                                `Paiement de ${paiement.totalAmount} F
+                                                   `,
+                                                deletePaiement
                                               );
                                             }}
                                           >

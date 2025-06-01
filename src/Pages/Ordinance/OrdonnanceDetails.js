@@ -24,7 +24,6 @@ const OrdonnanceDetails = ({
     isLoading,
   } = useOneOrdonnance(selectedOrdonnanceID);
 
-  console.log('SELECTED ORDONNANCE: ', selectedOrdonnance);
   return (
     <Modal
       isOpen={show_modal}
