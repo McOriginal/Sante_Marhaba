@@ -76,7 +76,9 @@ exports.createDoctor = async (req, res) => {
 // Obtenir tous les Doctors
 exports.getAllDoctors = async (req, res) => {
   try {
-    const doctors = await Doctor.find();
+    const doctors = await Doctor.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 });
     return res.status(200).json(doctors);
   } catch (e) {
     return res.status(404).json({ e });

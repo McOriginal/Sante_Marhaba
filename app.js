@@ -9,6 +9,7 @@ const chambreRoute = require('./routes/ChambreRoute');
 const medicamentRoute = require('./routes/MedicamentRoute');
 const ordonnanceRoute = require('./routes/OrdonnanceRoute');
 const paiementRoute = require('./routes/PaiementRoute');
+const approvisonementsRoute = require('./routes/ApprovisonementRoute');
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -56,6 +57,9 @@ app.use('/api/ordonnances', ordonnanceRoute);
 
 // Utilisation des routes Ordonnance
 app.use('/api/paiements', paiementRoute);
+
+// Utilisation des routes Approvisonnement
+app.use('/api/approvisonnements', approvisonementsRoute);
 
 //  Exporter le fichier APP
 module.exports = app;

@@ -44,6 +44,8 @@ exports.createOrdonnance = async (req, res) => {
 exports.getAllOrdonnances = async (req, res) => {
   try {
     const ordonnances = await Ordonnance.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 })
       .populate({
         path: 'traitement',
         populate: {

@@ -83,7 +83,9 @@ exports.createFournisseur = async (req, res) => {
 // Obtenir tous les Fournisseurs
 exports.getAllFournisseurs = async (req, res) => {
   try {
-    const fournisseurs = await Fournisseur.find();
+    const fournisseurs = await Fournisseur.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 });
     return res.status(200).json(fournisseurs);
   } catch (e) {
     return res.status(404).json({ e });

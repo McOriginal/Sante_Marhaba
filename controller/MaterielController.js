@@ -50,7 +50,9 @@ exports.createMateriel = async (req, res) => {
 //  Afficher toutes les Materiels
 exports.getMateriels = async (req, res) => {
   try {
-    const materiels = await Materiel.find();
+    const materiels = await Materiel.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 });
     return res.status(200).json(materiels);
   } catch (err) {
     return res.status(400).json({ status: 'error', message: err.message });

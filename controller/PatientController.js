@@ -83,7 +83,9 @@ exports.newPatient = async (req, res) => {
 
 exports.getAllPatients = async (req, res) => {
   try {
-    const allPatients = await Patient.find();
+    const allPatients = await Patient.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 });
 
     return res.status(200).json(allPatients);
   } catch (e) {

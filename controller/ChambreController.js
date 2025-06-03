@@ -47,7 +47,9 @@ exports.createChambre = async (req, res) => {
 //  Afficher toutes les Chambres
 exports.getAllChambre = async (req, res) => {
   try {
-    const chambres = await Chambre.find();
+    const chambres = await Chambre.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 });
     return res.status(200).json(chambres);
   } catch (err) {
     return res.status(400).json({ status: 'error', message: err.message });

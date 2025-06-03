@@ -27,6 +27,8 @@ exports.updatePaiement = async (req, res) => {
 exports.getAllPaiements = async (req, res) => {
   try {
     const paiements = await Paiement.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 })
       .populate({
         path: 'traitement',
         populate: {
@@ -54,14 +56,6 @@ exports.getPaiement = async (req, res) => {
   } catch (err) {
     res.status(400).json({ status: 'error', message: err.message });
   }
-};
-
-// Historique des paiements d’un étudiant
-exports.getPaiementsByStudent = async (req, res) => {
-  const paiements = await Paiement.find({ student: req.params.studentId })
-    .populate('traitement')
-    .populate('ordonnance');
-  res.status(200).json({ status: 'success', data: paiements });
 };
 
 // Supprimer un paiement

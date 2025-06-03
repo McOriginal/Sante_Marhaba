@@ -46,6 +46,8 @@ exports.addTraitement = async (req, res) => {
 exports.getAllTraitements = async (req, res) => {
   try {
     const traitements = await Traitement.find()
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 })
       .populate('patient')
       .populate('doctor');
     return res.status(200).json(traitements);
