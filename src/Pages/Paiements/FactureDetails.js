@@ -1,23 +1,16 @@
 import {
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   CardImg,
   CardText,
   CardTitle,
-  Col,
   Container,
-  Row,
 } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 
 import LoadingSpiner from '../components/LoadingSpiner';
-import {
-  capitalizeWords,
-  formatPhoneNumber,
-  formatPrice,
-} from '../components/capitalizeFunction';
+import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import { useOnePaiement } from '../../Api/queriesPaiement';
 import { useParams } from 'react-router-dom';
 import logo_medical from './../../assets/images/logo_medical.png';
@@ -32,47 +25,6 @@ export default function FactureDetails() {
       <div className='page-content'>
         <Container fluid>
           <Breadcrumbs title='Transactions' breadcrumbItem='Factures' />
-
-          {/* <Row>
-            <Col lg={12}>
-              <Card>
-                <CardBody>
-                  <div id='facturetList'>
-                    <Row className='g-4 mb-3'>
-                      <Col className='col-sm-auto'>
-                        <div className='d-flex gap-1'>
-                          <Button
-                            color='info'
-                            className='add-btn'
-                            id='create-btn'
-                            onClick={() => {
-                              setMedicamentToUpdate(null);
-                              tog_form_modal();
-                            }}
-                          >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
-                            Ajouter un Médicament
-                          </Button>
-                        </div>
-                      </Col>
-                      <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-center'>
-                          <div className='search-box ms-2'>
-                            <input
-                              type='text'
-                              className='form-control search'
-                              placeholder='Search...'
-                            />
-                            <i className='ri-search-line search-icon'></i>
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row> */}
 
           {error && (
             <div className='text-danger text-center'>

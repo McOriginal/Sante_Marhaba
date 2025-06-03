@@ -102,6 +102,8 @@ import NewOrdonance from '../Pages/Ordinance/NewOrdonance.js';
 import OrdonnanceListe from '../Pages/Ordinance/OrdonanceListe.js';
 import PaiementsListe from '../Pages/Paiements/PaiementsListe.js';
 import FactureDetails from '../Pages/Paiements/FactureDetails.js';
+import ApprovisonnementListe from '../Pages/Approvisonnements/ApprovisonnementListe.js';
+import ApprovisonnementForm from '../Pages/Approvisonnements/ApprovisonnementForm.js';
 
 const authProtectedRoutes = [
   //dashboard
@@ -148,8 +150,14 @@ const authProtectedRoutes = [
   // Matériels
   { path: '/materiels', component: <Materiels /> },
 
-  // Matériels
+  // Médicament Pharmaceutique
   { path: '/medicaments', component: <MedicamentListe /> },
+
+  // Ajouter une Approvisonnement
+  { path: '/approvisonnement/:id', component: <ApprovisonnementForm /> },
+
+  // approvisonnements
+  { path: '/approvisonnements', component: <ApprovisonnementListe /> },
 
   // E-mail
   { path: '/inbox', component: <Inbox /> },

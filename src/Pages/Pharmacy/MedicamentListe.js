@@ -29,6 +29,7 @@ import {
 } from '../../Api/queriesMedicament';
 import MedicamentForm from './MedicamentForm';
 import imgMedicament from './../../assets/images/medicament.jpg';
+import { useNavigate } from 'react-router-dom';
 
 export default function MedicamentListe() {
   const [form_modal, setForm_modal] = useState(false);
@@ -36,6 +37,12 @@ export default function MedicamentListe() {
   const { mutate: deleteMedicament } = useDeleteMedicament();
   const [medicamentToUpdate, setMedicamentToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un Médicament');
+
+  const navigate = useNavigate();
+  // Function to handle deletion of a medicament
+  function navigateToMedicamentApprovisonnement(id) {
+    navigate(`/approvisonnement/${id}`);
+  }
 
   function tog_form_modal() {
     setForm_modal(!form_modal);
@@ -61,7 +68,8 @@ export default function MedicamentListe() {
             }
           />
 
-          {/* -------------------- */}
+          {/* -------------------------- */}
+
           <Row>
             <Col lg={12}>
               <Card>
@@ -158,6 +166,15 @@ export default function MedicamentListe() {
                           >
                             <i className='ri-pencil-fill align-bottom me-2 text-muted'></i>
                             Modifier
+                          </DropdownItem>
+                          <DropdownItem
+                            className='edit-item-btn'
+                            onClick={() => {
+                              navigateToMedicamentApprovisonnement(medica._id);
+                            }}
+                          >
+                            <i className=' bx bx-analyse align-center me-2 text-muted'></i>
+                            Approvisonnée
                           </DropdownItem>
                           <DropdownItem
                             className='remove-item-btn'

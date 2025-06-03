@@ -101,15 +101,18 @@ const SidebarData = [
     ],
   },
 
-  // Outils Médical
+  // Pharmacie
   {
-    label: 'Pharmacie',
+    label: 'Suivie Pharmaceutique',
     isMainMenu: true,
   },
   {
     label: 'Pharmacie',
     icon: 'mdi mdi-email-outline',
-    subItem: [{ sublabel: 'Médicament', link: '/medicaments' }],
+    subItem: [
+      { sublabel: 'Médicament', link: '/medicaments' },
+      { sublabel: 'Approvisionnements', link: '/approvisonnements' },
+    ],
   },
 
   // --------------------------------------
