@@ -48,9 +48,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
       name: medicamentToEdit?.name || '',
       stock: medicamentToEdit?.stock || undefined,
       price: medicamentToEdit?.price || undefined,
-      deliveryDate: medicamentToEdit?.deliveryDate?.substring(0, 10) || '',
       imageUrl: medicamentToEdit?.imageUrl || '',
-      fournisseur: medicamentToEdit?.fournisseur._id || '',
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -59,8 +57,6 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
 
       stock: Yup.number().required('Ce champ est obligatoire'),
       price: Yup.number().required('Ce champ est obligatoire'),
-      deliveryDate: Yup.date().required('Ce champ est obligatoire'),
-      fournisseur: Yup.string().required('Ce champ est obligatoire'),
     }),
 
     onSubmit: (values, { resetForm }) => {
@@ -134,7 +130,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
             <Label htmlFor='name'>Nom</Label>
             <Input
               name='name'
-              placeholder="Chambre d'opération; Chambre de Serum..."
+              placeholder='Entrez le nom de médicament'
               type='text'
               className='form-control'
               id='name'
@@ -206,76 +202,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
           </FormGroup>
         </Col>
       </Row>
-      <Row>
-        <Col md='12'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='deliveryDate'>Date d'arrivée</Label>
-            <Input
-              name='deliveryDate'
-              placeholder='Chambre dédié pour les opérations chirugical.....'
-              type='date'
-              className='form-control'
-              id='deliveryDate'
-              max={new Date().toISOString().split('T')[0]} // Limite à aujourd'hui
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.deliveryDate || ''}
-              invalid={
-                validation.touched.deliveryDate &&
-                validation.errors.deliveryDate
-                  ? true
-                  : false
-              }
-            />
-            {validation.touched.deliveryDate &&
-            validation.errors.deliveryDate ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.deliveryDate}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col md='12'>
-          <FormGroup>
-            <Label htmlFor='fournisseur'>Fournisseur</Label>
-            <Input
-              type='select'
-              name='fournisseur'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.fournisseur || ''}
-              invalid={
-                validation.touched.fournisseur && validation.errors.fournisseur
-                  ? true
-                  : false
-              }
-            >
-              {fourniLoading && <LoadingSpiner />}
-              {fourniError && (
-                <div className='fw-bold text-danger text-center'></div>
-              )}
-              <option value=''>Sélectionner un fourni</option>
-              {!fourniError &&
-                !fourniLoading &&
-                fournisseurData?.length > 0 &&
-                fournisseurData.map((four) => (
-                  <option key={four._id} value={four._id}>
-                    {capitalizeWords(four.firstName)}{' '}
-                    {capitalizeWords(four.lastName)}{' '}
-                    {formatPhoneNumber(four.phoneNumber)}
-                  </option>
-                ))}
-            </Input>
-            {validation.touched.fournisseur && validation.errors.fournisseur ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.fournisseur}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-      </Row>
+
       <Row>
         <Col md='12'>
           <FormGroup className='mb-3'>

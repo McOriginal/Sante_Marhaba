@@ -17,6 +17,13 @@ const SidebarData = [
     isHasArrow: true,
     url: '/calendar',
   },
+  {
+    label: 'Rendez-vous',
+    icon: 'mdi mdi-calendar-outline',
+    isHasArrow: true,
+    url: '/appointments',
+  },
+
   // --------------------------------------
   // Hospital content
   {

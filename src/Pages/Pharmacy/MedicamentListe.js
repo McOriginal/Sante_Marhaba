@@ -131,7 +131,7 @@ export default function MedicamentListe() {
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
                       borderRadius: '15px',
-                      height: '200px',
+                      height: '120px',
                       padding: '10px 20px',
                       display: 'flex',
                       gap: '20px',
@@ -198,23 +198,14 @@ export default function MedicamentListe() {
                       className='img-fluid'
                       style={{
                         borderRadius: '15px 15px 0 0',
-                        height: '120px',
+                        height: '100%',
                         width: '30%',
                         objectFit: 'contain',
                       }}
                       src={medica.imageUrl ? medica.imageUrl : imgMedicament}
                       alt={medica.name}
                     />
-                    <CardTitle
-                      style={{
-                        position: 'absolute',
-                        bottom: '2%',
-                        left: '20%',
-                        fontSize: '18px',
-                      }}
-                    >
-                      {formatPrice(medica.price)} F
-                    </CardTitle>
+
                     <CardBody>
                       <CardTitle className='fs-6'>
                         Nom:
@@ -227,31 +218,13 @@ export default function MedicamentListe() {
                         Stock:
                         <span style={{ color: 'gray' }}> {medica?.stock}</span>
                       </CardTitle>
-                      <CardTitle className='fs-6'>
-                        Date d'arrivée:
+                      <CardTitle>
+                        {' '}
+                        Prix:{' '}
                         <span style={{ color: 'gray' }}>
                           {' '}
-                          {new Date(medica?.deliveryDate).toLocaleDateString()}
-                        </span>
-                      </CardTitle>
-                      <CardTitle className='fs-6'>
-                        Fournisseur:
-                        <span style={{ color: 'gray' }}>
-                          {' '}
-                          {capitalizeWords(
-                            medica?.fournisseur['firstName']
-                          )}{' '}
-                          {capitalizeWords(medica?.fournisseur['lastName'])}
-                        </span>
-                      </CardTitle>
-                      <CardTitle className='fs-6'>
-                        Tél Fournisseur:
-                        <span style={{ color: 'gray' }}>
-                          {' '}
-                          {formatPhoneNumber(
-                            medica?.fournisseur['phoneNumber']
-                          )}
-                        </span>
+                          {formatPrice(medica.price)} F
+                        </span>{' '}
                       </CardTitle>
                     </CardBody>
                   </Card>

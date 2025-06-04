@@ -104,10 +104,14 @@ import PaiementsListe from '../Pages/Paiements/PaiementsListe.js';
 import FactureDetails from '../Pages/Paiements/FactureDetails.js';
 import ApprovisonnementListe from '../Pages/Approvisonnements/ApprovisonnementListe.js';
 import ApprovisonnementForm from '../Pages/Approvisonnements/ApprovisonnementForm.js';
+import AppointmentListe from '../Pages/RendezVous/AppointmentListe.js';
 
 const authProtectedRoutes = [
   //dashboard
   { path: '/dashboard', component: <Dashboard /> },
+
+  //appointments
+  { path: '/appointments', component: <AppointmentListe /> },
 
   // Patient
   { path: '/patient', component: <PatientsListe /> },

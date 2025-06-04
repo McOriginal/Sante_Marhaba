@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
-import { useAllPatients, useDeletePatient } from '../../Api/queriesPatient';
-import PatientForm from './PatientForm';
 import LoadingSpiner from '../components/LoadingSpiner';
 import {
   capitalizeWords,
@@ -11,13 +9,19 @@ import {
 } from '../components/capitalizeFunction';
 import { Link } from 'react-router-dom';
 import { deleteButton } from '../components/AlerteModal';
+import AppointmentForm from './AppointmentForm';
+import {
+  useAllAppointment,
+  useDeleteAppointment,
+} from '../../Api/queriesAppointments';
 
-export default function PatientsListe() {
+export default function AppointmentListe() {
   const [form_modal, setForm_modal] = useState(false);
-  const { data, isLoading, error } = useAllPatients();
-  const { mutate: deletePatient, isLoading: isDeleting } = useDeletePatient();
-  const [patientToUpdate, setpatientToUpdate] = useState(null);
-  const [formModalTitle, setFormModalTitle] = useState('Ajouter un patien(e)');
+  const { data: appointmentData, isLoading, error } = useAllAppointment();
+  const { mutate: deleteAppointment, isLoading: isDeleting } =
+    useDeleteAppointment();
+  const [appointmentToUpdate, setAppointmentToUpdate] = useState(null);
+  const [formModalTitle, setFormModalTitle] = useState('Fixer un rendez-vous');
 
   function tog_form_modal() {
     setForm_modal(!form_modal);
@@ -26,7 +30,10 @@ export default function PatientsListe() {
     <React.Fragment>
       <div className='page-content'>
         <Container fluid>
-          <Breadcrumbs title='Patients' breadcrumbItem='Lists des patients' />
+          <Breadcrumbs
+            title='Rendez-vous'
+            breadcrumbItem='Lists des rendez-vous'
+          />
 
           {/* -------------------------- */}
           <FormModal
@@ -36,8 +43,8 @@ export default function PatientsListe() {
             modal_title={formModalTitle}
             size='md'
             bodyContent={
-              <PatientForm
-                patientToEdit={patientToUpdate}
+              <AppointmentForm
+                appointmentToEdit={appointmentToUpdate}
                 tog_form_modal={tog_form_modal}
               />
             }
@@ -48,7 +55,7 @@ export default function PatientsListe() {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <div id='customerList'>
+                  <div id='appointmentList'>
                     <Row className='g-4 mb-3'>
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
@@ -61,13 +68,7 @@ export default function PatientsListe() {
                             }}
                           >
                             <i className='ri-add-line align-bottom me-1'></i>{' '}
-                            Ajouter un(e) Patient(e)
-                          </Button>
-                          <Button
-                            color='soft-danger'
-                            // onClick="deleteMultiple()"
-                          >
-                            <i className='ri-delete-bin-2-line'></i>
+                            Fixer un rendez-vous
                           </Button>
                         </div>
                       </Col>
@@ -79,7 +80,6 @@ export default function PatientsListe() {
                               className='form-control search'
                               placeholder='Search...'
                             />
-                            <i className='ri-search-line search-icon'></i>
                           </div>
                         </div>
                       </Col>
@@ -92,71 +92,77 @@ export default function PatientsListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {data?.length === 0 && (
+                      {appointmentData?.length === 0 && (
                         <div className='text-center text-mutate'>
-                          Aucun patient pour le moment !
+                          Aucun Rendez-vous pour le moment !
                         </div>
                       )}
-                      {!error && !isLoading && (
+                      {!error && !isLoading && appointmentData.length > 0 && (
                         <table
                           className='table align-middle table-nowrap'
-                          id='customerTable'
+                          id='appointmentTable'
                         >
                           <thead className='table-light'>
                             <tr>
-                              <th scope='col' style={{ width: '50px' }}>
-                                ID
+                              <th data-sort='appointmentDate'>
+                                Date de rendez-vous
                               </th>
-                              <th className='sort' data-sort='customer_name'>
-                                Nom
-                              </th>
-                              <th className='sort' data-sort='email'>
-                                Prénom
-                              </th>
-                              <th className='sort' data-sort='groupeSanguin'>
-                                Groupe Sanguin
-                              </th>
-                              <th className='sort' data-sort='date'>
-                                Date de naissance
-                              </th>
+                              <th data-sort='traitement'>Traitement</th>
+                              <th data-sort='firstName'>Patient</th>
 
-                              <th className='sort' data-sort='adresse'>
-                                Domicile
-                              </th>
-                              <th className='sort' data-sort='phone'>
-                                Téléphone
-                              </th>
-                              <th className='sort' data-sort='action'>
-                                Action
-                              </th>
+                              <th data-sort='date'>Date de naissance</th>
+
+                              <th data-sort='adresse'>Domicile</th>
+                              <th data-sort='phone'>Téléphone</th>
+                              <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
-                          {data?.length > 0 &&
-                            data?.map((patient) => (
+                          {appointmentData?.length > 0 &&
+                            appointmentData?.map((appoint) => (
                               <tbody className='list form-check-all text-center'>
-                                <tr key={patient._id}>
-                                  <th scope='row'></th>
-                                  <td
-                                    className='id'
-                                    style={{ display: 'none' }}
-                                  ></td>
-                                  <td>{capitalizeWords(patient.firstName)} </td>
-                                  <td>{capitalizeWords(patient.lastName)} </td>
-                                  <td className='badge bg-warning text-light'>
-                                    {capitalizeWords(patient.groupeSanguin)}{' '}
+                                <tr key={appoint._id}>
+                                  <th>
+                                    {new Date(
+                                      appoint.appointmentDate
+                                    ).toLocaleDateString('fr-Fr', {
+                                      year: 'numeric',
+                                      month: '2-digit',
+                                      day: '2-digit',
+                                      weekday: 'short',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}{' '}
+                                  </th>
+
+                                  <td>
+                                    {capitalizeWords(
+                                      appoint.traitement['motif']
+                                    )}
+                                  </td>
+                                  <td>
+                                    {capitalizeWords(
+                                      appoint.traitement['patient'].firstName
+                                    )}{' '}
+                                    {capitalizeWords(
+                                      appoint.traitement['patient'].lastName
+                                    )}{' '}
                                   </td>
 
-                                  <td className='date'>
+                                  <td>
                                     {new Date(
-                                      patient.dateOfBirth
+                                      appoint.traitement['patient'].dateOfBirth
                                     ).toLocaleDateString()}{' '}
                                   </td>
 
-                                  <td className='adresse'>
-                                    {capitalizeWords(patient.adresse)}{' '}
+                                  <td>
+                                    {capitalizeWords(
+                                      appoint.traitement['patient'].adresse
+                                    )}{' '}
                                   </td>
-                                  <td className='phone'>
-                                    {formatPhoneNumber(patient.phoneNumber)}
+                                  <td>
+                                    {formatPhoneNumber(
+                                      appoint.traitement['patient'].phoneNumber
+                                    )}
                                   </td>
 
                                   <td>
@@ -170,7 +176,7 @@ export default function PatientsListe() {
                                             setFormModalTitle(
                                               'Modifier les données'
                                             );
-                                            setpatientToUpdate(patient);
+                                            setAppointmentToUpdate(appoint);
                                             tog_form_modal();
                                           }}
                                         >
@@ -186,11 +192,13 @@ export default function PatientsListe() {
                                             data-bs-target='#deleteRecordModal'
                                             onClick={() => {
                                               deleteButton(
-                                                patient._id,
-                                                patient.firstName +
+                                                appoint._id,
+                                                appoint.traitement['patient']
+                                                  .firstName +
                                                   ' ' +
-                                                  patient.lastName,
-                                                deletePatient
+                                                  appoint.traitement['patient']
+                                                    .lastName,
+                                                deleteAppointment
                                               );
                                             }}
                                           >
