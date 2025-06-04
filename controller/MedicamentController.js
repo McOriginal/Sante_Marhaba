@@ -99,8 +99,7 @@ exports.getAllMedicament = async (req, res) => {
   try {
     const medicaments = await Medicament.find()
       // Trie par date de création, du plus récent au plus ancien
-      .sort({ createdAt: -1 })
-      .populate('fournisseur');
+      .sort({ createdAt: -1 });
 
     return res.status(200).json(medicaments);
   } catch (err) {
@@ -111,10 +110,7 @@ exports.getAllMedicament = async (req, res) => {
 //  Afficher une seule Medicament
 exports.getOneMedicament = async (req, res) => {
   try {
-    const medicaments = await Medicament.findById(req.params.id).populate(
-      'fournisseur'
-    );
-
+    const medicaments = await Medicament.findById(req.params.id);
     return res.status(200).json(medicaments);
   } catch (err) {
     return res.status(400).json({ status: 'error', message: err.message });

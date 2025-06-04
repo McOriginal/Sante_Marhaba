@@ -17,18 +17,9 @@ const medicamentSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    deliveryDate: {
-      type: Date,
-      required: true,
-    },
+
     imageUrl: {
       type: String,
-    },
-    // La clé de rélation
-    fournisseur: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Fournisseur',
-      required: true,
     },
   },
   { timestamps: true }
