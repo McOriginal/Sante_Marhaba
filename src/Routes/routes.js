@@ -105,6 +105,9 @@ import FactureDetails from '../Pages/Paiements/FactureDetails.js';
 import ApprovisonnementListe from '../Pages/Approvisonnements/ApprovisonnementListe.js';
 import ApprovisonnementForm from '../Pages/Approvisonnements/ApprovisonnementForm.js';
 import AppointmentListe from '../Pages/RendezVous/AppointmentListe.js';
+import FactureListe from '../Pages/Paiements/FactureListe.js';
+import Raports from '../Pages/Raports/Raports.js';
+import DepenseListe from '../Pages/Depenses/DepenseListe.js';
 
 const authProtectedRoutes = [
   //dashboard
@@ -135,10 +138,18 @@ const authProtectedRoutes = [
   { path: '/fournisseurs', component: <FournisseurListe /> },
 
   // Transaction et Factures
+
+  // Paiements Liste
   { path: '/paiements', component: <PaiementsListe /> },
 
-  // Factures Liste
+  //  Factures Liste
+  { path: '/factures', component: <FactureListe /> },
+
+  // Factures Détails
   { path: '/facture/:id', component: <FactureDetails /> },
+
+  // Dépenses
+  { path: '/depenses', component: <DepenseListe /> },
 
   // Calender
   { path: '/calendar', component: <Calender /> },
@@ -163,6 +174,10 @@ const authProtectedRoutes = [
   // approvisonnements
   { path: '/approvisonnements', component: <ApprovisonnementListe /> },
 
+  // Raports
+  { path: '/raports', component: <Raports /> },
+
+  // --------------------------------------------------------
   // E-mail
   { path: '/inbox', component: <Inbox /> },
   { path: '/read-email', component: <ReadEmail /> },

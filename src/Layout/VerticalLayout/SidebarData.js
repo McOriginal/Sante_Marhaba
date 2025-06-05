@@ -83,14 +83,9 @@ const SidebarData = [
     icon: 'mdi mdi-email-outline',
     subItem: [
       { sublabel: 'Faire un Paiement', link: '/paiements' },
-      { sublabel: 'Factures', link: '/facture' },
+      { sublabel: 'Factures', link: '/factures' },
+      { sublabel: 'Dépense', link: '/depenses' },
     ],
-  },
-  {
-    label: 'Paiements',
-    icon: 'mdi mdi-calendar-outline',
-    isHasArrow: true,
-    url: '/paiements',
   },
 
   // ----------------------------------------------------------------------
@@ -122,6 +117,19 @@ const SidebarData = [
     ],
   },
 
+  // Pharmacie
+  {
+    label: 'Statistiques & Rapports',
+    isMainMenu: true,
+  },
+  {
+    label: 'Raports et Suivie',
+    icon: 'mdi mdi-email-outline',
+    subItem: [
+      { sublabel: 'Raports', link: '/raports' },
+      { sublabel: 'Approvisionnements', link: '/approvisonnements' },
+    ],
+  },
   // --------------------------------------
   {
     label: 'Email',
