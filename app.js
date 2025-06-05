@@ -11,6 +11,7 @@ const ordonnanceRoute = require('./routes/OrdonnanceRoute');
 const paiementRoute = require('./routes/PaiementRoute');
 const approvisonementsRoute = require('./routes/ApprovisonementRoute');
 const appointmentRoute = require('./routes/AppointementRoute');
+const depenseRoute = require('./routes/DepenseRoute');
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -62,7 +63,11 @@ app.use('/api/paiements', paiementRoute);
 // Utilisation des routes Approvisonnement
 app.use('/api/approvisonnements', approvisonementsRoute);
 
+// Utilisation des routes Appointment
 app.use('/api/appointments', appointmentRoute);
+
+// Utilisation des routes Depense
+app.use('/api/depenses', depenseRoute);
 
 //  Exporter le fichier APP
 module.exports = app;
