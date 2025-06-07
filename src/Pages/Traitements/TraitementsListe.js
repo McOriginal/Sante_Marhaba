@@ -111,8 +111,8 @@ export default function TraitementsListe() {
                       </Col>
                     </Row>
                     <p className='text-center text-warning'>
-                      Pour ajouter un traitement rassurez-vous que le patient
-                      est bien enregistré avant
+                      Avant d'ajouter un traitement rassurez-vous que vous avez
+                      déjà enregistré le Patient.
                     </p>
                   </div>
                 </CardBody>

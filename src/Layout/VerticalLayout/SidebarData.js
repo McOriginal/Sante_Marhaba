@@ -123,10 +123,10 @@ const SidebarData = [
     isMainMenu: true,
   },
   {
-    label: 'Raports et Suivie',
+    label: 'Rapports et Suivie',
     icon: 'mdi mdi-email-outline',
     subItem: [
-      { sublabel: 'Raports', link: '/raports' },
+      { sublabel: 'Raports', link: '/rapports' },
       { sublabel: 'Approvisionnements', link: '/approvisonnements' },
     ],
   },

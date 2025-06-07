@@ -1,9 +1,10 @@
 import { Card, CardBody, CardTitle, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import React from 'react';
-import RaportsBarChart from './DataRaports';
+import RaportsBarChart from './DataRaportsPatientTraitementOrdonnace';
+import BarChartEntreSortie from './DataRaportsEntreSortie';
 
-const Raports = () => {
+const Rapports = () => {
   document.title = 'Raports | Centre de Santé - MARHABA ';
   return (
     <React.Fragment>
@@ -15,7 +16,26 @@ const Raports = () => {
             <Col sm={12}>
               <Card>
                 <CardBody>
-                  <CardTitle>Raports et Revenu Annuel</CardTitle>
+                  <CardTitle>Entrée et Sortie</CardTitle>
+                  <p className='card-title-desc'>
+                    Le raports de Centre de Santé MARHABA vous permet de
+                    visualiser les données statistiques concernant les
+                    <span className='text-info'>
+                      {' '}
+                      Entrées, & Dépenses.
+                    </span>{' '}
+                    Vous pouvez également suivre l'évolution des revenus et des
+                    dépenses mensuelles.
+                  </p>
+                  <BarChartEntreSortie />
+                </CardBody>
+              </Card>
+            </Col>
+
+            <Col sm={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle>Rapports et Suivis</CardTitle>
                   <p className='card-title-desc'>
                     Le raports de Centre de Santé MARHABA vous permet de
                     visualiser les données statistiques concernant les
@@ -37,4 +57,4 @@ const Raports = () => {
   );
 };
 
-export default Raports;
+export default Rapports;

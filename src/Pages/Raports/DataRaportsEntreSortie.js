@@ -6,50 +6,37 @@ import { useAllTraitement } from '../../Api/queriesTraitement';
 import { useAllPatients } from '../../Api/queriesPatient';
 import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
 import { formatPrice } from '../components/capitalizeFunction';
+import { useAllPaiements } from '../../Api/queriesPaiement';
+import { useAllDepenses } from '../../Api/queriesDepense';
 
 Chart.register(CategoryScale);
 
-const BarChart = () => {
-  const { data: traitementsData = [] } = useAllTraitement();
-  const { data: patientData = [] } = useAllPatients();
-  const { data: ordonnanceData = [] } = useAllOrdonnances();
+const BarChartEntreSortie = () => {
+  const { data: paiementsData = [] } = useAllPaiements();
+  const { data: depenseData = [] } = useAllDepenses();
 
-  const countPatientsByMonth = (patients) => {
-    const monthlyCounts = new Array(12).fill(0);
-    patients.forEach((patient) => {
-      const date = new Date(patient.createdAt);
+  const sumPaiementTotalAmoutByMonth = (paiement) => {
+    const monthlySums = new Array(12).fill(0);
+    paiement.forEach((paie) => {
+      const date = new Date(paie.paiementDate);
       if (!isNaN(date)) {
         const month = date.getMonth();
-        monthlyCounts[month]++;
+        monthlySums[month] += Number(paie.totalAmount || 0);
       }
     });
-    return monthlyCounts;
+    return monthlySums;
   };
 
   const sumTotalAmountByMonth = (items) => {
     const monthlySums = new Array(12).fill(0);
     items.forEach((item) => {
-      const date = new Date(item.createdAt);
+      const date = new Date(item.dateOfDepense);
       if (!isNaN(date)) {
         const month = date.getMonth();
         monthlySums[month] += Number(item.totalAmount || 0);
       }
     });
     return monthlySums;
-  };
-
-  const sumTotalTraitement = () => {
-    return traitementsData.reduce((acc, traitement) => {
-      acc += Number(traitement.totalAmount || 0);
-      return acc;
-    }, 0);
-  };
-
-  const sumTotalOrdonnance = () => {
-    return ordonnanceData.reduce((acc, ordonnance) => {
-      acc += Number(ordonnance.totalAmount || 0);
-      return acc;
-    }, 0);
   };
 
   const labels = [
@@ -71,20 +58,15 @@ const BarChart = () => {
     labels,
     datasets: [
       {
-        label: `Traitements: ${formatPrice(sumTotalTraitement())} F  `,
-        data: sumTotalAmountByMonth(traitementsData),
+        label: 'Entrée',
+        data: sumPaiementTotalAmoutByMonth(paiementsData),
         backgroundColor: '#3d8ef8',
         barThickness: 10,
       },
+
       {
-        label: 'Patients (nouveaux)',
-        data: countPatientsByMonth(patientData),
-        backgroundColor: '#c1c1c14',
-        barThickness: 10,
-      },
-      {
-        label: `Ordonnances: ${formatPrice(sumTotalOrdonnance())} F`,
-        data: sumTotalAmountByMonth(ordonnanceData),
+        label: 'Sortie(Dépenses)',
+        data: sumTotalAmountByMonth(depenseData),
         backgroundColor: '#01baba',
         barThickness: 10,
       },
@@ -123,4 +105,4 @@ const BarChart = () => {
   );
 };
 
-export default BarChart;
+export default BarChartEntreSortie;

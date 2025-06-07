@@ -47,6 +47,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
     initialValues: {
       traitement: paiementToEdit?.traitement._id || '',
       motifPaiement: paiementToEdit?.motifPaiement || '',
+      paiementDate: paiementToEdit?.paiementDate.substring(0, 16) || '',
       totalAmount: paiementToEdit?.totalAmount || undefined,
       methode: paiementToEdit?.methode || '',
       statut: paiementToEdit?.statut || '',
@@ -54,6 +55,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
     validationSchema: Yup.object({
       traitement: Yup.string().required('Ce champ est obligatoire'),
       motifPaiement: Yup.string().required('Ce champ est obligatoire'),
+      paiementDate: Yup.date().required('Ce champ est obligatoire'),
       totalAmount: Yup.number().required('Ce champ est obligatoire'),
       methode: Yup.string().required('Ce champ est obligatoire'),
       statut: Yup.string().required('Ce champ est obligatoire'),
@@ -206,7 +208,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
         </Col>
       </Row>
       <Row>
-        <Col md='12'>
+        <Col md='6'>
           <FormGroup className='mb-3'>
             <Label htmlFor='totalAmount'>Somme Total</Label>
             <p style={{ fontSize: '12px' }}>
@@ -229,6 +231,33 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
             {validation.touched.totalAmount && validation.errors.totalAmount ? (
               <FormFeedback type='invalid'>
                 {validation.errors.totalAmount}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+        <Col md='6'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='paiementDate'>Date de Paiement</Label>
+
+            <Input
+              name='paiementDate'
+              type='date'
+              className='form-control'
+              id='paiementDate'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.paiementDate || ''}
+              invalid={
+                validation.touched.paiementDate &&
+                validation.errors.paiementDate
+                  ? true
+                  : false
+              }
+            />
+            {validation.touched.paiementDate &&
+            validation.errors.paiementDate ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.paiementDate}
               </FormFeedback>
             ) : null}
           </FormGroup>

@@ -98,16 +98,16 @@ import TraitementDetails from '../Pages/Traitements/TraitementDetails.js';
 import Chambre from '../Pages/OutilsMedicals/Chambre.js';
 import Materiels from '../Pages/OutilsMedicals/MaterielsMedical.js';
 import MedicamentListe from '../Pages/Pharmacy/MedicamentListe.js';
-import NewOrdonance from '../Pages/Ordinance/NewOrdonance.js';
-import OrdonnanceListe from '../Pages/Ordinance/OrdonanceListe.js';
+import NewOrdonance from '../Pages/Ordonnances/NewOrdonance.js';
+import OrdonnanceListe from '../Pages/Ordonnances/OrdonanceListe.js';
 import PaiementsListe from '../Pages/Paiements/PaiementsListe.js';
 import FactureDetails from '../Pages/Paiements/FactureDetails.js';
 import ApprovisonnementListe from '../Pages/Approvisonnements/ApprovisonnementListe.js';
 import ApprovisonnementForm from '../Pages/Approvisonnements/ApprovisonnementForm.js';
 import AppointmentListe from '../Pages/RendezVous/AppointmentListe.js';
 import FactureListe from '../Pages/Paiements/FactureListe.js';
-import Raports from '../Pages/Raports/Raports.js';
 import DepenseListe from '../Pages/Depenses/DepenseListe.js';
+import Rapports from '../Pages/Raports/Rapports.js';
 
 const authProtectedRoutes = [
   //dashboard
@@ -175,7 +175,7 @@ const authProtectedRoutes = [
   { path: '/approvisonnements', component: <ApprovisonnementListe /> },
 
   // Raports
-  { path: '/raports', component: <Raports /> },
+  { path: '/rapports', component: <Rapports /> },
 
   // --------------------------------------------------------
   // E-mail

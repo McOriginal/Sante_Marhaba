@@ -99,6 +99,15 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
       doctor: Yup.string().required(
         'Vous devez entrez une valeur dans de champ'
       ),
+      height: Yup.number().typeError('La taille doit être un nombre'),
+      width: Yup.number().typeError('Le poids doit être un nombre'),
+      nc: Yup.string().typeError('Le NC doit être un texte'),
+      ac: Yup.string().typeError('L’AC doit être un texte'),
+      asc: Yup.string().typeError('L’ASC doit être un texte'),
+      diagnostic: Yup.string().typeError('Le diagnostic doit être un texte'),
+      result: Yup.string().typeError('Le résultat doit être un texte'),
+      observation: Yup.string().typeError('L’observation doit être un texte'),
+      totalAmount: Yup.number().required('Le montant total est obligatoire'),
       // Le reste est optionnel
     }),
 
@@ -136,7 +145,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
       else {
         createTraitement(values, {
           onSuccess: () => {
-            successMessageAlert('Patient ajoutée avec succès');
+            successMessageAlert('Traitement Enregistrée avec succès');
             setisLoading(false);
             resetForm();
             tog_form_modal();
@@ -294,10 +303,11 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label>Date</Label>
+              <Label>Début Maladie</Label>
               <Input
                 type='date'
                 name='startDate'
+                max={new Date().toISOString().split('T')[0]} // Prevent future dates
                 value={validation.values.startDate || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}

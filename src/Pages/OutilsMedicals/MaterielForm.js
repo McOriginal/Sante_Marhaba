@@ -30,12 +30,6 @@ const MaterielForm = ({ materielToEdit, tog_form_modal }) => {
   const { mutate: updateMateriel } = useUpdateMateriel();
   const [isLoading, setIsLoading] = useState(false);
 
-  if (isLoading) {
-    setTimeout(() => {
-      errorMessageAlert('Une Erreur est survenue veillez réesayer !');
-      setIsLoading(false);
-    }, 10000);
-  }
   // Form validation
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -106,6 +100,12 @@ const MaterielForm = ({ materielToEdit, tog_form_modal }) => {
             setIsLoading(false);
           },
         });
+      }
+      if (isLoading) {
+        setTimeout(() => {
+          errorMessageAlert('Une Erreur est survenue veillez réesayer !');
+          setIsLoading(false);
+        }, 10000);
       }
     },
   });
