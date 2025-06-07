@@ -13,6 +13,10 @@ const paiementSchema = new mongoose.Schema(
       enum: ['ordonnance', 'traitement'],
       required: true,
     },
+    paiementDate: {
+      type: Date,
+      required: true,
+    },
     methode: {
       type: String,
       enum: ['cash', 'orange money', 'moove money'],

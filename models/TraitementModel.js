@@ -40,6 +40,7 @@ const traitementSchema = new mongoose.Schema(
     },
     result: {
       type: String,
+      required: [true, 'Le résultat du traitement est requis'],
     },
     observation: {
       type: String,

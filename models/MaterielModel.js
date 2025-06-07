@@ -26,4 +26,4 @@ const materielSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Course', materielSchema);
+module.exports = mongoose.model('Materiel', materielSchema);

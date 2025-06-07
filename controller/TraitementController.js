@@ -17,9 +17,9 @@ exports.addTraitement = async (req, res) => {
 
     if (
       !textValidator.stringValidator(motif) ||
-      !textValidator.stringValidator(diagnostic) ||
-      !textValidator.stringValidator(result) ||
-      !textValidator.stringValidator(observation)
+      (diagnostic != '' && !textValidator.stringValidator(diagnostic)) ||
+      (result != '' && !textValidator.stringValidator(result)) ||
+      (observation != '' && !textValidator.stringValidator(observation))
     ) {
       return res.status(404).json({
         message:
@@ -36,7 +36,6 @@ exports.addTraitement = async (req, res) => {
     });
     return res.status(201).json({ Traitements });
   } catch (err) {
-    console.log(err);
     return res.status(400).json({ status: 'error', message: err.message });
   }
 };
