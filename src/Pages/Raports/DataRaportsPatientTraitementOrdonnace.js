@@ -5,7 +5,6 @@ import { Chart, CategoryScale } from 'chart.js';
 import { useAllTraitement } from '../../Api/queriesTraitement';
 import { useAllPatients } from '../../Api/queriesPatient';
 import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
-import { formatPrice } from '../components/capitalizeFunction';
 
 Chart.register(CategoryScale);
 
@@ -38,19 +37,19 @@ const BarChartPatientTraitementOrdonnance = () => {
     return monthlySums;
   };
 
-  const sumTotalTraitement = () => {
-    return traitementsData.reduce((acc, traitement) => {
-      acc += Number(traitement.totalAmount || 0);
-      return acc;
-    }, 0);
-  };
+  // const sumTotalTraitement = () => {
+  //   return traitementsData.reduce((acc, traitement) => {
+  //     acc += Number(traitement.totalAmount || 0);
+  //     return acc;
+  //   }, 0);
+  // };
 
-  const sumTotalOrdonnance = () => {
-    return ordonnanceData.reduce((acc, ordonnance) => {
-      acc += Number(ordonnance.totalAmount || 0);
-      return acc;
-    }, 0);
-  };
+  // const sumTotalOrdonnance = () => {
+  //   return ordonnanceData.reduce((acc, ordonnance) => {
+  //     acc += Number(ordonnance.totalAmount || 0);
+  //     return acc;
+  //   }, 0);
+  // };
 
   const labels = [
     'Jan',
@@ -71,19 +70,19 @@ const BarChartPatientTraitementOrdonnance = () => {
     labels,
     datasets: [
       {
-        label: `Traitements: ${formatPrice(sumTotalTraitement())} F  `,
+        label: `Traitements  `,
         data: sumTotalAmountByMonth(traitementsData),
         backgroundColor: '#3d8ef8',
         barThickness: 10,
       },
       {
-        label: 'Patients (nouveaux)',
+        label: 'Patients',
         data: countPatientsByMonth(patientData),
         backgroundColor: '#c1c1c14',
         barThickness: 10,
       },
       {
-        label: `Ordonnances: ${formatPrice(sumTotalOrdonnance())} F`,
+        label: `Ordonnances`,
         data: sumTotalAmountByMonth(ordonnanceData),
         backgroundColor: '#01baba',
         barThickness: 10,

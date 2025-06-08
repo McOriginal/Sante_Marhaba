@@ -1,8 +1,8 @@
-import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
+import { Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords } from '../components/capitalizeFunction';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { deleteButton } from '../components/AlerteModal';
 import {
   useAllOrdonnances,
@@ -17,7 +17,6 @@ export default function OrdonnanceListe() {
     useDeleteOrdonnance();
   const [show_modal, setShow_modal] = useState(false);
   const [selectedOrdonnanceID, setSelectedOrdonnanceID] = useState(false);
-  const navigate = useNavigate();
 
   function tog_show_modal() {
     setShow_modal(!show_modal);
@@ -40,37 +39,17 @@ export default function OrdonnanceListe() {
               <Card>
                 <CardBody>
                   <div id='ordonnanceList'>
-                    <Row className='g-4 mb-3'>
-                      <Col className='col-sm-auto'>
-                        <div className='d-flex gap-1'>
-                          <Button
-                            color='success'
-                            className='add-btn'
-                            id='create-btn'
-                            onClick={() => {
-                              navigate('/traitements');
-                            }}
-                          >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
-                            Ajouter une Ordonnance
-                          </Button>
-                        </div>
-                      </Col>
-                      <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
-                            <input
-                              type='text'
-                              className='form-control search'
-                              placeholder='Search...'
-                            />
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
+                    <Row className='g-4 mb-3'></Row>
                     <p className='text-center my-4 text-warning'>
                       Pour ajouter une Ordonnance vous devez retourner
-                      sélectionner le Traitement concernée
+                      sélectionner le Traitement concernée,{' '}
+                      <Link
+                        to='/traitements'
+                        className='text-decoration-underline'
+                      >
+                        Cliquez ici
+                      </Link>{' '}
+                      pour retourner à la liste des Traitements.
                     </p>
                     {error && (
                       <div className='text-danger text-center'>

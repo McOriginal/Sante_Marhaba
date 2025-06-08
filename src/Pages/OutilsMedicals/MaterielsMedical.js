@@ -127,7 +127,7 @@ export default function Materiels() {
                         style={{
                           borderRadius: '15px 15px 0 0',
                           height: '100%',
-                          objectFit: 'cover',
+                          objectFit: 'contain',
                         }}
                         src={mat.imageUrl ? mat.imageUrl : imgOutil}
                         alt={mat.name}

@@ -4,7 +4,6 @@ import {
   Card,
   CardBody,
   CardImg,
-  CardText,
   CardTitle,
   Col,
   Container,
@@ -15,9 +14,10 @@ import FormModal from '../components/FormModal';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords } from '../components/capitalizeFunction';
 
-import img1 from '../../assets/images/bed1.jpg';
-import img2 from '../../assets/images/bed2.jpg';
-import img3 from '../../assets/images/bed3.jpg';
+import img1 from '../../assets/images/ch1.jpg';
+import img2 from '../../assets/images/ch2.jpg';
+import chamImg3 from './../../assets/images/chambre.jpg';
+
 import { deleteButton } from '../components/AlerteModal';
 import { useAllChambres, useDeleteChambre } from '../../Api/queriesChambre';
 import ChambreForm from './ChambreForm';
@@ -28,7 +28,7 @@ export default function Chambre() {
   const { mutate: deleteChambre, isLoading: isDeleting } = useDeleteChambre();
   const [chambreToUpdate, setChambreToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter une Chambre');
-  const images = [img1, img2, img3];
+  const images = [img1, img2, chamImg3];
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   function tog_form_modal() {

@@ -64,6 +64,8 @@ export default function AppointmentListe() {
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
+                              setAppointmentToUpdate(null);
+                              setFormModalTitle('Fixer un rendez-vous');
                               tog_form_modal();
                             }}
                           >
@@ -99,7 +101,7 @@ export default function AppointmentListe() {
                       )}
                       {!error && !isLoading && appointmentData.length > 0 && (
                         <table
-                          className='table align-middle table-nowrap'
+                          className='table align-middle table-nowrap table-hover'
                           id='appointmentTable'
                         >
                           <thead className='table-light'>

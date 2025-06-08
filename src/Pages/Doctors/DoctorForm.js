@@ -40,6 +40,9 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       adresse: doctorToEdit?.adresse || '',
       emailAdresse: doctorToEdit?.emailAdresse || '',
       speciality: doctorToEdit?.speciality || '',
+      salaire: doctorToEdit?.salaire || undefined,
+      statut: doctorToEdit?.statut || '',
+      guardDays: doctorToEdit?.guardDays || '',
     },
     validationSchema: Yup.object({
       firstName: Yup.string()
@@ -62,6 +65,12 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       adresse: Yup.string()
         .matches(/^[a-z0-9\s]+$/i, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),
+      salaire: Yup.number().required('Ce champ est obligatoire'),
+      guardDays: Yup.string(),
+      statut: Yup.string().oneOf(
+        ['Actif', 'Inactif'],
+        'Sélectionner un statut valide'
+      ),
     }),
 
     onSubmit: (values, { resetForm }) => {
@@ -212,8 +221,8 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
             <Label htmlFor='dateOfBirth'>Date de Naissance</Label>
             <Input
               name='dateOfBirth'
-              placeholder='10/01/2000'
               type='date'
+              max={new Date().toISOString().split('T')[0]}
               className='form-control'
               id='dateOfBirth'
               onChange={validation.handleChange}
@@ -353,6 +362,89 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
             {validation.touched.speciality && validation.errors.speciality ? (
               <FormFeedback type='invalid'>
                 {validation.errors.speciality}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col md='12'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='salaire'>Salaire</Label>
+            <Input
+              name='salaire'
+              type='number'
+              className='form-control'
+              id='salaire'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.salaire || ''}
+              invalid={
+                validation.touched.salaire && validation.errors.salaire
+                  ? true
+                  : false
+              }
+            />
+
+            {validation.touched.salaire && validation.errors.salaire ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.salaire}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col md='6'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='statut'>Statut</Label>
+            <Input
+              name='statut'
+              type='select'
+              className='form-control'
+              id='statut'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.statut || ''}
+              invalid={
+                validation.touched.statut && validation.errors.statut
+                  ? true
+                  : false
+              }
+            >
+              <option value=''>Sélectionner un statut</option>
+              <option value='employer'>Employer</option>
+              <option value='stagiaire'>Stagiaire</option>
+              <option value='assistant'>Assistant</option>
+            </Input>
+            {validation.touched.statut && validation.errors.statut ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.statut}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+        <Col md='6'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='guardDays'>Jour de Service/Garde</Label>
+            <Input
+              name='guardDays'
+              type='text'
+              className='form-control'
+              id='guardDays'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.guardDays || ''}
+              invalid={
+                validation.touched.guardDays && validation.errors.guardDays
+                  ? true
+                  : false
+              }
+            />
+
+            {validation.touched.guardDays && validation.errors.guardDays ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.guardDays}
               </FormFeedback>
             ) : null}
           </FormGroup>

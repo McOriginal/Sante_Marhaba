@@ -63,12 +63,6 @@ export default function PatientsListe() {
                             <i className='ri-add-line align-bottom me-1'></i>{' '}
                             Ajouter un(e) Patient(e)
                           </Button>
-                          <Button
-                            color='soft-danger'
-                            // onClick="deleteMultiple()"
-                          >
-                            <i className='ri-delete-bin-2-line'></i>
-                          </Button>
                         </div>
                       </Col>
                       <Col className='col-sm'>
@@ -79,7 +73,6 @@ export default function PatientsListe() {
                               className='form-control search'
                               placeholder='Search...'
                             />
-                            <i className='ri-search-line search-icon'></i>
                           </div>
                         </div>
                       </Col>
@@ -99,7 +92,7 @@ export default function PatientsListe() {
                       )}
                       {!error && !isLoading && (
                         <table
-                          className='table align-middle table-nowrap'
+                          className='table align-middle table-nowrap table-hover'
                           id='customerTable'
                         >
                           <thead className='table-light'>

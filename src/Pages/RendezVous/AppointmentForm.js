@@ -217,11 +217,10 @@ const AppointmentForm = ({ appointmentToEdit, tog_form_modal }) => {
             </Label>
             <Input
               name='appointmentDate'
-              placeholder='10/01/2000'
               type='datetime-local'
               className='form-control'
               id='appointmentDate'
-              min={new Date().toISOString().slice(0, 16)} // Prevent past dates
+              min={new Date().toISOString().slice(0, 10) + 'T00:00'}
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.appointmentDate || ''}

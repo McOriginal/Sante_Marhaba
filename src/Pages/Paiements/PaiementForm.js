@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   errorMessageAlert,
   successMessageAlert,
@@ -47,7 +47,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
     initialValues: {
       traitement: paiementToEdit?.traitement._id || '',
       motifPaiement: paiementToEdit?.motifPaiement || '',
-      paiementDate: paiementToEdit?.paiementDate.substring(0, 16) || '',
+      paiementDate: paiementToEdit?.paiementDate.substring(0, 10) || '',
       totalAmount: paiementToEdit?.totalAmount || undefined,
       methode: paiementToEdit?.methode || '',
       statut: paiementToEdit?.statut || '',
@@ -194,6 +194,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
               }
             >
               <option value=''>Sélectionner le motif de paiement</option>
+              <option value='tous'>Tous</option>
               <option value='traitement'>Traitement</option>
               <option value='ordonnance'>Ordonnance</option>
               <option value='consultation'>Consultation</option>
@@ -211,9 +212,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
         <Col md='6'>
           <FormGroup className='mb-3'>
             <Label htmlFor='totalAmount'>Somme Total</Label>
-            <p style={{ fontSize: '12px' }}>
-              Il s'agit de la somme total de Traitement + l'Ordonnance
-            </p>
+
             <Input
               name='totalAmount'
               type='number'
@@ -242,6 +241,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
             <Input
               name='paiementDate'
               type='date'
+              max={new Date().toISOString().split('T')[0]} // Prevent future dates
               className='form-control'
               id='paiementDate'
               onChange={validation.handleChange}
@@ -295,7 +295,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
         </Col>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='statut'>Méthode de Paiement</Label>
+            <Label htmlFor='statut'>Statut</Label>
             <Input
               name='statut'
               placeholder='Paiement dédié pour les opérations chirugical.....'

@@ -51,13 +51,14 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
         .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ Prénom est obligatoire'),
       gender: Yup.string().required('Ce champ est obligatoire'),
-      dateOfBirth: Yup.date().required('Ce champ est obligatoire'),
-      phoneNumber: Yup.number().required('Ce champ est obligatoire'),
+      dateOfBirth: Yup.date(),
+      phoneNumber: Yup.number(),
       groupeSanguin: Yup.string().required('Ce champ est obligatoire'),
-      ethnie: Yup.string().required('Ce champ est obligatoire'),
-      profession: Yup.string()
-        .matches(/^[a-z0-9À-ÿ\s]+$/i, 'Veillez Entrez une valeur correct !')
-        .required('Ce champ est obligatoire'),
+      ethnie: Yup.string(),
+      profession: Yup.string().matches(
+        /^[a-z0-9À-ÿ\s]+$/i,
+        'Veillez Entrez une valeur correct !'
+      ),
       adresse: Yup.string()
         .matches(/^[a-z0-9À-ÿ\s]+$/i, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),
@@ -233,6 +234,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               <option value='ab-'>A-</option>
               <option value='o+'>O+</option>
               <option value='o-'>O-</option>
+              <option value='non définis'>Non Définis</option>
             </Input>
             {validation.touched.groupeSanguin &&
             validation.errors.groupeSanguin ? (
@@ -249,7 +251,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
             <Label htmlFor='dateOfBirth'>Date de Naissance</Label>
             <Input
               name='dateOfBirth'
-              placeholder='10/01/2000'
+              max={new Date().toISOString().split('T')[0]} // Prevent future dates
               type='date'
               className='form-control'
               id='dateOfBirth'

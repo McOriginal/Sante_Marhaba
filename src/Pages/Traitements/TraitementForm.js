@@ -10,7 +10,6 @@ import {
   Input,
   Form,
   FormFeedback,
-  Button,
 } from 'reactstrap';
 
 import classnames from 'classnames';
@@ -70,7 +69,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
     initialValues: {
       patient: traitementToEdit?.patient._id || '',
       motif: traitementToEdit?.motif || '',
-      startDate: traitementToEdit?.startDate || '',
+      startDate: traitementToEdit?.startDate.substring(0, 10) || '',
       startTime: traitementToEdit?.startTime || '',
       height: traitementToEdit?.height || '',
       width: traitementToEdit?.width || '',
@@ -203,7 +202,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             >
               <span className='step-number'>02</span>
               <span className='step-title' style={{ paddingLeft: '10px' }}>
-                Données démographique
+                Données Démographique
               </span>
             </NavLink>
           </NavItem>
@@ -236,7 +235,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             >
               <span className='step-number'>04</span>
               <span className='step-title' style={{ paddingLeft: '10px' }}>
-                Ordonance
+                Montant du Traitement
               </span>
             </NavLink>
           </NavItem>

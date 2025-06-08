@@ -80,6 +80,17 @@ export default function NewOrdonance() {
     );
   };
 
+  // Fonction pour augmenter la quantité dans le panier
+  const increaseQuantity = (ordonnanceId) => {
+    setOrdonnanceItems((prevCart) =>
+      prevCart.map((item) =>
+        item.ordonnance._id === ordonnanceId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
+  };
+
   // Fonction pour vider les produits dans le panier
   const clearCart = () => {
     setOrdonnanceItems([]);
@@ -134,7 +145,6 @@ export default function NewOrdonance() {
             setIsSubmitting(false);
           },
           onError: (err) => {
-            console.error(err);
             const message =
               err ||
               err.message ||
@@ -145,7 +155,6 @@ export default function NewOrdonance() {
         });
       },
       onError: (err) => {
-        console.error(err);
         const message =
           err || err.message || "Erreur lors de la validation de l'Ordonnance.";
         errorMessageAlert(message);
@@ -161,63 +170,6 @@ export default function NewOrdonance() {
           <Breadcrumbs title='Traitements' breadcrumbItem='Odonnances' />
 
           <Row>
-            {/* Liste des produits */}
-            <Col lg={6}>
-              <Card>
-                <CardBody>
-                  {isLoading && <LoadingSpiner />}
-                  {error && (
-                    <div className='text-danger text-center'>
-                      Une erreur est survenue ! Veuillez actualiser la page.
-                    </div>
-                  )}
-                  <Row>
-                    {!error &&
-                      medicamentsData?.length > 0 &&
-                      medicamentsData?.map((ordonnance) => (
-                        <Col xl={6} key={ordonnance._id}>
-                          <Card
-                            className='shadow shadow-lg'
-                            onClick={() => addToCart(ordonnance)}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <CardImg
-                              top
-                              style={{
-                                height: '100px',
-                                objectFit: 'contain',
-                              }}
-                              src={
-                                ordonnance.imageUrl
-                                  ? ordonnance.imageUrl
-                                  : imgMedicament
-                              }
-                              alt={ordonnance.name}
-                            />
-                            <CardBody>
-                              <CardText className='text-center'>
-                                {capitalizeWords(ordonnance.name)}
-                              </CardText>
-                              <CardText
-                                className='text-center fw-bold'
-                                style={{
-                                  color: ordonnance.stock === 0 && 'red',
-                                }}
-                              >
-                                Stock: {formatPrice(ordonnance.stock)}
-                              </CardText>
-                              <CardText className='text-center fw-bold'>
-                                {formatPrice(ordonnance.price)} F
-                              </CardText>
-                            </CardBody>
-                          </Card>
-                        </Col>
-                      ))}
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-
             {/* Panier */}
             <Col lg={6}>
               <Card>
@@ -257,6 +209,13 @@ export default function NewOrdonance() {
                         >
                           -
                         </Button>
+                        <Button
+                          color='success'
+                          size='sm'
+                          onClick={() => increaseQuantity(item.ordonnance._id)}
+                        >
+                          +
+                        </Button>
                       </div>
                     </div>
                   ))}
@@ -286,6 +245,71 @@ export default function NewOrdonance() {
                       </div>
                     </div>
                   )}
+                </CardBody>
+              </Card>
+            </Col>
+            {/* ------------------------------------------------------------- */}
+            {/* ------------------------------------------------------------- */}
+            {/* ------------------------------------------------------------- */}
+            {/* Liste des produits */}
+            <Col md={12}>
+              <Card>
+                <CardBody>
+                  {isLoading && <LoadingSpiner />}
+                  {error && (
+                    <div className='text-danger text-center'>
+                      Une erreur est survenue ! Veuillez actualiser la page.
+                    </div>
+                  )}
+                  <Row>
+                    {!error &&
+                      medicamentsData?.length > 0 &&
+                      medicamentsData?.map((ordonnance) => (
+                        <Col md={3} sm={6} key={ordonnance._id}>
+                          <Card
+                            className='shadow shadow-lg'
+                            onClick={() => addToCart(ordonnance)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <CardImg
+                              top
+                              style={{
+                                height: '100px',
+                                objectFit: 'contain',
+                              }}
+                              src={
+                                ordonnance.imageUrl
+                                  ? ordonnance.imageUrl
+                                  : imgMedicament
+                              }
+                              alt={ordonnance.name}
+                            />
+                            <CardBody>
+                              <CardText className='text-center'>
+                                {capitalizeWords(ordonnance.name)}
+                              </CardText>
+                              <CardText className='text-center fw-bold'>
+                                Stock:{' '}
+                                {ordonnance.stock >= 10 ? (
+                                  <span className='text-primary'>
+                                    {' '}
+                                    {ordonnance.stock}{' '}
+                                  </span>
+                                ) : (
+                                  <span className='text-danger'>
+                                    {' '}
+                                    {ordonnance.stock}{' '}
+                                  </span>
+                                )}
+                              </CardText>
+                              <CardText className='text-center fw-bold'>
+                                {formatPrice(ordonnance.price)} F
+                              </CardText>
+                            </CardBody>
+                          </Card>
+                        </Col>
+                      ))}
+                  </Row>
                 </CardBody>
               </Card>
             </Col>

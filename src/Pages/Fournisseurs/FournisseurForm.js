@@ -53,12 +53,10 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
         .required('Ce champ Prénom est obligatoire'),
       gender: Yup.string().required('Ce champ est obligatoire'),
       phoneNumber: Yup.number().required('Ce champ est obligatoire'),
-      emailAdresse: Yup.string()
-        .matches(
-          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-          'Veillez Entrez un Email correct !'
-        )
-        .required('Ce champ est obligatoire'),
+      emailAdresse: Yup.string().matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Veillez Entrez un Email correct !'
+      ),
       adresse: Yup.string()
         .matches(/^[a-z0-9À-ÿ\s]+$/i, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),

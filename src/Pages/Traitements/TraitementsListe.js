@@ -28,7 +28,7 @@ import img2 from '../../assets/images/t2.jpg';
 import img3 from '../../assets/images/t3.jpg';
 import img4 from '../../assets/images/t4.jpg';
 import { deleteButton } from '../components/AlerteModal';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function TraitementsListe() {
   const [form_modal, setForm_modal] = useState(false);
@@ -112,7 +112,14 @@ export default function TraitementsListe() {
                     </Row>
                     <p className='text-center text-warning'>
                       Avant d'ajouter un traitement rassurez-vous que vous avez
-                      déjà enregistré le Patient.
+                      déjà enregistré le Patient, sinon{' '}
+                      <Link
+                        to='/patients'
+                        className='text-decoration-underline'
+                      >
+                        Cliquez ici
+                      </Link>{' '}
+                      pour retourner à la liste des patients.
                     </p>
                   </div>
                 </CardBody>
@@ -204,7 +211,7 @@ export default function TraitementsListe() {
                       alt={trait.motif}
                     />
                     <CardBody>
-                      <CardTitle className='mt-0'>
+                      <CardTitle style={{ fontSize: '12px' }}>
                         <span style={{ color: 'gray' }}>Traitement:</span>{' '}
                         {capitalizeWords(trait.motif)}{' '}
                       </CardTitle>

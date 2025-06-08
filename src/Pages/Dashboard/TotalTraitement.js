@@ -26,7 +26,6 @@ export default function TotalTraitement() {
         <Card
           style={{
             height: '150px',
-            backgroundColor: '#f8f9fa',
             boxShadow: '1px 0px 10px rgba(1, 186, 186, 0.57)',
           }}
         >

@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Row,
-} from 'reactstrap';
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
 import DoctorForm from './DoctorForm';
@@ -17,6 +9,7 @@ import LoadingSpiner from '../components/LoadingSpiner';
 import {
   capitalizeWords,
   formatPhoneNumber,
+  formatPrice,
 } from '../components/capitalizeFunction';
 import { deleteButton } from '../components/AlerteModal';
 
@@ -101,7 +94,7 @@ export default function DoctorsListe() {
                       )}
                       {!error && !isLoading && (
                         <table
-                          className='table align-middle table-nowrap'
+                          className='table align-middle table-nowrap table-hover'
                           id='customerTable'
                         >
                           <thead className='table-light'>
@@ -109,69 +102,44 @@ export default function DoctorsListe() {
                               <th scope='col' style={{ width: '50px' }}>
                                 ID
                               </th>
-                              <th className='sort' data-sort='customer_name'>
-                                Nom
-                              </th>
-                              <th className='sort' data-sort='email'>
-                                Prénom
-                              </th>
-                              <th className='sort' data-sort='genre'>
-                                Genre
-                              </th>
-                              <th className='sort' data-sort='speciality'>
-                                Spécialité
-                              </th>
-                              <th className='sort' data-sort='email'>
-                                Adresse Email
-                              </th>
-                              <th className='sort' data-sort='date'>
-                                Date de naissance
-                              </th>
+                              <th data-sort='customer_name'>Nom</th>
+                              <th data-sort='email'>Prénom</th>
+                              <th data-sort='genre'>Genre</th>
+                              <th data-sort='statut'>Statut</th>
+                              <th data-sort='salaire'>Salaire</th>
+                              <th data-sort='guardDays'>J-Services</th>
+                              <th data-sort='speciality'>Spécialité</th>
+                              <th data-sort='email'>Adresse Email</th>
+                              <th data-sort='date'>Date de naissance</th>
 
-                              <th className='sort' data-sort='adresse'>
-                                Domicile
-                              </th>
-                              <th className='sort' data-sort='phone'>
-                                Téléphone
-                              </th>
-                              <th className='sort' data-sort='action'>
-                                Action
-                              </th>
+                              <th data-sort='adresse'>Domicile</th>
+                              <th data-sort='phone'>Téléphone</th>
+                              <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
                           {doctorsData?.length > 0 &&
-                            doctorsData?.map((doctor) => (
+                            doctorsData?.map((doctor, index) => (
                               <tbody className='list form-check-all text-center'>
                                 <tr key={doctor._id}>
-                                  <th scope='row'></th>
-                                  <td
-                                    className='id'
-                                    style={{ display: 'none' }}
-                                  ></td>
-                                  <td className='firstName'>
-                                    {capitalizeWords(doctor.firstName)}{' '}
-                                  </td>
-                                  <td className='firstName'>
-                                    {capitalizeWords(doctor.lastName)}{' '}
-                                  </td>
-                                  <td className='gender'>{doctor.gender} </td>
-                                  <td className='speciality'>
-                                    {capitalizeWords(doctor.speciality)}{' '}
-                                  </td>
-                                  <td className='email'>
-                                    {doctor.emailAdresse}{' '}
-                                  </td>
+                                  <th scope='row'>{index + 1}</th>
 
-                                  <td className='date'>
+                                  <td>{capitalizeWords(doctor.firstName)} </td>
+                                  <td>{capitalizeWords(doctor.lastName)} </td>
+                                  <td>{capitalizeWords(doctor.gender)} </td>
+                                  <td>{capitalizeWords(doctor.statut)} </td>
+                                  <td>{formatPrice(doctor.salaire)} F </td>
+                                  <td>{capitalizeWords(doctor.guardDays)} </td>
+                                  <td>{capitalizeWords(doctor.speciality)} </td>
+                                  <td>{doctor.emailAdresse} </td>
+
+                                  <td>
                                     {new Date(
                                       doctor.dateOfBirth
                                     ).toLocaleDateString()}{' '}
                                   </td>
 
-                                  <td className='adresse'>
-                                    {capitalizeWords(doctor.adresse)}{' '}
-                                  </td>
-                                  <td className='phone'>
+                                  <td>{capitalizeWords(doctor.adresse)} </td>
+                                  <td>
                                     {formatPhoneNumber(doctor.phoneNumber)}
                                   </td>
 

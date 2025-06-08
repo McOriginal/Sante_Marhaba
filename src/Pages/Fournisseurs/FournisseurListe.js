@@ -108,7 +108,7 @@ export default function FournisseurListe() {
                       )}
                       {!error && fournisseurData?.length > 0 && !isLoading && (
                         <table
-                          className='table align-middle table-nowrap'
+                          className='table align-middle table-nowrap table-hover'
                           id='fournisseurTable'
                         >
                           <thead className='table-light'>

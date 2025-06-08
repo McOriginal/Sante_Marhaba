@@ -52,7 +52,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
+        .matches(/^[a-zA-ZÀ-ÿ0-9\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),
 
       stock: Yup.number().required('Ce champ est obligatoire'),

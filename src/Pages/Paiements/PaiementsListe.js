@@ -97,13 +97,16 @@ export default function PaiementsListe() {
                       )}
                       {!error && !isLoading && paiementsData.length > 0 && (
                         <table
-                          className='table align-middle table-nowrap'
+                          className='table align-middle table-nowrap table-hover'
                           id='paiementTable'
                         >
                           <thead className='table-light'>
                             <tr>
-                              <th scope='col' style={{ width: '50px' }}>
-                                ID
+                              <th
+                                style={{ width: '50px' }}
+                                data-sort='paiementDate'
+                              >
+                                Date de Paiement
                               </th>
                               <th className='sort' data-sort='paiement_name'>
                                 Patient(e)
@@ -126,10 +129,6 @@ export default function PaiementsListe() {
                                 Motif de Paiement
                               </th>
 
-                              <th className='sort' data-sort='paiementDate'>
-                                Date de Paiement
-                              </th>
-
                               <th className='sort' data-sort='statut'>
                                 Statut
                               </th>
@@ -142,7 +141,11 @@ export default function PaiementsListe() {
                             paiementsData?.map((paiement) => (
                               <tbody className='list form-check-all text-center'>
                                 <tr key={paiement._id}>
-                                  <th scope='row'></th>
+                                  <th scope='row'>
+                                    {new Date(
+                                      paiement.paiementDate
+                                    ).toLocaleDateString()}
+                                  </th>
                                   <td
                                     className='id'
                                     style={{ display: 'none' }}
@@ -179,11 +182,7 @@ export default function PaiementsListe() {
                                   <td>
                                     {capitalizeWords(paiement.motifPaiement)}
                                   </td>
-                                  <td>
-                                    {new Date(
-                                      paiement.createdAt
-                                    ).toLocaleDateString()}
-                                  </td>
+
                                   <td>
                                     <span
                                       className={`badge badge-soft-${
