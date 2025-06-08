@@ -5,10 +5,10 @@ const ordonnanceController = require('../controller/OrdonnanceController');
 //  Créer une nouvelle Ordonnance
 router.post('/createOrdonnance', ordonnanceController.createOrdonnance);
 
-//  Obtenir toutes les Ordonnances (avec année scolaire liée)
+//  Obtenir toutes les Ordonnances
 router.get('/getAllOrdonnances', ordonnanceController.getAllOrdonnances);
 
-//  Obtenir une Ordonnances (avec année scolaire liée)
+//  Obtenir une Ordonnances
 router.get('/getOneOrdonnance/:id', ordonnanceController.getOneOrdonnance);
 
 //  Obtenir une Ordonnances (avec TRAITEMENT liée)

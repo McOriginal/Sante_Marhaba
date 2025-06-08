@@ -26,9 +26,8 @@ exports.newPatient = async (req, res) => {
     if (
       !textValidator.stringValidator(lowerFirstName) ||
       !textValidator.stringValidator(lowerLastName) ||
-      !textValidator.stringValidator(lowerAdresse) ||
-      !textValidator.stringValidator(lowerEthnie) ||
-      !textValidator.stringValidator()
+      (ethnie != '' && !textValidator.stringValidator(lowerEthnie)) ||
+      (profession != '' && !textValidator.stringValidator(profession))
     ) {
       return res.status(400).json({
         status: 'error',

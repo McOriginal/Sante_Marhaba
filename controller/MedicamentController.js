@@ -155,8 +155,8 @@ exports.decrementMultipleStocks = async (req, res) => {
   try {
     const items = req.body.items; // [{ id, quantity }, ...]
 
-    for (const { medicamentID, quantity } of items) {
-      const medicament = await Medicament.findById(medicamentID).session(
+    for (const { medicaments, quantity } of items) {
+      const medicament = await Medicament.findById(medicaments).session(
         session
       );
       if (!medicament) {

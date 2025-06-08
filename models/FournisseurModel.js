@@ -25,7 +25,6 @@ const fournisseurSchema = new mongoose.Schema(
 
     emailAdresse: {
       type: String,
-      required: true,
       trim: true,
     },
 

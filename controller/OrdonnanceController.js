@@ -7,6 +7,7 @@ const Traitement = require('../models/TraitementModel');
 exports.createOrdonnance = async (req, res) => {
   try {
     const { items, ...restOfData } = req.body;
+    console.log(req.body);
 
     // const cashierId = req.user?._id || null; // supposé que `req.user` est injecté par auth middleware
 
@@ -16,11 +17,11 @@ exports.createOrdonnance = async (req, res) => {
     }
 
     for (const item of items) {
-      const medicament = await Medicament.findById(item.medicamentID);
+      const medicament = await Medicament.findById(item.medicaments);
       if (!medicament) {
         return res
           .status(404)
-          .json({ message: `Medicament introuvable: ${item.medicamentID}` });
+          .json({ message: `Medicament introuvable: ${item.medicaments}` });
       }
       if (item.quantity < 1) {
         return res
@@ -36,7 +37,7 @@ exports.createOrdonnance = async (req, res) => {
 
     res.status(201).json(newOrdonnance);
   } catch (error) {
-    console.error("Erreur de validation l'ordonnance :", error);
+    console.log("Erreur de validation l'ordonnance :", error);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };

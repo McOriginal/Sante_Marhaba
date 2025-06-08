@@ -1,12 +1,18 @@
-const mongoose = require('mongoose');
 const Doctor = require('../models/DoctorModel');
 const textValidation = require('./regexValidation');
 
 // Créer un Doctor
 exports.createDoctor = async (req, res) => {
   try {
-    const { firstName, lastName, emailAdresse, adresse, ...resOfData } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      emailAdresse,
+      adresse,
+      salaire,
+      prime,
+      ...resOfData
+    } = req.body;
     // Changer les données en miniscule
     const lowerFirstName = firstName.toLowerCase();
     const lowerLastName = lastName.toLowerCase();

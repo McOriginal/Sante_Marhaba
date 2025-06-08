@@ -43,7 +43,16 @@ const doctorSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    photo: String,
+    salaire: {
+      type: Number,
+    },
+
+    guardDays: {
+      type: String,
+    },
+    statut: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

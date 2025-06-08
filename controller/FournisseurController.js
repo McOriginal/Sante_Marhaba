@@ -26,7 +26,7 @@ exports.createFournisseur = async (req, res) => {
       !textValidation.stringValidator(lowerFirstName) ||
       !textValidation.stringValidator(lowerLastName) ||
       !textValidation.stringValidator(lowerAdresse) ||
-      !textValidation.emailValidation(emailAdresse) ||
+      (emailAdresse != '' && !textValidation.emailValidation(emailAdresse)) ||
       !textValidation.stringValidator(marchandise)
     ) {
       return res.status(400).json({

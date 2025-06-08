@@ -33,7 +33,6 @@ const patientSchema = new mongoose.Schema(
     },
     profession: {
       type: String,
-      required: true,
     },
 
     adresse: {
