@@ -27,43 +27,24 @@ const SidebarData = [
   },
   {
     label: 'Patients',
-    icon: 'mdi mdi-calendar-outline',
+    icon: 'fas fa-procedures',
     isHasArrow: true,
     url: '/patients',
   },
   {
     label: 'Traitements',
-    icon: 'mdi mdi-calendar-outline',
+    // icon: 'fas fa-file-medical-alt',
+    icon: 'fas fa-heartbeat',
     isHasArrow: true,
     url: '/traitements',
   },
   {
     label: 'Ordonnances',
-    icon: 'mdi mdi-calendar-outline',
+    icon: 'fas fa-first-aid',
     isHasArrow: true,
     url: '/ordonnances',
   },
 
-  // ----------------------------------------------------------------------
-  // Médecins
-  {
-    label: 'Médecins & Fournisseurs',
-    isMainMenu: true,
-  },
-  {
-    label: 'Médecins',
-    icon: 'mdi mdi-calendar-outline',
-    isHasArrow: true,
-    url: '/doctors',
-  },
-  {
-    label: 'Fournisseurs',
-    icon: 'mdi mdi-calendar-outline',
-    isHasArrow: true,
-    url: '/fournisseurs',
-  },
-
-  // ----------------------------------------------------------------------
   // Transactions
   {
     label: 'Paiements',
@@ -71,26 +52,11 @@ const SidebarData = [
   },
   {
     label: 'Transactions',
-    icon: 'mdi mdi-email-outline',
+    icon: 'fas fa-euro-sign',
     subItem: [
-      { sublabel: 'Faire un Paiement', link: '/paiements' },
+      { sublabel: 'Paiement', link: '/paiements' },
       { sublabel: 'Factures', link: '/factures' },
       { sublabel: 'Dépense', link: '/depenses' },
-    ],
-  },
-
-  // ----------------------------------------------------------------------
-  // Outils Médical
-  {
-    label: 'Matériels',
-    isMainMenu: true,
-  },
-  {
-    label: 'Outis Médicals',
-    icon: 'mdi mdi-email-outline',
-    subItem: [
-      { sublabel: 'Chambre', link: '/chambres' },
-      { sublabel: 'Matériels', link: '/materiels' },
     ],
   },
 
@@ -101,10 +67,43 @@ const SidebarData = [
   },
   {
     label: 'Pharmacie',
-    icon: 'mdi mdi-email-outline',
+    icon: 'dripicons-pill',
     subItem: [
       { sublabel: 'Médicament', link: '/medicaments' },
       { sublabel: 'Approvisionnements', link: '/approvisonnements' },
+    ],
+  },
+
+  // ----------------------------------------------------------------------
+  // Médecins
+  {
+    label: 'Médecins & Fournisseurs',
+    isMainMenu: true,
+  },
+  {
+    label: 'Médecins',
+    icon: 'fas fa-user-md',
+    isHasArrow: true,
+    url: '/doctors',
+  },
+  {
+    label: 'Fournisseurs',
+    icon: 'fas fa-ambulance',
+    isHasArrow: true,
+    url: '/fournisseurs',
+  },
+
+  // Outils Médical
+  {
+    label: 'Matériels',
+    isMainMenu: true,
+  },
+  {
+    label: 'Outis Médicals',
+    icon: 'fas fa-toolbox',
+    subItem: [
+      { sublabel: 'Chambre', link: '/chambres' },
+      { sublabel: 'Matériels', link: '/materiels' },
     ],
   },
 
@@ -115,7 +114,7 @@ const SidebarData = [
   },
   {
     label: 'Rapports et Suivie',
-    icon: 'mdi mdi-email-outline',
+    icon: 'fas fa-chart-bar',
     subItem: [{ sublabel: 'Raports', link: '/rapports' }],
   },
   // --------------------------------------

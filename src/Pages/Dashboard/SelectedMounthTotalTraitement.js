@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, CardTitle, Col } from 'reactstrap';
+import { Card, CardBody } from 'reactstrap';
 import { useAllTraitement } from '../../Api/queriesTraitement';
 
 const SelectedMounthTotalTraitement = () => {

@@ -53,7 +53,7 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
         .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ Prénom est obligatoire'),
       gender: Yup.string().required('Ce champ est obligatoire'),
-      dateOfBirth: Yup.date().required('Ce champ est obligatoire'),
+      dateOfBirth: Yup.date(),
       phoneNumber: Yup.number().required('Ce champ est obligatoire'),
       emailAdresse: Yup.string()
         .matches(
@@ -65,12 +65,9 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       adresse: Yup.string()
         .matches(/^[a-z0-9\s]+$/i, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),
-      salaire: Yup.number().required('Ce champ est obligatoire'),
+      salaire: Yup.number().typeError('Ce champ doit être un nombre'),
       guardDays: Yup.string(),
-      statut: Yup.string().oneOf(
-        ['Actif', 'Inactif'],
-        'Sélectionner un statut valide'
-      ),
+      statut: Yup.string(),
     }),
 
     onSubmit: (values, { resetForm }) => {

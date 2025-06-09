@@ -48,7 +48,7 @@ export default function PatientsListe() {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <div id='customerList'>
+                  <div id='patientList'>
                     <Row className='g-4 mb-3'>
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
@@ -93,68 +93,49 @@ export default function PatientsListe() {
                       {!error && !isLoading && (
                         <table
                           className='table align-middle table-nowrap table-hover'
-                          id='customerTable'
+                          id='patientTable'
                         >
                           <thead className='table-light'>
                             <tr>
                               <th scope='col' style={{ width: '50px' }}>
                                 ID
                               </th>
-                              <th className='sort' data-sort='customer_name'>
-                                Nom
-                              </th>
-                              <th className='sort' data-sort='email'>
-                                Prénom
-                              </th>
-                              <th className='sort' data-sort='groupeSanguin'>
-                                Groupe Sanguin
-                              </th>
-                              <th className='sort' data-sort='date'>
-                                Date de naissance
-                              </th>
+                              <th data-sort='patient_name'>Nom</th>
+                              <th data-sort='email'>Prénom</th>
+                              <th data-sort='groupeSanguin'>Groupe Sanguin</th>
+                              <th data-sort='date'>Date de naissance</th>
 
-                              <th className='sort' data-sort='adresse'>
-                                Domicile
-                              </th>
-                              <th className='sort' data-sort='phone'>
-                                Téléphone
-                              </th>
-                              <th className='sort' data-sort='action'>
-                                Action
-                              </th>
+                              <th data-sort='adresse'>Domicile</th>
+                              <th data-sort='phone'>Téléphone</th>
+                              <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
                           {data?.length > 0 &&
-                            data?.map((patient) => (
+                            data?.map((patient, index) => (
                               <tbody className='list form-check-all text-center'>
                                 <tr key={patient._id}>
-                                  <th scope='row'></th>
-                                  <td
-                                    className='id'
-                                    style={{ display: 'none' }}
-                                  ></td>
+                                  <th scope='row'>{index + 1}</th>
+
                                   <td>{capitalizeWords(patient.firstName)} </td>
                                   <td>{capitalizeWords(patient.lastName)} </td>
                                   <td className='badge bg-warning text-light'>
                                     {capitalizeWords(patient.groupeSanguin)}{' '}
                                   </td>
 
-                                  <td className='date'>
+                                  <td>
                                     {new Date(
                                       patient.dateOfBirth
                                     ).toLocaleDateString()}{' '}
                                   </td>
 
-                                  <td className='adresse'>
-                                    {capitalizeWords(patient.adresse)}{' '}
-                                  </td>
-                                  <td className='phone'>
+                                  <td>{capitalizeWords(patient.adresse)} </td>
+                                  <td>
                                     {formatPhoneNumber(patient.phoneNumber)}
                                   </td>
 
                                   <td>
                                     <div className='d-flex gap-2'>
-                                      <div className='edit'>
+                                      <div>
                                         <button
                                           className='btn btn-sm btn-success edit-item-btn'
                                           data-bs-toggle='modal'

@@ -49,6 +49,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       motifPaiement: paiementToEdit?.motifPaiement || '',
       paiementDate: paiementToEdit?.paiementDate.substring(0, 10) || '',
       totalAmount: paiementToEdit?.totalAmount || undefined,
+      totalPaye: paiementToEdit?.totalPaye || undefined,
       methode: paiementToEdit?.methode || '',
       statut: paiementToEdit?.statut || '',
     },
@@ -57,6 +58,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       motifPaiement: Yup.string().required('Ce champ est obligatoire'),
       paiementDate: Yup.date().required('Ce champ est obligatoire'),
       totalAmount: Yup.number().required('Ce champ est obligatoire'),
+      totalPaye: Yup.number().required('Ce champ est obligatoire'),
       methode: Yup.string().required('Ce champ est obligatoire'),
       statut: Yup.string().required('Ce champ est obligatoire'),
     }),
@@ -209,7 +211,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
         </Col>
       </Row>
       <Row>
-        <Col md='6'>
+        <Col md='12'>
           <FormGroup className='mb-3'>
             <Label htmlFor='totalAmount'>Somme Total</Label>
 
@@ -230,6 +232,33 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
             {validation.touched.totalAmount && validation.errors.totalAmount ? (
               <FormFeedback type='invalid'>
                 {validation.errors.totalAmount}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col md='6'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='totalPaye'>Somme Payé</Label>
+
+            <Input
+              name='totalPaye'
+              type='number'
+              className='form-control'
+              id='totalPaye'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.totalPaye || ''}
+              invalid={
+                validation.touched.totalPaye && validation.errors.totalPaye
+                  ? true
+                  : false
+              }
+            />
+            {validation.touched.totalPaye && validation.errors.totalPaye ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.totalPaye}
               </FormFeedback>
             ) : null}
           </FormGroup>

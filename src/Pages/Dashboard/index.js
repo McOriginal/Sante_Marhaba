@@ -15,13 +15,13 @@ import BarChartDataRaportsTraitement from '../Raports/DataRaportsTraitement';
 import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
 
 const Dashboard = () => {
-  document.title = 'Dashboard | Upzet - React Admin & Dashboard Template';
+  document.title = 'Santé MARHABA';
 
   return (
     <React.Fragment>
       <div className='page-content'>
         <Container fluid={true}>
-          <Breadcrumbs title='Upzet' breadcrumbItem='Dashboard' />
+          <Breadcrumbs title='Santé MARHABA' breadcrumbItem='Dashboard' />
 
           <motion.div
             initial={{ opacity: 0, y: 70 }}

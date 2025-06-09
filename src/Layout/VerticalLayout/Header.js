@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-
-import LanguageDropdown from '../../components/Common/TopbarDropdown/LanguageDropdown';
-import NotificationDropdown from '../../components/Common/TopbarDropdown/NotificationDropdown';
 
 //i18n
 import { withTranslation } from 'react-i18next';
 
 //import images
-import logoSm from '../../assets/images/logo-sm.png';
-import logoDark from '../../assets/images/logo-dark.png';
-import logoLight from '../../assets/images/logo-light.png';
+// import logoSm from '../../assets/images/logo-sm.png';
+// import logoDark from '../../assets/images/logo-dark.png';
+// import logoLight from '../../assets/images/logo-light.png';
 import logo from '../../assets/images/logo_medical.png';
 
 // Redux Store
@@ -22,11 +18,8 @@ import {
   changeSidebarType,
 } from '../../store/actions';
 import ProfileMenu from '../../components/Common/TopbarDropdown/ProfileMenu';
-import AppsDropdown from '../../components/Common/TopbarDropdown/AppsDropdown';
 
 const Header = (props) => {
-  const [search, setsearch] = useState(false);
-
   function toggleFullscreen() {
     if (
       !document.fullscreenElement &&
@@ -87,16 +80,7 @@ const Header = (props) => {
                   <img src={logoLight} alt='logo-light' height='24' />
                 </span>
               </Link> */}
-              <span
-                style={{
-                  background: 'warning',
-                  margin: '10px 0 0 0',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '5px',
-                  alignItems: 'center',
-                }}
-              >
+              <span>
                 <img
                   src={logo}
                   style={{
@@ -104,7 +88,7 @@ const Header = (props) => {
                   }}
                   alt=''
                 />
-                <h5 className='text-white'> Clinique MARHABA</h5>
+                <h5 className='text-white'> Santé MARHABA</h5>
               </span>
             </div>
 
@@ -119,61 +103,20 @@ const Header = (props) => {
               <i className='ri-menu-2-line align-middle'></i>
             </button>
 
-            <form className='app-search d-none d-lg-block'>
-              <div className='position-relative'>
-                <input
-                  type='text'
-                  className='form-control'
-                  placeholder='Search...'
-                />
-                <span className='ri-search-line'></span>
-              </div>
-            </form>
+            <h4
+              style={{
+                color: ' #27548A',
+                textAlign: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              Cabinet de soins MARHABA Santé
+            </h4>
           </div>
 
           <div className='d-flex'>
-            <div className='dropdown d-inline-block d-lg-none ms-2'>
-              <button
-                onClick={() => {
-                  setsearch(!search);
-                }}
-                type='button'
-                className='btn header-item noti-icon '
-                id='page-header-search-dropdown'
-              >
-                <i className='ri-search-line' />
-              </button>
-              <div
-                className={
-                  search
-                    ? 'dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 show'
-                    : 'dropdown-menu dropdown-menu-lg dropdown-menu-end p-0'
-                }
-                aria-labelledby='page-header-search-dropdown'
-              >
-                <form className='p-3'>
-                  <div className='form-group m-0'>
-                    <div className='input-group'>
-                      <input
-                        type='text'
-                        className='form-control'
-                        placeholder='Search ...'
-                        aria-label="Recipient's username"
-                      />
-                      <div className='input-group-append'>
-                        <button className='btn btn-primary' type='submit'>
-                          <i className='ri-search-line' />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <LanguageDropdown />
-            <AppsDropdown />
-
             <div className='dropdown d-none d-lg-inline-block ms-1'>
               <button
                 type='button'
@@ -186,8 +129,6 @@ const Header = (props) => {
                 <i className='ri-fullscreen-line' />
               </button>
             </div>
-
-            <NotificationDropdown />
 
             <ProfileMenu />
 

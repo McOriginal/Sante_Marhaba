@@ -86,9 +86,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
       patient: Yup.string().required(
         'Vous devez entrez une valeur dans de champ'
       ),
-      motif: Yup.string().required(
-        'Vous devez entrez une valeur dans de champ'
-      ),
+      motif: Yup.string().typeError('Le motif doit être un texte'),
       startDate: Yup.date().required(
         'Vous devez entrez une valeur dans de champ'
       ),

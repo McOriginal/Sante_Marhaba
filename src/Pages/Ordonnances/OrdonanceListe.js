@@ -94,13 +94,10 @@ export default function OrdonnanceListe() {
                           </thead>
                           <tbody className='list form-check-all text-center'>
                             {ordonnances?.length > 0 &&
-                              ordonnances?.map((ordo) => (
+                              ordonnances?.map((ordo, index) => (
                                 <tr key={ordo._id}>
-                                  <th scope='row'></th>
-                                  <td
-                                    className='id'
-                                    style={{ display: 'none' }}
-                                  ></td>
+                                  <th scope='row'>{index + 1}</th>
+
                                   <td>
                                     {new Date(
                                       ordo.createdAt

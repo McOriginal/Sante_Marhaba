@@ -3,6 +3,7 @@ import Breadcrumbs from '../../components/Common/Breadcrumb';
 import React from 'react';
 import RaportsBarChart from './DataRaportsPatientTraitementOrdonnace';
 import BarChartEntreSortie from './DataRaportsEntreSortie';
+import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
 
 const Rapports = () => {
   document.title = 'Raports | Centre de Santé - MARHABA ';
@@ -13,6 +14,10 @@ const Rapports = () => {
           <Breadcrumbs title='Statistique' breadcrumbItem='Raports' />
 
           <Row>
+            <Col md={12}>
+              <SelectedMounthTotalTraitement />
+            </Col>
+
             <Col sm={12}>
               <Card>
                 <CardBody>

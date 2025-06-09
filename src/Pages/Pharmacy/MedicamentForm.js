@@ -21,22 +21,12 @@ import {
   useCreateMedicament,
   useUpdateMedicament,
 } from '../../Api/queriesMedicament';
-import { useAllFournisseur } from '../../Api/queriesFournisseur';
-import {
-  capitalizeWords,
-  formatPhoneNumber,
-} from '../components/capitalizeFunction';
 
 const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
   // Matériels Query pour créer la Medicament
   const { mutate: createMedicament } = useCreateMedicament();
   // Matériels Query pour Mettre à jour la Medicament
   const { mutate: updateMedicament } = useUpdateMedicament();
-  const {
-    data: fournisseurData,
-    isLoading: fourniLoading,
-    error: fourniError,
-  } = useAllFournisseur();
   const [isLoading, setIsLoading] = useState(false);
 
   // Form validation
@@ -51,9 +41,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
       imageUrl: medicamentToEdit?.imageUrl || '',
     },
     validationSchema: Yup.object({
-      name: Yup.string()
-        .matches(/^[a-zA-ZÀ-ÿ0-9\s'-]+$/, 'Veillez Entrez une valeur correct !')
-        .required('Ce champ est obligatoire'),
+      name: Yup.string().required('Ce champ est obligatoire'),
 
       stock: Yup.number().required('Ce champ est obligatoire'),
       price: Yup.number().required('Ce champ est obligatoire'),
@@ -127,7 +115,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
       <Row>
         <Col md='12'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='name'>Nom</Label>
+            <Label htmlFor='name'>Nom du Médicament</Label>
             <Input
               name='name'
               placeholder='Entrez le nom de médicament'
@@ -153,7 +141,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
       <Row>
         <Col sm='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='stock'>Stock</Label>
+            <Label htmlFor='stock'>Stock Disponible</Label>
             <Input
               name='stock'
               placeholder='10; 4; 0'
@@ -178,7 +166,7 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
         </Col>
         <Col sm='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='price'>Prix</Label>
+            <Label htmlFor='price'>Prix de Vente</Label>
             <Input
               name='price'
               placeholder='Entrez les prix de médicament'

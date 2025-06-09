@@ -145,14 +145,10 @@ export default function FournisseurListe() {
                             </tr>
                           </thead>
 
-                          {fournisseurData?.map((fourniseur) => (
+                          {fournisseurData?.map((fourniseur, index) => (
                             <tbody className='list form-check-all text-center'>
                               <tr key={fourniseur._id}>
-                                <th scope='row'></th>
-                                <td
-                                  className='id'
-                                  style={{ display: 'none' }}
-                                ></td>
+                                <th scope='row'>{index + 1}</th>
                                 <td className='firstName'>
                                   {capitalizeWords(fourniseur.firstName)}{' '}
                                 </td>

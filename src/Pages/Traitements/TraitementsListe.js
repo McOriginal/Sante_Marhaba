@@ -90,6 +90,8 @@ export default function TraitementsListe() {
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
+                              setTraitementToUpdate(null);
+                              setFormModalTitle('Ajouter un Traitement');
                               tog_form_modal();
                             }}
                           >
