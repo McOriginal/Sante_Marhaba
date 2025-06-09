@@ -1,5 +1,4 @@
 const Medicament = require('../models/MedicamentModel');
-const textValidation = require('./regexValidation');
 
 // Enregistrer une Medicament
 exports.createMedicament = async (req, res) => {
@@ -9,13 +8,6 @@ exports.createMedicament = async (req, res) => {
     const lowerName = name.toLowerCase();
     const formatStock = Number(stock);
     const formatPrice = Number(price);
-
-    if (!textValidation.stringValidator(name)) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Vous avez mal saisie les données.',
-      });
-    }
 
     // Vérifier s'il existe déjà une matière avec ces critères
     const existingMedicaments = await Medicament.findOne({
@@ -52,13 +44,6 @@ exports.updateMedicament = async (req, res) => {
     const lowerName = name.toLowerCase();
     const formatStock = Number(stock);
     const formatPrice = Number(price);
-
-    if (!textValidation.stringValidator(name)) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Vous avez mal saisie les données.',
-      });
-    }
 
     // Vérifier s'il existe déjà une matière avec ces critères
     const existingMedicaments = await Medicament.findOne({

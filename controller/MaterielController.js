@@ -10,16 +10,6 @@ exports.createMateriel = async (req, res) => {
     const lowerDescription = description.toLowerCase();
     const numberMateriel = Number(nombre);
 
-    if (
-      !textValidation.stringValidator(lowerName) ||
-      (lowerDescription != '' &&
-        !textValidation.stringValidator(lowerDescription))
-    ) {
-      return res
-        .status(404)
-        .json({ message: 'vous avez mal entrée les données' });
-    }
-
     // Vérification si la Materiels n'existe pas dans la base de données
     const existingMateriels = await Materiel.findOne({
       name: lowerName,
@@ -76,16 +66,6 @@ exports.updateMateriel = async (req, res) => {
     const lowerName = name.toLowerCase();
     const lowerDescription = description.toLowerCase();
     const numberMateriel = Number(nombre);
-
-    if (
-      !textValidation.stringValidator(lowerName) ||
-      (lowerDescription != '' &&
-        !textValidation.stringValidator(lowerDescription))
-    ) {
-      return res
-        .status(404)
-        .json({ message: 'vous avez mal entrée les données' });
-    }
 
     // Vérification si la Materiels n'existe pas dans la base de données
     const existingMateriels = await Materiel.findOne({

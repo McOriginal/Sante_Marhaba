@@ -7,10 +7,15 @@ const paiementSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    totalPaye: {
+      type: Number,
+      required: true,
+      trim: true,
+    },
 
     motifPaiement: {
       type: String,
-      enum: ['ordonnance', 'traitement'],
+      enum: ['ordonnance', 'traitement', 'consultation', 'tous'],
       required: true,
     },
     paiementDate: {
