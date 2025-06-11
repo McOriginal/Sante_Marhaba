@@ -231,7 +231,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               <option value='b+'>B+</option>
               <option value='b-'>B-</option>
               <option value='ab+'>AB+</option>
-              <option value='ab-'>A-</option>
+              <option value='ab-'>AB-</option>
               <option value='o+'>O+</option>
               <option value='o-'>O-</option>
               <option value='non définis'>Non Définis</option>
@@ -304,7 +304,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
             <Input
               name='phoneNumber'
               placeholder='70 00 00 00'
-              type='tel'
+              type='number'
               className='form-control'
               id='phoneNumber'
               onChange={validation.handleChange}

@@ -19,6 +19,23 @@ export default function PatientsListe() {
   const [patientToUpdate, setpatientToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un patien(e)');
 
+  // Barre de recherche
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction pour filtrer les patients en fonction du terme de recherche
+  const filteredPatients = data?.filter((patient) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      `${patient.firstName || ''} ${patient.lastName || ''}`
+        .toLowerCase()
+        .includes(search) ||
+      (patient.groupeSanguin || '').toLowerCase().includes(search) ||
+      (patient.adresse || '').toLowerCase().includes(search) ||
+      (patient.phoneNumber || '').toString().includes(search) ||
+      (patient.profession || '').toLowerCase().includes(search)
+    );
+  });
+
   function tog_form_modal() {
     setForm_modal(!form_modal);
   }
@@ -71,7 +88,9 @@ export default function PatientsListe() {
                             <input
                               type='text'
                               className='form-control search'
-                              placeholder='Search...'
+                              placeholder='Rechercher un patient(e)...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
                           </div>
                         </div>
@@ -107,11 +126,12 @@ export default function PatientsListe() {
 
                               <th data-sort='adresse'>Domicile</th>
                               <th data-sort='phone'>Téléphone</th>
+                              <th data-sort='profession'>Profession</th>
                               <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
-                          {data?.length > 0 &&
-                            data?.map((patient, index) => (
+                          {filteredPatients?.length > 0 &&
+                            filteredPatients?.map((patient, index) => (
                               <tbody className='list form-check-all text-center'>
                                 <tr key={patient._id}>
                                   <th scope='row'>{index + 1}</th>
@@ -123,14 +143,27 @@ export default function PatientsListe() {
                                   </td>
 
                                   <td>
-                                    {new Date(
-                                      patient.dateOfBirth
-                                    ).toLocaleDateString()}{' '}
+                                    {patient.dateOfBirth
+                                      ? new Date(
+                                          patient.dateOfBirth
+                                        ).toLocaleDateString()
+                                      : '----'}
                                   </td>
 
-                                  <td>{capitalizeWords(patient.adresse)} </td>
                                   <td>
-                                    {formatPhoneNumber(patient.phoneNumber)}
+                                    {patient.adresse
+                                      ? capitalizeWords(patient.adresse)
+                                      : '------'}{' '}
+                                  </td>
+                                  <td>
+                                    {patient.phoneNumber
+                                      ? formatPhoneNumber(patient.phoneNumber)
+                                      : '------'}
+                                  </td>
+                                  <td>
+                                    {patient.profession
+                                      ? capitalizeWords(patient.profession)
+                                      : '------'}
                                   </td>
 
                                   <td>

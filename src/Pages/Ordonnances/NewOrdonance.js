@@ -23,11 +23,14 @@ import {
   successMessageAlert,
 } from '../components/AlerteModal';
 import imgMedicament from './../../assets/images/medicament.jpg';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useOneTraitement } from '../../Api/queriesTraitement';
 
 export default function NewOrdonance() {
   const { id } = useParams();
+
+  // State de navigation
+  const navigate = useNavigate();
 
   // Query pour le Traitement Sélectionné
   const { data: selectedTraitement } = useOneTraitement(id);
@@ -104,8 +107,7 @@ export default function NewOrdonance() {
 
   // Validation de commande et AJOUTE DANS LA BASE DE DONNEES
   const handleSubmitOrder = () => {
-    if (ordonnanceItems.length === 0) return;
-
+  
     // Vérification de quantité dans le STOCK
     if (ordonnanceItems.length === 0) return;
 
@@ -143,6 +145,7 @@ export default function NewOrdonance() {
             clearCart();
             successMessageAlert('Ordonnance validée avec succès !');
             setIsSubmitting(false);
+            navigate('/ordonnances');
           },
           onError: (err) => {
             const message =

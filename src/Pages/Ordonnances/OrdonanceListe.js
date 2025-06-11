@@ -3,20 +3,60 @@ import Breadcrumbs from '../../components/Common/Breadcrumb';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords } from '../components/capitalizeFunction';
 import { Link } from 'react-router-dom';
-import { deleteButton } from '../components/AlerteModal';
+import {
+  deleteButton,
+  errorMessageAlert,
+  successMessageAlert,
+} from '../components/AlerteModal';
 import {
   useAllOrdonnances,
   useDeleteOrdonnance,
 } from '../../Api/queriesOrdonnance';
 import React, { useState } from 'react';
 import OrdonnanceDetails from './OrdonnanceDetails';
+import { useCancelDecrementMultipleStocks } from '../../Api/queriesMedicament';
 
 export default function OrdonnanceListe() {
+  // Afficher toutes les ordonnances
   const { data: ordonnances, isLoading, error } = useAllOrdonnances();
+
+  // Suprimer une ordonnance
   const { mutate: deleteOrdonnance, isLoading: isDeleting } =
     useDeleteOrdonnance();
-  const [show_modal, setShow_modal] = useState(false);
+
+  // ID de l'ordonnance sélectionnée pour les détails
   const [selectedOrdonnanceID, setSelectedOrdonnanceID] = useState(false);
+  // Annuler une Ordonnance
+  const { mutate: cancelDecrementMultipleStocks } =
+    useCancelDecrementMultipleStocks();
+
+  // ---------------------------
+  const [show_modal, setShow_modal] = useState(false);
+
+  // Fonction pour exeuter l'annulation de la décrementation des stocks
+  function cancelOrdonnance(ordo) {
+    const payload = {
+      ordonnanceId: ordo._id,
+      items: ordo.items.map((item) => ({
+        medicamentId: item.medicaments, // ou item.ordonnance._id selon ta donnée
+        quantity: item.quantity,
+      })),
+    };
+
+    cancelDecrementMultipleStocks(payload, {
+      onSuccess: () => {
+        successMessageAlert('Ordonnance annulée et stock mis à jour !');
+      },
+      onError: (error) => {
+        errorMessageAlert(
+          "Erreur lors de l'annulation :",
+          error.response?.data?.message || error.message
+        );
+      },
+    });
+  }
+
+  // console.log('CANCEL ORDONNANCE : ', result);
 
   function tog_show_modal() {
     setShow_modal(!show_modal);
@@ -129,6 +169,16 @@ export default function OrdonnanceListe() {
 
                                   <td>
                                     <div className='d-flex gap-2'>
+                                      <div className='show-details'>
+                                        <button
+                                          className='btn btn-sm btn-warning show-item-btn'
+                                          data-bs-toggle='modal'
+                                          data-bs-target='#showdetails'
+                                          onClick={() => cancelOrdonnance(ordo)}
+                                        >
+                                          Annuler
+                                        </button>
+                                      </div>
                                       <div className='show-details'>
                                         <button
                                           className='btn btn-sm btn-info show-item-btn'

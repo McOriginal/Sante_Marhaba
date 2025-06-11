@@ -16,11 +16,7 @@ import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
 
 import LoadingSpiner from '../components/LoadingSpiner';
-import {
-  capitalizeWords,
-  formatPhoneNumber,
-  formatPrice,
-} from '../components/capitalizeFunction';
+import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 
 import { deleteButton } from '../components/AlerteModal';
 import {
@@ -216,7 +212,17 @@ export default function MedicamentListe() {
                       </CardTitle>
                       <CardTitle className='fs-6'>
                         Stock:
-                        <span style={{ color: 'gray' }}> {medica?.stock}</span>
+                        {medica.stock >= 10 ? (
+                          <span style={{ color: 'gray' }}>
+                            {' '}
+                            {formatPrice(medica?.stock)}
+                          </span>
+                        ) : (
+                          <span className='text-danger'>
+                            {' '}
+                            {formatPrice(medica?.stock)}
+                          </span>
+                        )}
                       </CardTitle>
                       <CardTitle>
                         {' '}

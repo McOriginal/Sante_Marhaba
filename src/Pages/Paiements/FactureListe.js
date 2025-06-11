@@ -150,7 +150,7 @@ export default function FactureListe() {
                   justif-content-center'
                       >
                         <CardText className={'text-center'}>
-                          Total Traitement:{' '}
+                          Somme Total:{' '}
                           <strong style={{ fontSize: '14px' }}>
                             {' '}
                             {formatPrice(
@@ -166,7 +166,7 @@ export default function FactureListe() {
                           </strong>{' '}
                         </CardText>
                         <CardText className='text-center '>
-                          Restant:
+                          Réliqua:
                           <strong style={{ fontSize: '14px' }}>
                             {' '}
                             {paiement.totalAmount -

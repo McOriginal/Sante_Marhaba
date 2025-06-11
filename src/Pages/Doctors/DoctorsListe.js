@@ -20,6 +20,24 @@ export default function DoctorsListe() {
   const [doctorToUpdate, setDoctorToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un Médecin');
 
+  // State de Rechcher
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction de recherche
+  const filterSearchData = doctorsData?.filter((doctor) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      `${doctor.firstName || ''} ${doctor.lastName || ''}`
+        .toLowerCase()
+        .includes(search) ||
+      (doctor.emailAdresse || '').toLowerCase().includes(search) ||
+      doctor.speciality.toLowerCase().includes(search) ||
+      (doctor.phoneNumber || '').toString().includes(search) ||
+      (doctor.guardDays || '').toLowerCase().includes(search) ||
+      (doctor.statut || '').toLowerCase().includes(search)
+    );
+  });
+
   function tog_form_modal() {
     setForm_modal(!form_modal);
   }
@@ -74,6 +92,8 @@ export default function DoctorsListe() {
                               type='text'
                               className='form-control search'
                               placeholder='Search...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
                           </div>
                         </div>
@@ -117,8 +137,8 @@ export default function DoctorsListe() {
                               <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
-                          {doctorsData?.length > 0 &&
-                            doctorsData?.map((doctor, index) => (
+                          {filterSearchData?.length > 0 &&
+                            filterSearchData?.map((doctor, index) => (
                               <tbody className='list form-check-all text-center'>
                                 <tr key={doctor._id}>
                                   <th scope='row'>{index + 1}</th>

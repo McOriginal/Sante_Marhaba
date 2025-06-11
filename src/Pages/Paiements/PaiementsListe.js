@@ -108,33 +108,23 @@ export default function PaiementsListe() {
                               >
                                 Date de Paiement
                               </th>
-                              <th className='sort' data-sort='paiement_name'>
-                                Patient(e)
-                              </th>
+                              <th data-sort='paiement_name'>Patient(e)</th>
 
-                              <th className='sort' data-sort='genre'>
-                                Genre
-                              </th>
-                              <th className='sort' data-sort='date'>
-                                Date de naissance
-                              </th>
-                              <th className='sort' data-sort='traitement'>
-                                Maladie Traitée
-                              </th>
+                              <th data-sort='genre'>Genre</th>
+                              <th data-sort='date'>Date de naissance</th>
+                              <th data-sort='traitement'>Maladie Traitée</th>
 
-                              <th className='sort' data-sort='totaAmount'>
+                              <th data-sort='totaAmount'>Somme Total</th>
+                              <th className='sort' data-sort='totaPayer'>
                                 Somme Payé
                               </th>
-                              <th className='sort' data-sort='motif'>
-                                Motif de Paiement
+                              <th className='sort' data-sort='reliqua'>
+                                Réliqua
                               </th>
+                              <th data-sort='motif'>Réduction</th>
 
-                              <th className='sort' data-sort='statut'>
-                                Statut
-                              </th>
-                              <th className='sort' data-sort='action'>
-                                Action
-                              </th>
+                              <th data-sort='statut'>Statut</th>
+                              <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
                           {paiementsData?.length > 0 &&
@@ -150,7 +140,7 @@ export default function PaiementsListe() {
                                     className='id'
                                     style={{ display: 'none' }}
                                   ></td>
-                                  <td className='firstName'>
+                                  <td>
                                     {capitalizeWords(
                                       paiement.traitement['patient'].firstName
                                     )}{' '}
@@ -158,7 +148,7 @@ export default function PaiementsListe() {
                                       paiement.traitement['patient'].lastName
                                     )}
                                   </td>
-                                  <td className='genre'>
+                                  <td>
                                     {capitalizeWords(
                                       paiement.traitement['patient'].gender
                                     )}{' '}
@@ -175,12 +165,38 @@ export default function PaiementsListe() {
                                     )}
                                   </td>
 
-                                  <td className='adresse'>
+                                  <td>
                                     {formatPrice(paiement.totalAmount)}
                                     {' F '}
                                   </td>
                                   <td>
-                                    {capitalizeWords(paiement.motifPaiement)}
+                                    {formatPrice(paiement.totalPaye)}
+                                    {' F '}
+                                  </td>
+                                  <td>
+                                    {paiement.totalAmount - paiement.totalPaye >
+                                    0 ? (
+                                      <span className='text-danger'>
+                                        {' '}
+                                        {formatPrice(
+                                          paiement.totalAmount -
+                                            paiement.totalPaye
+                                        )}
+                                        {' F '}
+                                      </span>
+                                    ) : (
+                                      <span>
+                                        {' '}
+                                        {formatPrice(
+                                          paiement.totalAmount -
+                                            paiement.totalPaye
+                                        )}
+                                        {' F '}
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className='text-warning'>
+                                    {formatPrice(paiement.reduction)} F
                                   </td>
 
                                   <td>

@@ -39,6 +39,20 @@ export default function TraitementsListe() {
   const images = [img1, img2, img3, img4];
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
+  // State de Recherche
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filterTraitementSearch = traitements?.filter((trait) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      `${trait.patient?.firstName || ''} ${trait.patient?.lastName || ''}`
+        .toLowerCase()
+        .includes(search) ||
+      (trait.motif || '').toLowerCase().includes(search) ||
+      new Date(trait.createdAt).toLocaleDateString().toString().includes(search)
+    );
+  });
+
   const navigate = useNavigate();
 
   const handleNavigateToDetails = (id) => {
@@ -106,7 +120,9 @@ export default function TraitementsListe() {
                             <input
                               type='text'
                               className='form-control search'
-                              placeholder='Search...'
+                              placeholder='Recherche...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
                           </div>
                         </div>
@@ -138,8 +154,8 @@ export default function TraitementsListe() {
 
             {!error &&
               !isLoading &&
-              traitements?.length > 0 &&
-              traitements?.map((trait) => (
+              filterTraitementSearch?.length > 0 &&
+              filterTraitementSearch?.map((trait) => (
                 <Col mg={6} xl={3}>
                   <Card
                     style={{
@@ -213,21 +229,35 @@ export default function TraitementsListe() {
                       alt={trait.motif}
                     />
                     <CardBody>
-                      <CardTitle style={{ fontSize: '12px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          marginBottom: '13px',
+                          textAlign: 'center',
+                          display: 'block',
+                          color: 'blue',
+                        }}
+                      >
+                        <i className='bx bx-calendar'></i> Date de Traitement:{' '}
+                        {new Date(trait.createdAt).toLocaleDateString()}
+                      </span>
+                      <CardTitle
+                        style={{ fontSize: '12px', marginBottom: '10px' }}
+                      >
                         <span style={{ color: 'gray' }}>Traitement:</span>{' '}
                         {capitalizeWords(trait.motif)}{' '}
                       </CardTitle>
-                      <CardText>
-                        {trait.patient
-                          ? capitalizeWords(trait?.patient['firstName']) +
-                            ' ' +
-                            capitalizeWords(trait?.patient['lastName'])
-                          : '---------'}
-                      </CardText>
-                      <CardText>
-                        {new Date(
-                          trait?.patient['dateOfBirth']
-                        ).toLocaleDateString()}
+                      <CardText style={{ fontSize: '12px' }}>
+                        {capitalizeWords(trait?.patient['firstName']) +
+                          ' ' +
+                          capitalizeWords(trait?.patient['lastName'])}
+                        <p>
+                          {trait.patient['dateOfBirth']
+                            ? new Date(
+                                trait?.patient['dateOfBirth']
+                              ).toLocaleDateString()
+                            : '---------'}
+                        </p>
                       </CardText>
                     </CardBody>
                   </Card>

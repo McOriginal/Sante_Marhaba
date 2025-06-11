@@ -30,6 +30,22 @@ export const useDecrementMultipleStocks = () => {
   });
 };
 
+// Mettre à jour une Medicaments avec Stock
+export const useCancelDecrementMultipleStocks = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ ordonnanceId, items }) =>
+      api.post(`/medicaments/cancelDecrementMultipleStocks/${ordonnanceId}`, {
+        items,
+      }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries(['medicaments']);
+      queryClient.invalidateQueries(['ordonnances']); // si tu veux la liste à jour
+    },
+  });
+};
+
 // Lire toutes les Medicaments
 export const useAllMedicament = () =>
   useQuery({

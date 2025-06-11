@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   errorMessageAlert,
   successMessageAlert,
@@ -22,12 +22,16 @@ import {
 } from '../../Api/queriesPaiement';
 import { capitalizeWords } from '../components/capitalizeFunction';
 import { useAllTraitement } from '../../Api/queriesTraitement';
+import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
 
 const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
   // Paiement Query pour créer la Paiement
   const { mutate: createPaiement } = useCreatePaiement();
   // Paiement Query pour Mettre à jour la Paiement
   const { mutate: updatePaiement } = useUpdatePaiement();
+
+  // Query Ordonnance
+  const { data: ordonnanceData } = useAllOrdonnances();
 
   // Query pour affiche toutes les traitementData
   const {
@@ -46,18 +50,18 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
 
     initialValues: {
       traitement: paiementToEdit?.traitement._id || '',
-      motifPaiement: paiementToEdit?.motifPaiement || '',
       paiementDate: paiementToEdit?.paiementDate.substring(0, 10) || '',
       totalAmount: paiementToEdit?.totalAmount || undefined,
+      reduction: paiementToEdit?.reduction || undefined,
       totalPaye: paiementToEdit?.totalPaye || undefined,
       methode: paiementToEdit?.methode || '',
       statut: paiementToEdit?.statut || '',
     },
     validationSchema: Yup.object({
       traitement: Yup.string().required('Ce champ est obligatoire'),
-      motifPaiement: Yup.string().required('Ce champ est obligatoire'),
       paiementDate: Yup.date().required('Ce champ est obligatoire'),
       totalAmount: Yup.number().required('Ce champ est obligatoire'),
+      reduction: Yup.number().typeError('Ce doit être un nombre valide'),
       totalPaye: Yup.number().required('Ce champ est obligatoire'),
       methode: Yup.string().required('Ce champ est obligatoire'),
       statut: Yup.string().required('Ce champ est obligatoire'),
@@ -113,6 +117,33 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       }
     },
   });
+  // Calcule de Somme Total en fonction de TRAITEMENT Sélectionné
+  useEffect(() => {
+    const selectedTraitement = traitementData?.find(
+      (t) => t._id === validation.values.traitement
+    );
+
+    // Trouver l'ordonnaces en fonction de ID de traitement sélectionné
+    const selectedOrdonnance = ordonnanceData?.find(
+      (ordo) => ordo.traitement._id === validation.values.traitement
+    );
+
+    if (selectedTraitement) {
+      const traitementAmount = selectedTraitement.totalAmount || 0;
+      const ordonnancesAmount = selectedOrdonnance?.totalAmount || 0;
+      // Calculer le montant total en ajoutant le montant du traitement et de l'ordonnance
+      const totalTraitementOrdonnance = traitementAmount + ordonnancesAmount;
+      const reduction = Number(validation.values.reduction) || 0;
+      const finalAmount = Math.max(totalTraitementOrdonnance - reduction, 0);
+
+      validation.setFieldValue('totalAmount', finalAmount);
+    }
+  }, [
+    validation.values.traitement,
+    validation.values.reduction,
+    traitementData,
+  ]);
+
   return (
     <Form
       className='needs-validation'
@@ -178,49 +209,20 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       <Row>
         <Col md='12'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='motifPaiement'>Motif de Paiement</Label>
-
-            <Input
-              name='motifPaiement'
-              type='select'
-              className='form-control'
-              id='motifPaiement'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.motifPaiement || ''}
-              invalid={
-                validation.touched.motifPaiement &&
-                validation.errors.motifPaiement
-                  ? true
-                  : false
-              }
-            >
-              <option value=''>Sélectionner le motif de paiement</option>
-              <option value='tous'>Tous</option>
-              <option value='traitement'>Traitement</option>
-              <option value='ordonnance'>Ordonnance</option>
-              <option value='consultation'>Consultation</option>
-            </Input>
-            {validation.touched.motifPaiement &&
-            validation.errors.motifPaiement ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.motifPaiement}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col md='12'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='totalAmount'>Somme Total</Label>
+            <Label htmlFor='totalAmount'>
+              Somme Total{' '}
+              <span className='text-warning' style={{ fontSize: '10px' }}>
+                Traitement + ordonnances
+              </span>{' '}
+            </Label>
 
             <Input
               name='totalAmount'
+              min={1}
+              style={{ color: 'orange' }}
               type='number'
               className='form-control'
               id='totalAmount'
-              onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.totalAmount || ''}
               invalid={
@@ -245,7 +247,10 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
             <Input
               name='totalPaye'
               type='number'
-              className='form-control'
+              min={0}
+              max={validation.values.totalAmount || 0}
+              placeholder='Somme Payé'
+              className='form-control no-spinner'
               id='totalPaye'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -264,6 +269,37 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
           </FormGroup>
         </Col>
         <Col md='6'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='reduction'>Réduction</Label>
+
+            <Input
+              name='reduction'
+              type='number'
+              style={{ color: 'red' }}
+              min={0}
+              max={validation.values.totalAmount || 0}
+              placeholder='Réduction appliquée'
+              className='form-control'
+              id='reduction'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.reduction || 0}
+              invalid={
+                validation.touched.reduction && validation.errors.reduction
+                  ? true
+                  : false
+              }
+            />
+            {validation.touched.reduction && validation.errors.reduction ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.reduction}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col md='12'>
           <FormGroup className='mb-3'>
             <Label htmlFor='paiementDate'>Date de Paiement</Label>
 

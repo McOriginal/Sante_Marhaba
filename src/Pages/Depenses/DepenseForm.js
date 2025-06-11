@@ -141,6 +141,7 @@ const DepenseForm = ({ depenseToEdit, tog_form_modal }) => {
             <Input
               name='totalAmount'
               type='number'
+              min={0}
               className='form-control'
               id='totalAmount'
               onChange={validation.handleChange}
@@ -167,6 +168,7 @@ const DepenseForm = ({ depenseToEdit, tog_form_modal }) => {
             <Input
               name='dateOfDepense'
               type='date'
+              max={new Date().toISOString().split('T')[0]}
               className='form-control'
               id='dateOfDepense'
               onChange={validation.handleChange}
