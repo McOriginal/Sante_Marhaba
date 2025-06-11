@@ -4,6 +4,8 @@ import React from 'react';
 import RaportsBarChart from './DataRaportsPatientTraitementOrdonnace';
 import BarChartEntreSortie from './DataRaportsEntreSortie';
 import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
+import RapportByDay from './RapportByDay';
+import RapportBySemaine from './RapportBySemaine';
 
 const Rapports = () => {
   document.title = 'Raports | Centre de Santé - MARHABA ';
@@ -12,6 +14,17 @@ const Rapports = () => {
       <div className='page-content'>
         <Container fluid={true}>
           <Breadcrumbs title='Statistique' breadcrumbItem='Raports' />
+
+          <Row>
+            <Col sm={12}>
+              <RapportByDay />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12}>
+              <RapportBySemaine />
+            </Col>
+          </Row>
 
           <Row>
             <Col md={12}>

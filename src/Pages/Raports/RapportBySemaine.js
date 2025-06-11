@@ -1,85 +1,79 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Col, Row } from 'reactstrap';
+import { Card, CardBody, Col, Input, Row } from 'reactstrap';
 import { useAllPaiements } from '../../Api/queriesPaiement';
 import { useAllDepenses } from '../../Api/queriesDepense';
 import { useAllTraitement } from '../../Api/queriesTraitement';
 import { formatPrice } from '../components/capitalizeFunction'; // Pour afficher les montants formatés
 import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
 
-const SelectedMounthTotalTraitement = () => {
+const RapportBySemaine = () => {
   const { data: traitementsData = [] } = useAllTraitement();
   const { data: paiementsData = [] } = useAllPaiements();
   const { data: depenseData = [] } = useAllDepenses();
   const { data: ordonnancesData = [] } = useAllOrdonnances();
 
-  const monthOptions = [
-    'Janvier',
-    'Février',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Août',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Décembre',
-  ];
+  // Calcule de la date pour le 7 dernier jours
+  const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  // Calcul des totaux Nombre de Traitement pour le 7 dernier jour
+  const recentTraitements = useMemo(
+    () =>
+      traitementsData.filter((item) => {
+        const t = new Date(item.createdAt).getTime();
+        return t >= sevenDaysAgo;
+      }),
+    [traitementsData, sevenDaysAgo]
+  );
+  // Calcul des totaux pour Traitements pour le 7 dernier jour
+  const totalTraitementsNumber = recentTraitements.length;
+  const totalTraitementAmount = recentTraitements.reduce(
+    (acc, item) => acc + Number(item.totalAmount || 0),
+    0
+  );
 
-  // Calcul des totaux Nombre de Traitement pour le mois sélectionné
-  const totalTraitementsNumber = useMemo(() => {
-    return traitementsData.filter((item) => {
-      const date = new Date(item.createdAt);
-      return !isNaN(date) && date.getMonth() === selectedMonth;
-    }).length;
-  }, [traitementsData, selectedMonth]);
-
-  // Calcul des totaux pour Traitements pour le mois sélectionné
-  const totalTraitementAmount = useMemo(() => {
-    return traitementsData.reduce((acc, item) => {
-      const date = new Date(item.createdAt);
-      if (!isNaN(date) && date.getMonth() === selectedMonth) {
-        acc += Number(item.totalAmount || 0);
-      }
-      return acc;
-    }, 0);
-  }, [traitementsData, selectedMonth]);
-
+  const recentOrdonnance = useMemo(
+    () =>
+      ordonnancesData.filter((item) => {
+        const ord = new Date(item.createdAt).getTime();
+        return ord >= sevenDaysAgo;
+      }),
+    [ordonnancesData, sevenDaysAgo]
+  );
   // Calculer le Total des Ordonnances pour le mois sélectionné
-  const totalOrdonnancesAmount = useMemo(() => {
-    return ordonnancesData.reduce((acc, item) => {
-      const date = new Date(item.createdAt);
-      if (!isNaN(date) && date.getMonth() === selectedMonth) {
-        acc += Number(item.totaAmount || 0);
-      }
-      return acc;
-    }, 0);
-  }, [ordonnancesData, selectedMonth]);
+  const totalOrdonnancesAmount = recentOrdonnance.reduce(
+    (acc, item) => acc + Number(item.totalAmount || 0),
+    0
+  );
 
+  // Recente Depense
+  const recentPaiement = useMemo(
+    () =>
+      paiementsData.filter((item) => {
+        const paie = new Date(item.paiementDate).getTime();
+        return paie >= sevenDaysAgo;
+      }),
+    [paiementsData, sevenDaysAgo]
+  );
+
+  // Calculer le total de DEPENSE pour le 7 dernier jour
+  const totalPaiements = recentPaiement.reduce(
+    (acc, item) => acc + Number(item.totalAmount || 0),
+    0
+  );
+
+  const recentDepense = useMemo(
+    () =>
+      depenseData.filter((item) => {
+        const depen = new Date(item.dateOfDepense).getTime();
+        return depen >= sevenDaysAgo;
+      }),
+    [depenseData, sevenDaysAgo]
+  );
   // Calcul des totaux pour Paiements pour le mois sélectionné
-  const totalPaiements = useMemo(() => {
-    return paiementsData.reduce((acc, item) => {
-      const date = new Date(item.paiementDate);
-      if (!isNaN(date) && date.getMonth() === selectedMonth) {
-        acc += Number(item.totalAmount || 0);
-      }
-      return acc;
-    }, 0);
-  }, [paiementsData, selectedMonth]);
-
-  // Calcul des totaux pour Dépenses pour le mois sélectionné
-  const totalDepenses = useMemo(() => {
-    return depenseData.reduce((acc, item) => {
-      const date = new Date(item.createdAt);
-      if (!isNaN(date) && date.getMonth() === selectedMonth) {
-        acc += Number(item.totalAmount || 0);
-      }
-      return acc;
-    }, 0);
-  }, [depenseData, selectedMonth]);
+  const totalDepenses = recentDepense.reduce(
+    (acc, item) => acc + Number(item.totalAmount || 0),
+    0
+  );
 
   // Calculer Le revenu (Bénéfice) pour le mois sélectionné
   const profit = useMemo(() => {
@@ -91,35 +85,9 @@ const SelectedMounthTotalTraitement = () => {
       <Card style={{ boxShadow: '0px 0px 10px rgba(123, 123, 123, 0.28)' }}>
         {/* Filtrage Bouton */}
         <Row>
-          <Col md={4}>
-            <Card
-              style={{
-                background: 'linear-gradient(1deg, #641B2E 0%, #BE5B50 100%)',
-              }}
-            >
-              <CardBody>
-                <h6 className='text-white text-center'>Filtrage Mensuel</h6>
-                <div className='d-flex align-items-center justify-content-between mb-3'>
-                  <select
-                    className='form-select form-select-sm'
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                  >
-                    {monthOptions.map((label, index) => (
-                      <option key={index} value={index}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className='text-center text-white'></div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col md={4}>
-            <h4 className='text-end mt-5' style={{ color: '#BE5B50' }}>
-              Rapports Mensuel
+          <Col md={8}>
+            <h4 className='text-end mt-5' style={{ color: '#27548A' }}>
+              Rapports de 7 Dernier Jours
             </h4>
           </Col>
         </Row>
@@ -130,7 +98,7 @@ const SelectedMounthTotalTraitement = () => {
           <Col md={4}>
             <Card
               style={{
-                background: 'linear-gradient(to top right , #090979, #00D4FF)',
+                background: 'linear-gradient(to top right , #090979, #222831)',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100px',
@@ -149,7 +117,7 @@ const SelectedMounthTotalTraitement = () => {
           <Col md={4}>
             <Card
               style={{
-                background: 'linear-gradient(to top right , #090979, #00D4FF)',
+                background: 'linear-gradient(to top right , #090979, #222831)',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100px',
@@ -172,21 +140,21 @@ const SelectedMounthTotalTraitement = () => {
           <Col md={4}>
             <Card
               style={{
-                background: 'linear-gradient(to top right , #090979, #00D4FF)',
+                background: 'linear-gradient(to top right , #090979, #222831)',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100px',
               }}
             >
               {' '}
-              <h4 className='mb-1' style={{ color: '#901E3E' }}>
+              <h4 className='mb-1' style={{ color: '#CB0404' }}>
                 {formatPrice(totalDepenses)} F
               </h4>
               <p className='text-white'>
                 Dépenses (Sortie)
                 <i
                   className='fas fa-level-up-alt ms-2 fs-4'
-                  style={{ color: '#901E3E' }}
+                  style={{ color: '#CB0404' }}
                 ></i>
               </p>
             </Card>{' '}
@@ -196,7 +164,7 @@ const SelectedMounthTotalTraitement = () => {
           <Col md={4}>
             <Card
               style={{
-                background: 'linear-gradient(to top right , #090979, #00D4FF)',
+                background: 'linear-gradient(to top right , #090979, #222831)',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100px',
@@ -216,7 +184,7 @@ const SelectedMounthTotalTraitement = () => {
           <Col md={4}>
             <Card
               style={{
-                background: 'linear-gradient(to top right , #090979, #00D4FF)',
+                background: 'linear-gradient(to top right , #090979, #222831)',
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '100px',
@@ -235,4 +203,4 @@ const SelectedMounthTotalTraitement = () => {
   );
 };
 
-export default SelectedMounthTotalTraitement;
+export default RapportBySemaine;
