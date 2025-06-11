@@ -130,9 +130,9 @@ export default function PatientsListe() {
                               <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
-                          {filteredPatients?.length > 0 &&
-                            filteredPatients?.map((patient, index) => (
-                              <tbody className='list form-check-all text-center'>
+                          <tbody className='list form-check-all text-center'>
+                            {filteredPatients?.length > 0 &&
+                              filteredPatients?.map((patient, index) => (
                                 <tr key={patient._id}>
                                   <th scope='row'>{index + 1}</th>
 
@@ -208,8 +208,8 @@ export default function PatientsListe() {
                                     </div>
                                   </td>
                                 </tr>
-                              </tbody>
-                            ))}
+                              ))}
+                          </tbody>
                         </table>
                       )}
                       <div className='noresult' style={{ display: 'none' }}>

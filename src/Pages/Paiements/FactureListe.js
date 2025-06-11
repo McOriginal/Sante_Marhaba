@@ -36,13 +36,12 @@ export default function FactureListe() {
           {paiementData?.length === 0 && (
             <div className='text-center'>Aucune Facture disponible.</div>
           )}
-          {!error &&
-            !isLoading &&
-            paiementData?.length > 0 &&
-            paiementData?.map((paiement) => (
-              <div
-                style={{ width: '100%', borderBottom: '2px dotted #0ababa' }}
-              >
+
+          <div style={{ width: '100%', borderBottom: '2px dotted #0ababa' }}>
+            {!error &&
+              !isLoading &&
+              paiementData?.length > 0 &&
+              paiementData?.map((paiement) => (
                 <Card
                   key={paiement._id}
                   style={{
@@ -178,8 +177,8 @@ export default function FactureListe() {
                     </div>
                   </CardBody>
                 </Card>
-              </div>
-            ))}
+              ))}
+          </div>
         </Container>
       </div>
     </React.Fragment>

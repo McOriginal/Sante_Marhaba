@@ -29,6 +29,7 @@ export const useOneApprovisonnement = (id) =>
       api
         .get(`/approvisonnements/getApprovisonement/${id}`)
         .then((res) => res.data),
+    enabled: Boolean(id),
     staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });
 

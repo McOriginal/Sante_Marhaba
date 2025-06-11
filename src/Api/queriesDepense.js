@@ -32,6 +32,8 @@ export const useOneDepense = (id) =>
     queryKey: ['depenses', id],
     queryFn: () =>
       api.get(`/depenses/getDepenseById/${id}`).then((res) => res.data),
+    enabled: Boolean(id),
+    staleTime: 1000 * 60 * 5, // chaque 5 minutes rafraichir les données
   });
 
 // Supprimer une Depense

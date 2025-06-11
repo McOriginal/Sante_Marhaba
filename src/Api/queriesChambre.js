@@ -27,10 +27,13 @@ export const useAllChambres = () =>
   });
 
 // Obtenir une Chambre
-export const useOneChambre = () =>
+export const useOneChambre = (id) =>
   useQuery({
-    queryKey: ['getOneChambre'],
-    queryFn: () => api.get('/chambres/getOneChambre').then((res) => res.data),
+    queryKey: ['getOneChambre', id],
+    queryFn: () =>
+      api.get(`/chambres/getOneChambre/${id}`).then((res) => res.data),
+    enabled: Boolean(id),
+    staleTime: 1000 * 60 * 5, // chaque 5 minutes rafraichir les données
   });
 
 // Supprimer une Chambre

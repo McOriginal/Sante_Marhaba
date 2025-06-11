@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardBody, Col, Input, Row } from 'reactstrap';
+import React, { useMemo } from 'react';
+import { Card, Col, Row } from 'reactstrap';
 import { useAllPaiements } from '../../Api/queriesPaiement';
 import { useAllDepenses } from '../../Api/queriesDepense';
 import { useAllTraitement } from '../../Api/queriesTraitement';

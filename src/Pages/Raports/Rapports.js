@@ -6,6 +6,7 @@ import BarChartEntreSortie from './DataRaportsEntreSortie';
 import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
 import RapportByDay from './RapportByDay';
 import RapportBySemaine from './RapportBySemaine';
+import BarChartPatientsTraitement from './DataRaportsPatientsTraitement';
 
 const Rapports = () => {
   document.title = 'Raports | Centre de Santé - MARHABA ';
@@ -65,6 +66,20 @@ const Rapports = () => {
                     mensuels.
                   </p>
                   <RaportsBarChart />
+                </CardBody>
+              </Card>
+            </Col>
+
+            {/* -------------------- */}
+            <Col sm={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle>Rapports et Suivis</CardTitle>
+                  <p>
+                    Rapport sur le nombre de{' '}
+                    <strong>Patient et Traitement</strong>{' '}
+                  </p>
+                  <BarChartPatientsTraitement />
                 </CardBody>
               </Card>
             </Col>

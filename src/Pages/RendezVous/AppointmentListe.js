@@ -128,7 +128,7 @@ export default function AppointmentListe() {
                       )}
                       {!error &&
                         !isLoading &&
-                        filterSearchAppointement.length > 0 && (
+                        filterSearchAppointement?.length > 0 && (
                           <table
                             className='table align-middle table-nowrap table-hover'
                             id='appointmentTable'
@@ -148,9 +148,9 @@ export default function AppointmentListe() {
                                 <th data-sort='action'>Action</th>
                               </tr>
                             </thead>
-                            {filterSearchAppointement?.length > 0 &&
-                              filterSearchAppointement?.map((appoint) => (
-                                <tbody className='list form-check-all text-center'>
+                            <tbody className='list form-check-all text-center'>
+                              {filterSearchAppointement?.length > 0 &&
+                                filterSearchAppointement?.map((appoint) => (
                                   <tr key={appoint._id}>
                                     <th>
                                       {new Date(
@@ -244,8 +244,8 @@ export default function AppointmentListe() {
                                       </div>
                                     </td>
                                   </tr>
-                                </tbody>
-                              ))}
+                                ))}
+                            </tbody>
                           </table>
                         )}
                       <div className='noresult' style={{ display: 'none' }}>

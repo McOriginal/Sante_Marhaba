@@ -80,8 +80,8 @@ export default function ApprovisonnementListe() {
                               </tr>
                             </thead>
 
-                            {ApprovisonnementData?.map((appro, index) => (
-                              <tbody className='list form-check-all text-center'>
+                            <tbody className='list form-check-all text-center'>
+                              {ApprovisonnementData?.map((appro, index) => (
                                 <tr key={appro._id}>
                                   <th scope='row'>{index + 1}</th>
                                   <td>
@@ -143,8 +143,8 @@ export default function ApprovisonnementListe() {
                                     </div>
                                   </td>
                                 </tr>
-                              </tbody>
-                            ))}
+                              ))}
+                            </tbody>
                           </table>
                         )}
                     </div>

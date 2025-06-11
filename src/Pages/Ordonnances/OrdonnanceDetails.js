@@ -83,7 +83,7 @@ const OrdonnanceDetails = ({
                   <CardText>
                     <strong> Date d'Ordonnance:</strong>{' '}
                     {new Date(
-                      selectedOrdonnance.ordonnances.createdAt
+                      selectedOrdonnance?.ordonnances?.createdAt
                     ).toLocaleDateString()}
                   </CardText>
                   <CardImg
@@ -123,7 +123,7 @@ const OrdonnanceDetails = ({
                     <strong> Médicaments:</strong>
                   </CardText>
                   <ul className='list-unstyled'>
-                    {selectedOrdonnance?.ordonnances.items.map(
+                    {selectedOrdonnance?.ordonnances?.items.map(
                       (medi, index) => (
                         <li
                           key={index}
@@ -139,7 +139,7 @@ const OrdonnanceDetails = ({
                           </span>
                           <strong className='ms-4 text-primary'>
                             {' '}
-                            {formatPrice(medi.medicaments['price'])} F
+                            {formatPrice(medi?.medicaments['price'])} F
                           </strong>
                         </li>
                       )
@@ -152,12 +152,14 @@ const OrdonnanceDetails = ({
                 <div className='d-flex justify-content-around align-item-center'>
                   <CardText style={{ fontSize: '12px' }}>
                     <strong> Total Médicaments: </strong>{' '}
-                    {formatPrice(selectedOrdonnance.ordonnances.totalAmount)}{' '}
+                    {formatPrice(selectedOrdonnance?.ordonnances?.totalAmount)}{' '}
                     FCFA
                   </CardText>
                   <CardText style={{ fontSize: '12px' }}>
                     <strong> Total Traitement: </strong>{' '}
-                    {formatPrice(selectedOrdonnance.traitements['totalAmount'])}{' '}
+                    {formatPrice(
+                      selectedOrdonnance?.traitements['totalAmount']
+                    )}{' '}
                     FCFA
                   </CardText>
                 </div>
@@ -165,8 +167,8 @@ const OrdonnanceDetails = ({
                   <strong> Total Général: </strong>{' '}
                   <span className='fs-5'>
                     {formatPrice(
-                      selectedOrdonnance.traitements['totalAmount'] +
-                        selectedOrdonnance.ordonnances.totalAmount
+                      selectedOrdonnance?.traitements['totalAmount'] +
+                        selectedOrdonnance?.ordonnances?.totalAmount
                     )}{' '}
                     FCFA
                   </span>

@@ -72,6 +72,7 @@ export const useOneMedicament = (id) =>
     queryKey: ['getMedicament', id],
     queryFn: () =>
       api.get(`/medicaments/getOneMedicament/${id}`).then((res) => res.data),
+    enabled: Boolean(id),
     staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });
 

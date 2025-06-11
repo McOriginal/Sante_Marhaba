@@ -26,7 +26,7 @@ export default function Materiels() {
   const { data: materiels, isLoading, error } = useAllMateriels();
   const { mutate: deleteMateriel, isLoading: isDeleting } = useDeleteMateriel();
   const [materielToUpdate, setMaterielToUpdate] = useState(null);
-  const [formModalTitle, setFormModalTitle] = useState('Ajouter une Matériel');
+  const [formModalTitle, setFormModalTitle] = useState('Ajouter un Matériel');
 
   // State de Recherche
   const [searchTerm, seatSearchTerm] = useState('');
@@ -78,6 +78,8 @@ export default function Materiels() {
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
+                              setFormModalTitle('Ajouter un Matériel');
+                              setMaterielToUpdate(null);
                               tog_form_modal();
                             }}
                           >

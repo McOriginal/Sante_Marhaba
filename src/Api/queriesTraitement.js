@@ -25,6 +25,8 @@ export const useOneTraitement = (id) =>
     queryKey: ['traitements', id],
     queryFn: () =>
       api.get(`/traitements/getOneTraitement/${id}`).then((res) => res.data),
+    enabled: Boolean(id),
+
     staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });
 

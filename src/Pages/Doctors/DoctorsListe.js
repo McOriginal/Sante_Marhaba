@@ -139,9 +139,10 @@ export default function DoctorsListe() {
                                 <th data-sort='action'>Action</th>
                               </tr>
                             </thead>
-                            {filterSearchData?.length > 0 &&
-                              filterSearchData?.map((doctor, index) => (
-                                <tbody className='list form-check-all text-center'>
+
+                            <tbody className='list form-check-all text-center'>
+                              {filterSearchData?.length > 0 &&
+                                filterSearchData?.map((doctor, index) => (
                                   <tr key={doctor._id}>
                                     <th scope='row'>{index + 1}</th>
 
@@ -213,8 +214,8 @@ export default function DoctorsListe() {
                                       </div>
                                     </td>
                                   </tr>
-                                </tbody>
-                              ))}
+                                ))}
+                            </tbody>
                           </table>
                         )}
                         <div className='noresult' style={{ display: 'none' }}>

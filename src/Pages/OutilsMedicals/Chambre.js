@@ -90,7 +90,7 @@ export default function Chambre() {
                 Erreur lors de chargement des données
               </div>
             )}
-            {!error && !isLoading && chambres.length === 0 && (
+            {!error && !isLoading && chambres?.length === 0 && (
               <div className='text-center'>Aucune Chambre disponible</div>
             )}
 
@@ -98,7 +98,7 @@ export default function Chambre() {
               !isLoading &&
               chambres?.length > 0 &&
               chambres?.map((chamb) => (
-                <Col mg={6} xl={3}>
+                <Col md={4} xl={3}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(105, 206, 236, 0.5)',

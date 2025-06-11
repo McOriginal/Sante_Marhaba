@@ -27,11 +27,14 @@ export const useAllMateriels = () =>
     queryFn: () => api.get('/materiels/getMateriels').then((res) => res.data),
   });
 
-// Obtenir une Materiel
-export const useOneMateriel = () =>
+// Obtenir un seul Materiel
+export const useOneMateriel = (id) =>
   useQuery({
-    queryKey: ['getOneMateriel'],
-    queryFn: () => api.get('/materiels/getOneMateriel').then((res) => res.data),
+    queryKey: ['getOneMateriel', id],
+    queryFn: () =>
+      api.get(`/materiels/getOneMateriel/${id}`).then((res) => res.data),
+    enabled: Boolean(id),
+    staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });
 
 // Supprimer une Materiel

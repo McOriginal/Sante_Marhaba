@@ -70,21 +70,22 @@ const BarChartPatientTraitementOrdonnance = () => {
     labels,
     datasets: [
       {
-        label: `Traitements  `,
-        data: sumTotalAmountByMonth(traitementsData),
-        backgroundColor: '#3d8ef8',
+        label: 'Patients',
+        data: countPatientsByMonth(patientData),
+        backgroundColor: ' #5F8B4C',
         barThickness: 10,
       },
       {
-        label: 'Patients',
-        data: countPatientsByMonth(patientData),
-        backgroundColor: '#c1c1c14',
+        label: `Traitements  `,
+        data: sumTotalAmountByMonth(traitementsData),
+        backgroundColor: ' #FFD63A',
         barThickness: 10,
       },
+
       {
         label: `Ordonnances`,
         data: sumTotalAmountByMonth(ordonnanceData),
-        backgroundColor: '#01baba',
+        backgroundColor: ' #3A59D1',
         barThickness: 10,
       },
     ],
@@ -93,14 +94,58 @@ const BarChartPatientTraitementOrdonnance = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#102E50',
+          boxWidth: 20,
+          boxHeight: 20,
+        },
+      },
+      title: {
+        display: true,
+        text: 'Statistiques des Patients, Traitements et Ordonnances',
+        color: '#102E50',
+      },
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    hover: {
+      mode: 'nearest',
+      intersect: true,
+    },
+    elements: {
+      bar: {
+        borderWidth: 2,
+      },
+    },
+    layout: {
+      padding: {
+        top: 20,
+        bottom: 20,
+        left: 20,
+        right: 20,
+      },
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeInOutQuart',
+    },
+    animationSteps: 60,
+    animationEasing: 'easeInOutQuart',
+    responsiveAnimationDuration: 500,
+
     scales: {
       x: {
         grid: {
           display: false,
-          drawBorder: false,
+          drawBorder: true,
         },
         ticks: {
-          color: '#686868',
+          color: ' #102E50',
         },
       },
       y: {
@@ -108,7 +153,7 @@ const BarChartPatientTraitementOrdonnance = () => {
           drawBorder: false,
         },
         ticks: {
-          color: '#7b919e',
+          color: ' #3A59D1',
         },
         beginAtZero: true,
       },

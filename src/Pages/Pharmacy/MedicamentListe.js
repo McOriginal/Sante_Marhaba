@@ -134,14 +134,14 @@ export default function MedicamentListe() {
                 Erreur lors de chargement des données
               </div>
             )}
-            {!error && !isLoading && filterSearchMedicaments.length === 0 && (
+            {!error && !isLoading && filterSearchMedicaments?.length === 0 && (
               <div className='text-center'>Aucun Médicament trouvés</div>
             )}
             {!error &&
               !isLoading &&
               filterSearchMedicaments?.length > 0 &&
               filterSearchMedicaments?.map((medica) => (
-                <Col md={6}>
+                <Col md={6} xl={4} key={medica._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',

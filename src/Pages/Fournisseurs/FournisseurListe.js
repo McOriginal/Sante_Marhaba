@@ -164,78 +164,84 @@ export default function FournisseurListe() {
                               </tr>
                             </thead>
 
-                            {filteredFournisseurs?.map((fournisseur, index) => (
-                              <tbody className='list form-check-all text-center'>
-                                <tr key={fournisseur._id}>
-                                  <th scope='row'>{index + 1}</th>
-                                  <td className='firstName'>
-                                    {capitalizeWords(fournisseur.firstName)}{' '}
-                                  </td>
-                                  <td className='firstName'>
-                                    {capitalizeWords(fournisseur.lastName)}{' '}
-                                  </td>
-                                  <td className='gender'>
-                                    {fournisseur.gender}{' '}
-                                  </td>
+                            <tbody className='list form-check-all text-center'>
+                              {filteredFournisseurs?.map(
+                                (fournisseur, index) => (
+                                  <tr key={fournisseur._id}>
+                                    <th scope='row'>{index + 1}</th>
+                                    <td className='firstName'>
+                                      {capitalizeWords(fournisseur.firstName)}{' '}
+                                    </td>
+                                    <td className='firstName'>
+                                      {capitalizeWords(fournisseur.lastName)}{' '}
+                                    </td>
+                                    <td className='gender'>
+                                      {fournisseur.gender}{' '}
+                                    </td>
 
-                                  <td className='email'>
-                                    {fournisseur.emailAdresse}{' '}
-                                  </td>
+                                    <td className='email'>
+                                      {fournisseur.emailAdresse}{' '}
+                                    </td>
 
-                                  <td className='adresse'>
-                                    {capitalizeWords(fournisseur.adresse)}{' '}
-                                  </td>
-                                  <td className='phone'>
-                                    {formatPhoneNumber(fournisseur.phoneNumber)}
-                                  </td>
-                                  <td className='speciality'>
-                                    {capitalizeWords(fournisseur.marchandise)}{' '}
-                                  </td>
+                                    <td className='adresse'>
+                                      {capitalizeWords(fournisseur.adresse)}{' '}
+                                    </td>
+                                    <td className='phone'>
+                                      {formatPhoneNumber(
+                                        fournisseur.phoneNumber
+                                      )}
+                                    </td>
+                                    <td className='speciality'>
+                                      {capitalizeWords(fournisseur.marchandise)}{' '}
+                                    </td>
 
-                                  <td>
-                                    <div className='d-flex gap-2'>
-                                      <div className='edit'>
-                                        <button
-                                          className='btn btn-sm btn-success edit-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
-                                          onClick={() => {
-                                            setFormModalTitle(
-                                              'Modifier les données'
-                                            );
-                                            setFournisseurToUpdate(fournisseur);
-                                            tog_form_modal();
-                                          }}
-                                        >
-                                          <i className='ri-pencil-fill text-white'></i>
-                                        </button>
-                                      </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
+                                    <td>
+                                      <div className='d-flex gap-2'>
+                                        <div className='edit'>
                                           <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
+                                            className='btn btn-sm btn-success edit-item-btn'
                                             data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
+                                            data-bs-target='#showModal'
                                             onClick={() => {
-                                              deleteButton(
-                                                fournisseur._id,
-                                                fournisseur.firstName +
-                                                  ' ' +
-                                                  fournisseur.lastName,
-                                                deleteFournisseur
+                                              setFormModalTitle(
+                                                'Modifier les données'
                                               );
+                                              setFournisseurToUpdate(
+                                                fournisseur
+                                              );
+                                              tog_form_modal();
                                             }}
                                           >
-                                            <i className='ri-delete-bin-fill text-white'></i>
+                                            <i className='ri-pencil-fill text-white'></i>
                                           </button>
                                         </div>
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            ))}
+                                        {isDeleting && <LoadingSpiner />}
+                                        {!isDeleting && (
+                                          <div className='remove'>
+                                            <button
+                                              className='btn btn-sm btn-danger remove-item-btn'
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#deleteRecordModal'
+                                              onClick={() => {
+                                                deleteButton(
+                                                  fournisseur._id,
+                                                  fournisseur.firstName +
+                                                    ' ' +
+                                                    fournisseur.lastName,
+                                                  deleteFournisseur
+                                                );
+                                              }}
+                                            >
+                                              <i className='ri-delete-bin-fill text-white'></i>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
                           </table>
                         )}
                     </div>

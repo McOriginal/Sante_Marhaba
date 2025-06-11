@@ -2,10 +2,6 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Chart, CategoryScale } from 'chart.js';
-import { useAllTraitement } from '../../Api/queriesTraitement';
-import { useAllPatients } from '../../Api/queriesPatient';
-import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
-import { formatPrice } from '../components/capitalizeFunction';
 import { useAllPaiements } from '../../Api/queriesPaiement';
 import { useAllDepenses } from '../../Api/queriesDepense';
 
@@ -60,14 +56,14 @@ const BarChartEntreSortie = () => {
       {
         label: 'Entrée',
         data: sumPaiementTotalAmoutByMonth(paiementsData),
-        backgroundColor: '#3d8ef8',
+        backgroundColor: ' #328E6E',
         barThickness: 10,
       },
 
       {
         label: 'Sortie(Dépenses)',
         data: sumTotalAmountByMonth(depenseData),
-        backgroundColor: '#01baba',
+        backgroundColor: ' #CF0F47',
         barThickness: 10,
       },
     ],
@@ -76,14 +72,57 @@ const BarChartEntreSortie = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#102E50',
+          boxWidth: 20,
+          boxHeight: 20,
+        },
+      },
+      title: {
+        display: true,
+        text: 'Statistiques des Entrée, Sortie',
+        color: '#102E50',
+      },
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    hover: {
+      mode: 'nearest',
+      intersect: true,
+    },
+    elements: {
+      bar: {
+        borderWidth: 2,
+      },
+    },
+    layout: {
+      padding: {
+        top: 20,
+        bottom: 20,
+        left: 20,
+        right: 20,
+      },
+    },
+    animation: {
+      duration: 1000,
+      easing: 'easeInOutQuart',
+    },
+    animationSteps: 60,
+    animationEasing: 'easeInOutQuart',
+    responsiveAnimationDuration: 500,
     scales: {
       x: {
         grid: {
           display: false,
-          drawBorder: false,
+          drawBorder: true,
         },
         ticks: {
-          color: '#686868',
+          color: ' #102E50',
         },
       },
       y: {
@@ -91,7 +130,7 @@ const BarChartEntreSortie = () => {
           drawBorder: false,
         },
         ticks: {
-          color: '#7b919e',
+          color: ' #3A59D1',
         },
         beginAtZero: true,
       },

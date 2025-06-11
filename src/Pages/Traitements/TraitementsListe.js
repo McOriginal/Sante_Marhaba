@@ -159,7 +159,7 @@ export default function TraitementsListe() {
               !isLoading &&
               filterTraitementSearch?.length > 0 &&
               filterTraitementSearch?.map((trait) => (
-                <Col mg={6} xl={3}>
+                <Col md={4} xl={3} key={trait._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',

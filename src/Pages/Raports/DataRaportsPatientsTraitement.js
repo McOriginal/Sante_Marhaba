@@ -2,26 +2,25 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Chart, CategoryScale } from 'chart.js';
+import { useAllPatients } from '../../Api/queriesPatient';
 import { useAllTraitement } from '../../Api/queriesTraitement';
-import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
-import { Card, CardBody } from 'reactstrap';
 
 Chart.register(CategoryScale);
 
-const BarChartDataRaportsTraitement = () => {
-  const { data: traitementsData = [] } = useAllTraitement();
-  const { data: ordonnanceData = [] } = useAllOrdonnances();
+const BarChartPatientsTraitement = () => {
+  const { data: patientData = [] } = useAllPatients();
+  const { data: traitementData = [] } = useAllTraitement();
 
-  const sumTotalItemsByMonth = (items) => {
-    const monthlySums = new Array(12).fill(0);
+  const countItemssByMonth = (items) => {
+    const monthlyCounts = new Array(12).fill(0);
     items.forEach((item) => {
       const date = new Date(item.createdAt);
       if (!isNaN(date)) {
         const month = date.getMonth();
-        monthlySums[month] += 1;
+        monthlyCounts[month]++;
       }
     });
-    return monthlySums;
+    return monthlyCounts;
   };
 
   const labels = [
@@ -43,15 +42,15 @@ const BarChartDataRaportsTraitement = () => {
     labels,
     datasets: [
       {
-        label: 'Traitements',
-        data: sumTotalItemsByMonth(traitementsData),
-        backgroundColor: ' #FFD63A',
+        label: 'Patients',
+        data: countItemssByMonth(patientData),
+        backgroundColor: ' #5F8B4C',
         barThickness: 10,
       },
       {
-        label: 'Ordonnances',
-        data: sumTotalItemsByMonth(ordonnanceData),
-        backgroundColor: ' #102E50',
+        label: `Traitements  `,
+        data: countItemssByMonth(traitementData),
+        backgroundColor: ' #FFD63A',
         barThickness: 10,
       },
     ],
@@ -108,10 +107,10 @@ const BarChartDataRaportsTraitement = () => {
       x: {
         grid: {
           display: false,
-          drawBorder: false,
+          drawBorder: true,
         },
         ticks: {
-          color: '#686868',
+          color: ' #102E50',
         },
       },
       y: {
@@ -119,7 +118,7 @@ const BarChartDataRaportsTraitement = () => {
           drawBorder: false,
         },
         ticks: {
-          color: '#7b919e',
+          color: ' #3A59D1',
         },
         beginAtZero: true,
       },
@@ -128,16 +127,9 @@ const BarChartDataRaportsTraitement = () => {
 
   return (
     <React.Fragment>
-      <Card>
-        <div className='card-header'>
-          <h4 className='card-title mb-0'>Rapport du Traitements</h4>
-        </div>
-        <CardBody>
-          <Bar width={537} height={268} data={data} options={options} />
-        </CardBody>
-      </Card>
+      <Bar width={537} height={268} data={data} options={options} />
     </React.Fragment>
   );
 };
 
-export default BarChartDataRaportsTraitement;
+export default BarChartPatientsTraitement;

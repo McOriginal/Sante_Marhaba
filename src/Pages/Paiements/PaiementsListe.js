@@ -13,7 +13,7 @@ export default function PaiementsListe() {
   const [form_modal, setForm_modal] = useState(false);
   const { data: paiementsData, isLoading, error } = useAllPaiements();
   const { mutate: deletePaiement, isDeleting } = useDeletePaiement();
-  const [paiementToUpdate, setpaiementToUpdate] = useState(null);
+  const [paiementToUpdate, setPaiementToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un Paiement');
 
   // State de Recherche
@@ -84,7 +84,8 @@ export default function PaiementsListe() {
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
-                              setpaiementToUpdate(null);
+                              setPaiementToUpdate(null);
+                              setFormModalTitle('Ajouter un Paiement');
                               tog_form_modal();
                             }}
                           >
@@ -122,7 +123,7 @@ export default function PaiementsListe() {
                       )}
                       {!error &&
                         !isLoading &&
-                        filterSearchPaiement.length > 0 && (
+                        filterSearchPaiement?.length > 0 && (
                           <table
                             className='table align-middle table-nowrap table-hover'
                             id='paiementTable'
@@ -154,9 +155,10 @@ export default function PaiementsListe() {
                                 <th data-sort='action'>Action</th>
                               </tr>
                             </thead>
-                            {filterSearchPaiement?.length > 0 &&
-                              filterSearchPaiement?.map((paiement) => (
-                                <tbody className='list form-check-all text-center'>
+
+                            <tbody className='list form-check-all text-center'>
+                              {filterSearchPaiement?.length > 0 &&
+                                filterSearchPaiement?.map((paiement) => (
                                   <tr key={paiement._id}>
                                     <th scope='row'>
                                       {new Date(
@@ -262,7 +264,7 @@ export default function PaiementsListe() {
                                               setFormModalTitle(
                                                 'Modifier les données'
                                               );
-                                              setpaiementToUpdate(paiement);
+                                              setPaiementToUpdate(paiement);
                                               tog_form_modal();
                                             }}
                                           >
@@ -292,8 +294,8 @@ export default function PaiementsListe() {
                                       </div>
                                     </td>
                                   </tr>
-                                </tbody>
-                              ))}
+                                ))}
+                            </tbody>
                           </table>
                         )}
                       <div className='noresult' style={{ display: 'none' }}>
