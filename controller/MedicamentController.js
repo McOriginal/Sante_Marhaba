@@ -1,5 +1,5 @@
 const Medicament = require('../models/MedicamentModel');
-
+const Ordonnance = require('../models/OrdonanceModel');
 // Enregistrer une Medicament
 exports.createMedicament = async (req, res) => {
   try {
@@ -162,6 +162,46 @@ exports.decrementMultipleStocks = async (req, res) => {
 
     return res.status(200).json({ message: 'Stocks mis à jour avec succès' });
   } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
+    return res.status(400).json({ message: err.message });
+  }
+};
+
+exports.cancelOrdonnance = async (req, res) => {
+  const session = await Medicament.startSession();
+  session.startTransaction();
+
+  try {
+    const ordonnanceId = req.params.ordonnanceId;
+    const { items } = req.body; // [{ medicamentId, quantity }, ...]
+
+    for (const { medicamentId, quantity } of items) {
+      const medicament = await Medicament.findById(medicamentId).session(
+        session
+      );
+      if (!medicament) {
+        throw new Error(`Médicament ${medicamentId} non trouvé`);
+      }
+      medicament.stock += quantity;
+      await medicament.save({ session });
+    }
+
+    const deletedOrdonnance = await Ordonnance.findByIdAndDelete(ordonnanceId, {
+      session,
+    });
+    if (!deletedOrdonnance) {
+      throw new Error('Ordonnance non trouvée');
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res
+      .status(200)
+      .json({ message: 'Annulation réussie, stock rétabli.' });
+  } catch (err) {
+    console.log(err);
     await session.abortTransaction();
     session.endSession();
     return res.status(400).json({ message: err.message });

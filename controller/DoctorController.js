@@ -4,15 +4,8 @@ const textValidation = require('./regexValidation');
 // Créer un Doctor
 exports.createDoctor = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      emailAdresse,
-      adresse,
-      salaire,
-      prime,
-      ...resOfData
-    } = req.body;
+    const { firstName, lastName, emailAdresse, adresse, ...resOfData } =
+      req.body;
     // Changer les données en miniscule
     const lowerFirstName = firstName.toLowerCase();
     const lowerLastName = lastName.toLowerCase();
@@ -35,7 +28,7 @@ exports.createDoctor = async (req, res) => {
 
     // Vérification des champs uniques
     const existingDoctor = await Doctor.findOne({
-      $or: [{ lowerEmail }, { phoneNumber }],
+      $or: [{ emailAdresse: lowerEmail }, { phoneNumber }],
     }).exec();
 
     if (existingDoctor) {
@@ -140,7 +133,7 @@ exports.updateDoctor = async (req, res) => {
   // Vérification des doublons (en excluant l'étudiant actuel)
   const existingDoctor = await Doctor.findOne({
     _id: { $ne: req.params.id }, // Exclure l'étudiant actuel
-    $or: [{ lowerEmail }, { phoneNumber: phoneNum }],
+    $or: [{ emailAdresse: lowerEmail }, { phoneNumber: phoneNum }],
   }).exec();
 
   if (existingDoctor) {

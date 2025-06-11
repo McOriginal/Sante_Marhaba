@@ -22,8 +22,6 @@ const patientSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: Number,
-      required: true,
-      unique: true,
     },
     groupeSanguin: {
       type: String,

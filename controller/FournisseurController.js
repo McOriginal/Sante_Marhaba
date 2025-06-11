@@ -40,7 +40,7 @@ exports.createFournisseur = async (req, res) => {
       $or: [{ emailAdresse: lowerEmail }, { phoneNumber }],
     }).exec();
 
-    if (existingFournisseur) {
+    if (emailAdresse != '' && existingFournisseur) {
       const duplicateFields = [];
 
       if (existingFournisseur.emailAdresse === lowerEmail)

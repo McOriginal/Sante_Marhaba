@@ -20,6 +20,12 @@ router.post(
   medicamentController.decrementMultipleStocks
 );
 
+// Annuler à jour une Medicament avec le Stock
+router.post(
+  '/cancelDecrementMultipleStocks/:ordonnanceId',
+  medicamentController.cancelOrdonnance
+);
+
 // supprimer une Matière
 router.delete(
   '/deleteMedicament/:id',

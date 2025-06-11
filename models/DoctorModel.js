@@ -14,7 +14,6 @@ const doctorSchema = new mongoose.Schema(
     },
     emailAdresse: {
       type: String,
-      unique: true,
       trim: true,
     },
     gender: {

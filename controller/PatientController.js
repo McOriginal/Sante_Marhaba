@@ -21,8 +21,6 @@ exports.newPatient = async (req, res) => {
     const lowerEthnie = ethnie.toLowerCase();
     const lowerProfession = profession.toLowerCase();
 
-    const phoneNumber = Number(req.body.phoneNumber);
-
     if (
       !textValidator.stringValidator(lowerFirstName) ||
       !textValidator.stringValidator(lowerLastName) ||
@@ -35,19 +33,23 @@ exports.newPatient = async (req, res) => {
       });
     }
 
-    // Vérification des champs uniques
-    const existingPatient = await Patient.findOne({
-      phoneNumber,
-    }).exec();
+    const phoneNumber = Number(req.body.phoneNumber);
 
-    if (existingPatient) {
-      return res.status(409).json({
-        status: 'error',
-        message: 'Ce numéro existe déjà pour un patient',
-      });
+    if (phoneNumber) {
+      // Vérification des champs uniques
+      const existingPatient = await Patient.findOne({
+        phoneNumber,
+      }).exec();
+
+      if (existingPatient) {
+        return res.status(409).json({
+          status: 'error',
+          message: 'Ce numéro existe déjà pour un patient',
+        });
+      }
     }
 
-    if (req.body.phoneNumber.toString().length !== 8) {
+    if (phoneNumber && req.body.phoneNumber.toString().length !== 8) {
       return res.status(409).json({
         status: 'error',
         message: 'Le numéro de téléphone doit contenir exactement 8 chiffres',
@@ -69,7 +71,7 @@ exports.newPatient = async (req, res) => {
       data: newPatient,
     });
   } catch (error) {
-    console.error('Erreur de création:', error);
+    console.log('Erreur de création:', error);
     return res.status(500).json({
       status: 'error',
       message: error.message,
@@ -130,7 +132,6 @@ exports.updatePatient = async (req, res) => {
       adresse,
       ethnie,
       profession,
-      phoneNumber,
       ...resOfData
     } = req.body;
 
@@ -154,7 +155,7 @@ exports.updatePatient = async (req, res) => {
       !textValidator.stringValidator(lowerLastName) ||
       !textValidator.stringValidator(lowerAdresse) ||
       !textValidator.stringValidator(lowerEthnie) ||
-      !textValidator.stringValidator(lowerProfession)
+      (profession != '' && !textValidator.stringValidator(lowerProfession))
     ) {
       return res.status(400).json({
         status: 'error',
@@ -162,19 +163,27 @@ exports.updatePatient = async (req, res) => {
       });
     }
 
-    // Conversion des numéros (protection contre les strings)
-    const phoneNum = Number(phoneNumber);
+    const phoneNumber = Number(req.body.phoneNumber);
 
-    // Vérification des doublons (en excluant patient actuel)
-    const existingPatient = await Patient.findOne({
-      _id: { $ne: req.params.id }, // Exclure patient actuel
-      phoneNumber: phoneNum,
-    }).exec();
+    if (phoneNumber) {
+      // Vérification des champs uniques
+      const existingPatient = await Patient.findOne({
+        _id: { $ne: req.params.id }, // Exclure le patient en cours de mise à jour
+        phoneNumber,
+      }).exec();
 
-    if (existingPatient) {
+      if (existingPatient) {
+        return res.status(409).json({
+          status: 'error',
+          message: 'Ce numéro existe déjà pour un patient',
+        });
+      }
+    }
+
+    if (phoneNumber && req.body.phoneNumber.toString().length !== 8) {
       return res.status(409).json({
         status: 'error',
-        message: `Ce numéro de téléphone existe déjà pour un Patien`,
+        message: 'Le numéro de téléphone doit contenir exactement 8 chiffres',
       });
     }
 
@@ -185,7 +194,8 @@ exports.updatePatient = async (req, res) => {
         firstName: lowerFirstName,
         lastName: lowerLastName,
         adresse: lowerAdresse,
-        phoneNumber: phoneNum,
+        ethnie: lowerEthnie,
+        profession: lowerProfession,
         ...resOfData,
       },
       {
