@@ -55,7 +55,7 @@ export default function FactureDetails() {
                     }}
                   />
                   <CardTitle className='text-center '>
-                    <h2>Centre de Santé MARHABA</h2>
+                    <h3>Cabinet de soins MARHABA Santé</h3>
                     <p style={{ margin: '15px', fontSize: '10px' }}>
                       Kabala zone universitaire sur le goudron de COURALE
                     </p>

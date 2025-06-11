@@ -72,7 +72,7 @@ export default function DoctorsListe() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -80,7 +80,7 @@ export default function DoctorsListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-user-md align-center me-1'></i>{' '}
                             Ajouter un Médecin
                           </Button>
                         </div>
@@ -90,8 +90,8 @@ export default function DoctorsListe() {
                           <div className='search-box ms-2'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Search...'
+                              className='form-control search border border-dark rounded'
+                              placeholder='Recherche...'
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -106,125 +106,134 @@ export default function DoctorsListe() {
                     )}
                     {isLoading && <LoadingSpiner />}
 
-                    <div className='table-responsive table-card mt-3 mb-1'>
-                      {doctorsData?.length === 0 && (
-                        <div className='text-center text-mutate'>
-                          Aucun médecin pour le moment !
-                        </div>
-                      )}
-                      {!error && !isLoading && (
-                        <table
-                          className='table align-middle table-nowrap table-hover'
-                          id='customerTable'
-                        >
-                          <thead className='table-light'>
-                            <tr>
-                              <th scope='col' style={{ width: '50px' }}>
-                                ID
-                              </th>
-                              <th data-sort='customer_name'>Nom</th>
-                              <th data-sort='email'>Prénom</th>
-                              <th data-sort='genre'>Genre</th>
-                              <th data-sort='statut'>Statut</th>
-                              <th data-sort='salaire'>Salaire</th>
-                              <th data-sort='guardDays'>J-Services</th>
-                              <th data-sort='speciality'>Spécialité</th>
-                              <th data-sort='email'>Adresse Email</th>
-                              <th data-sort='date'>Date de naissance</th>
+                    {filterSearchData?.length === 0 && (
+                      <div className='text-center text-mutate'>
+                        Aucun médecin trouvée !
+                      </div>
+                    )}
 
-                              <th data-sort='adresse'>Domicile</th>
-                              <th data-sort='phone'>Téléphone</th>
-                              <th data-sort='action'>Action</th>
-                            </tr>
-                          </thead>
-                          {filterSearchData?.length > 0 &&
-                            filterSearchData?.map((doctor, index) => (
-                              <tbody className='list form-check-all text-center'>
-                                <tr key={doctor._id}>
-                                  <th scope='row'>{index + 1}</th>
+                    {filterSearchData?.length > 0 && (
+                      <div className='table-responsive table-card mt-3 mb-1'>
+                        {!error && !isLoading && (
+                          <table
+                            className='table align-middle table-nowrap table-hover'
+                            id='customerTable'
+                          >
+                            <thead className='table-light'>
+                              <tr>
+                                <th scope='col' style={{ width: '50px' }}>
+                                  ID
+                                </th>
+                                <th data-sort='customer_name'>Nom</th>
+                                <th data-sort='email'>Prénom</th>
+                                <th data-sort='genre'>Genre</th>
+                                <th data-sort='statut'>Statut</th>
+                                <th data-sort='salaire'>Salaire</th>
+                                <th data-sort='guardDays'>J-Services</th>
+                                <th data-sort='speciality'>Spécialité</th>
+                                <th data-sort='email'>Adresse Email</th>
+                                <th data-sort='date'>Date de naissance</th>
 
-                                  <td>{capitalizeWords(doctor.firstName)} </td>
-                                  <td>{capitalizeWords(doctor.lastName)} </td>
-                                  <td>{capitalizeWords(doctor.gender)} </td>
-                                  <td>{capitalizeWords(doctor.statut)} </td>
-                                  <td>{formatPrice(doctor.salaire)} F </td>
-                                  <td>{capitalizeWords(doctor.guardDays)} </td>
-                                  <td>{capitalizeWords(doctor.speciality)} </td>
-                                  <td>{doctor.emailAdresse} </td>
+                                <th data-sort='adresse'>Domicile</th>
+                                <th data-sort='phone'>Téléphone</th>
+                                <th data-sort='action'>Action</th>
+                              </tr>
+                            </thead>
+                            {filterSearchData?.length > 0 &&
+                              filterSearchData?.map((doctor, index) => (
+                                <tbody className='list form-check-all text-center'>
+                                  <tr key={doctor._id}>
+                                    <th scope='row'>{index + 1}</th>
 
-                                  <td>
-                                    {new Date(
-                                      doctor.dateOfBirth
-                                    ).toLocaleDateString()}{' '}
-                                  </td>
+                                    <td>
+                                      {capitalizeWords(doctor.firstName)}{' '}
+                                    </td>
+                                    <td>{capitalizeWords(doctor.lastName)} </td>
+                                    <td>{capitalizeWords(doctor.gender)} </td>
+                                    <td>{capitalizeWords(doctor.statut)} </td>
+                                    <td>{formatPrice(doctor.salaire)} F </td>
+                                    <td>
+                                      {capitalizeWords(doctor.guardDays)}{' '}
+                                    </td>
+                                    <td>
+                                      {capitalizeWords(doctor.speciality)}{' '}
+                                    </td>
+                                    <td>{doctor.emailAdresse} </td>
 
-                                  <td>{capitalizeWords(doctor.adresse)} </td>
-                                  <td>
-                                    {formatPhoneNumber(doctor.phoneNumber)}
-                                  </td>
+                                    <td>
+                                      {new Date(
+                                        doctor.dateOfBirth
+                                      ).toLocaleDateString()}{' '}
+                                    </td>
 
-                                  <td>
-                                    <div className='d-flex gap-2'>
-                                      <div className='edit'>
-                                        <button
-                                          className='btn btn-sm btn-success edit-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
-                                          onClick={() => {
-                                            setFormModalTitle(
-                                              'Modifier les données'
-                                            );
-                                            setDoctorToUpdate(doctor);
-                                            tog_form_modal();
-                                          }}
-                                        >
-                                          <i className='ri-pencil-fill text-white'></i>
-                                        </button>
-                                      </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
+                                    <td>{capitalizeWords(doctor.adresse)} </td>
+                                    <td>
+                                      {formatPhoneNumber(doctor.phoneNumber)}
+                                    </td>
+
+                                    <td>
+                                      <div className='d-flex gap-2'>
+                                        <div className='edit'>
                                           <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
+                                            className='btn btn-sm btn-success edit-item-btn'
                                             data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
+                                            data-bs-target='#showModal'
                                             onClick={() => {
-                                              deleteButton(
-                                                doctor._id,
-                                                doctor.firstName +
-                                                  ' ' +
-                                                  doctor.lastName,
-                                                deleteDoctor
+                                              setFormModalTitle(
+                                                'Modifier les données'
                                               );
+                                              setDoctorToUpdate(doctor);
+                                              tog_form_modal();
                                             }}
                                           >
-                                            <i className='ri-delete-bin-fill text-white'></i>
+                                            <i className='ri-pencil-fill text-white'></i>
                                           </button>
                                         </div>
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            ))}
-                        </table>
-                      )}
-                      <div className='noresult' style={{ display: 'none' }}>
-                        <div className='text-center'>
-                          <lord-icon
-                            src='https://cdn.lordicon.com/msoeawqm.json'
-                            trigger='loop'
-                            colors='primary:#121331,secondary:#08a88a'
-                            style={{ width: '75px', height: '75px' }}
-                          ></lord-icon>
-                          <h5 className='mt-2'>Sorry! No Result Found</h5>
-                          <p className='text-muted mb-0'>
-                            We've searched more than 150+ Orders We did not find
-                            any orders for you search.
-                          </p>
+                                        {isDeleting && <LoadingSpiner />}
+                                        {!isDeleting && (
+                                          <div className='remove'>
+                                            <button
+                                              className='btn btn-sm btn-danger remove-item-btn'
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#deleteRecordModal'
+                                              onClick={() => {
+                                                deleteButton(
+                                                  doctor._id,
+                                                  doctor.firstName +
+                                                    ' ' +
+                                                    doctor.lastName,
+                                                  deleteDoctor
+                                                );
+                                              }}
+                                            >
+                                              <i className='ri-delete-bin-fill text-white'></i>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              ))}
+                          </table>
+                        )}
+                        <div className='noresult' style={{ display: 'none' }}>
+                          <div className='text-center'>
+                            <lord-icon
+                              src='https://cdn.lordicon.com/msoeawqm.json'
+                              trigger='loop'
+                              colors='primary:#121331,secondary:#08a88a'
+                              style={{ width: '75px', height: '75px' }}
+                            ></lord-icon>
+                            <h5 className='mt-2'>Sorry! No Result Found</h5>
+                            <p className='text-muted mb-0'>
+                              We've searched more than 150+ Orders We did not
+                              find any orders for you search.
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className='d-flex justify-content-end'>
                       <div className='pagination-wrap hstack gap-2'>

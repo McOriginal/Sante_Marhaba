@@ -16,6 +16,29 @@ export default function PaiementsListe() {
   const [paiementToUpdate, setpaiementToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un Paiement');
 
+  // State de Recherche
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction de Rechercher
+  const filterSearchPaiement = paiementsData?.filter((paiement) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      `${paiement.traitement['patient'].firstName} ${paiement.traitement['patient'].lastName}`
+        .toLowerCase()
+        .includes(search) ||
+      paiement.traitement['patient'].gender.toLowerCase().includes(search) ||
+      paiement.traitement['motif'].toLowerCase().includes(search) ||
+      paiement.totalAmount.toString().includes(search) ||
+      (paiement.totalPaye || '').toString().includes(search) ||
+      (paiement.reduction || 0).toString().includes(search) ||
+      paiement.statut.toLowerCase().includes(search) ||
+      (
+        paiement.paiementDate &&
+        new Date(paiement.paiementDate).toLocaleDateString()
+      ).includes(search)
+    );
+  });
+
   const navigate = useNavigate();
 
   // Navigation ver la FACTURE avec ID de Paiement
@@ -57,7 +80,7 @@ export default function PaiementsListe() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -65,18 +88,20 @@ export default function PaiementsListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-dollar-sign align-center me-1'></i>{' '}
                             Ajouter un Paiement
                           </Button>
                         </div>
                       </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
+                          <div className='search-box me-4'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Search...'
+                              className='form-control search border border-dark rounded'
+                              placeholder='Rechercher...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
                           </div>
                         </div>
@@ -90,182 +115,187 @@ export default function PaiementsListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {paiementsData?.length === 0 && (
+                      {filterSearchPaiement?.length === 0 && (
                         <div className='text-center text-mutate'>
-                          Aucun paiement enregistrée pour le moment !
+                          Aucun paiement trouvée !
                         </div>
                       )}
-                      {!error && !isLoading && paiementsData.length > 0 && (
-                        <table
-                          className='table align-middle table-nowrap table-hover'
-                          id='paiementTable'
-                        >
-                          <thead className='table-light'>
-                            <tr>
-                              <th
-                                style={{ width: '50px' }}
-                                data-sort='paiementDate'
-                              >
-                                Date de Paiement
-                              </th>
-                              <th data-sort='paiement_name'>Patient(e)</th>
+                      {!error &&
+                        !isLoading &&
+                        filterSearchPaiement.length > 0 && (
+                          <table
+                            className='table align-middle table-nowrap table-hover'
+                            id='paiementTable'
+                          >
+                            <thead className='table-light'>
+                              <tr>
+                                <th
+                                  style={{ width: '50px' }}
+                                  data-sort='paiementDate'
+                                >
+                                  Date de Paiement
+                                </th>
+                                <th data-sort='paiement_name'>Patient(e)</th>
 
-                              <th data-sort='genre'>Genre</th>
-                              <th data-sort='date'>Date de naissance</th>
-                              <th data-sort='traitement'>Maladie Traitée</th>
+                                <th data-sort='genre'>Genre</th>
+                                <th data-sort='date'>Date de naissance</th>
+                                <th data-sort='traitement'>Maladie Traitée</th>
 
-                              <th data-sort='totaAmount'>Somme Total</th>
-                              <th className='sort' data-sort='totaPayer'>
-                                Somme Payé
-                              </th>
-                              <th className='sort' data-sort='reliqua'>
-                                Réliqua
-                              </th>
-                              <th data-sort='motif'>Réduction</th>
+                                <th data-sort='totaAmount'>Somme Total</th>
+                                <th className='sort' data-sort='totaPayer'>
+                                  Somme Payé
+                                </th>
+                                <th className='sort' data-sort='reliqua'>
+                                  Réliqua
+                                </th>
+                                <th data-sort='motif'>Réduction</th>
 
-                              <th data-sort='statut'>Statut</th>
-                              <th data-sort='action'>Action</th>
-                            </tr>
-                          </thead>
-                          {paiementsData?.length > 0 &&
-                            paiementsData?.map((paiement) => (
-                              <tbody className='list form-check-all text-center'>
-                                <tr key={paiement._id}>
-                                  <th scope='row'>
-                                    {new Date(
-                                      paiement.paiementDate
-                                    ).toLocaleDateString()}
-                                  </th>
-                                  <td
-                                    className='id'
-                                    style={{ display: 'none' }}
-                                  ></td>
-                                  <td>
-                                    {capitalizeWords(
-                                      paiement.traitement['patient'].firstName
-                                    )}{' '}
-                                    {capitalizeWords(
-                                      paiement.traitement['patient'].lastName
-                                    )}
-                                  </td>
-                                  <td>
-                                    {capitalizeWords(
-                                      paiement.traitement['patient'].gender
-                                    )}{' '}
-                                  </td>
-                                  <td>
-                                    {new Date(
-                                      paiement.traitement['patient'].dateOfBirth
-                                    ).toLocaleDateString()}{' '}
-                                  </td>
+                                <th data-sort='statut'>Statut</th>
+                                <th data-sort='action'>Action</th>
+                              </tr>
+                            </thead>
+                            {filterSearchPaiement?.length > 0 &&
+                              filterSearchPaiement?.map((paiement) => (
+                                <tbody className='list form-check-all text-center'>
+                                  <tr key={paiement._id}>
+                                    <th scope='row'>
+                                      {new Date(
+                                        paiement.paiementDate
+                                      ).toLocaleDateString()}
+                                    </th>
+                                    <td
+                                      className='id'
+                                      style={{ display: 'none' }}
+                                    ></td>
+                                    <td>
+                                      {capitalizeWords(
+                                        paiement.traitement['patient'].firstName
+                                      )}{' '}
+                                      {capitalizeWords(
+                                        paiement.traitement['patient'].lastName
+                                      )}
+                                    </td>
+                                    <td>
+                                      {capitalizeWords(
+                                        paiement.traitement['patient'].gender
+                                      )}{' '}
+                                    </td>
+                                    <td>
+                                      {new Date(
+                                        paiement.traitement[
+                                          'patient'
+                                        ].dateOfBirth
+                                      ).toLocaleDateString()}{' '}
+                                    </td>
 
-                                  <td>
-                                    {capitalizeWords(
-                                      paiement.traitement['motif']
-                                    )}
-                                  </td>
+                                    <td>
+                                      {capitalizeWords(
+                                        paiement.traitement['motif']
+                                      )}
+                                    </td>
 
-                                  <td>
-                                    {formatPrice(paiement.totalAmount)}
-                                    {' F '}
-                                  </td>
-                                  <td>
-                                    {formatPrice(paiement.totalPaye)}
-                                    {' F '}
-                                  </td>
-                                  <td>
-                                    {paiement.totalAmount - paiement.totalPaye >
-                                    0 ? (
-                                      <span className='text-danger'>
-                                        {' '}
-                                        {formatPrice(
-                                          paiement.totalAmount -
-                                            paiement.totalPaye
-                                        )}
-                                        {' F '}
+                                    <td>
+                                      {formatPrice(paiement.totalAmount)}
+                                      {' F '}
+                                    </td>
+                                    <td>
+                                      {formatPrice(paiement.totalPaye)}
+                                      {' F '}
+                                    </td>
+                                    <td>
+                                      {paiement.totalAmount -
+                                        paiement.totalPaye >
+                                      0 ? (
+                                        <span className='text-danger'>
+                                          {' '}
+                                          {formatPrice(
+                                            paiement.totalAmount -
+                                              paiement.totalPaye
+                                          )}
+                                          {' F '}
+                                        </span>
+                                      ) : (
+                                        <span>
+                                          {' '}
+                                          {formatPrice(
+                                            paiement.totalAmount -
+                                              paiement.totalPaye
+                                          )}
+                                          {' F '}
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className='text-warning'>
+                                      {formatPrice(paiement.reduction)} F
+                                    </td>
+
+                                    <td>
+                                      <span
+                                        className={`badge badge-soft-${
+                                          paiement.statut === 'payé'
+                                            ? 'success'
+                                            : 'danger'
+                                        } text-uppercase`}
+                                      >
+                                        {paiement.statut}
                                       </span>
-                                    ) : (
-                                      <span>
-                                        {' '}
-                                        {formatPrice(
-                                          paiement.totalAmount -
-                                            paiement.totalPaye
-                                        )}
-                                        {' F '}
-                                      </span>
-                                    )}
-                                  </td>
-                                  <td className='text-warning'>
-                                    {formatPrice(paiement.reduction)} F
-                                  </td>
+                                    </td>
 
-                                  <td>
-                                    <span
-                                      className={`badge badge-soft-${
-                                        paiement.statut === 'payé'
-                                          ? 'success'
-                                          : 'danger'
-                                      } text-uppercase`}
-                                    >
-                                      {paiement.statut}
-                                    </span>
-                                  </td>
-
-                                  <td>
-                                    <div className='d-flex gap-2'>
-                                      <div>
-                                        <button
-                                          className='btn btn-sm btn-secondary show-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
-                                          onClick={() => {
-                                            handlePaiementClick(paiement._id);
-                                          }}
-                                        >
-                                          <i className='bx bx-show align-center text-white'></i>
-                                        </button>
-                                      </div>
-                                      <div className='edit'>
-                                        <button
-                                          className='btn btn-sm btn-success edit-item-btn'
-                                          onClick={() => {
-                                            setFormModalTitle(
-                                              'Modifier les données'
-                                            );
-                                            setpaiementToUpdate(paiement);
-                                            tog_form_modal();
-                                          }}
-                                        >
-                                          <i className='ri-pencil-fill text-white'></i>
-                                        </button>
-                                      </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
+                                    <td>
+                                      <div className='d-flex gap-2'>
+                                        <div>
                                           <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
+                                            className='btn btn-sm btn-secondary show-item-btn'
                                             data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
+                                            data-bs-target='#showModal'
                                             onClick={() => {
-                                              deleteButton(
-                                                paiement._id,
-                                                `Paiement de ${paiement.totalAmount} F
-                                                   `,
-                                                deletePaiement
-                                              );
+                                              handlePaiementClick(paiement._id);
                                             }}
                                           >
-                                            <i className='ri-delete-bin-fill text-white'></i>
+                                            <i className='bx bx-show align-center text-white'></i>
                                           </button>
                                         </div>
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            ))}
-                        </table>
-                      )}
+                                        <div className='edit'>
+                                          <button
+                                            className='btn btn-sm btn-success edit-item-btn'
+                                            onClick={() => {
+                                              setFormModalTitle(
+                                                'Modifier les données'
+                                              );
+                                              setpaiementToUpdate(paiement);
+                                              tog_form_modal();
+                                            }}
+                                          >
+                                            <i className='ri-pencil-fill text-white'></i>
+                                          </button>
+                                        </div>
+                                        {isDeleting && <LoadingSpiner />}
+                                        {!isDeleting && (
+                                          <div className='remove'>
+                                            <button
+                                              className='btn btn-sm btn-danger remove-item-btn'
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#deleteRecordModal'
+                                              onClick={() => {
+                                                deleteButton(
+                                                  paiement._id,
+                                                  `Paiement de ${paiement.totalAmount} F
+                                                   `,
+                                                  deletePaiement
+                                                );
+                                              }}
+                                            >
+                                              <i className='ri-delete-bin-fill text-white'></i>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              ))}
+                          </table>
+                        )}
                       <div className='noresult' style={{ display: 'none' }}>
                         <div className='text-center'>
                           <lord-icon

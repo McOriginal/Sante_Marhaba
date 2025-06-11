@@ -139,11 +139,10 @@ const SelectedMounthTotalTraitement = () => {
               {' '}
               <h5 className='mb-1 text-white'>Bénéfice (Revenue)</h5>
               {profit <= 0 ? (
-                <h4 className='text-danger'>{formatPrice(profit)}</h4>
+                <h4 className='text-danger'>{formatPrice(profit)} F</h4>
               ) : (
-                <h4 className='text-success'>{formatPrice(profit)}</h4>
-              )}{' '}
-              F
+                <h4 className='text-success'>{formatPrice(profit)} F</h4>
+              )}
             </Card>{' '}
           </Col>
           {/* Paiements */}

@@ -16,6 +16,23 @@ export default function DepenseListe() {
   const [depenseToUpdate, setDepenseToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter une Dépense');
 
+  // Search State
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction pour la recherche
+  const filterSearchDepense = depenseData?.filter((depense) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      depense.motifDepense.toLowerCase().includes(search) ||
+      depense.totalAmount.toString().includes(search) ||
+      new Date(depense.dateOfDepense)
+        .toLocaleDateString('fr-Fr')
+        .toString()
+        .includes(search)
+    );
+  });
+
   // Ouverture de Modal Form
   function tog_form_modal() {
     setForm_modal(!form_modal);
@@ -51,7 +68,7 @@ export default function DepenseListe() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -59,18 +76,20 @@ export default function DepenseListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-dollar-sign align-center me-1'></i>{' '}
                             Ajouter une Dépense
                           </Button>
                         </div>
                       </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
+                          <div className='search-box me-4'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Search...'
+                              className='form-control search border border-black rounded'
+                              placeholder='Rechercher...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
                           </div>
                         </div>
@@ -84,96 +103,98 @@ export default function DepenseListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {depenseData?.length === 0 && (
+                      {filterSearchDepense?.length === 0 && (
                         <div className='text-center text-mutate'>
-                          Aucune Dépense enregistrée pour le moment !
+                          Aucune Dépense trouvée !
                         </div>
                       )}
-                      {!error && !isLoading && depenseData.length > 0 && (
-                        <table
-                          className='table align-middle table-nowrap'
-                          id='depenseTable'
-                        >
-                          <thead className='table-light'>
-                            <tr>
-                              <th data-sort='date' style={{ width: '50px' }}>
-                                Date de dépense
-                              </th>
+                      {!error &&
+                        !isLoading &&
+                        filterSearchDepense.length > 0 && (
+                          <table
+                            className='table align-middle table-nowrap'
+                            id='depenseTable'
+                          >
+                            <thead className='table-light'>
+                              <tr>
+                                <th data-sort='date' style={{ width: '50px' }}>
+                                  Date de dépense
+                                </th>
 
-                              <th className='sort' data-sort='motif'>
-                                Motif de Dépense
-                              </th>
-                              <th className='sort' data-sort='totaAmount'>
-                                Somme Dépensé
-                              </th>
+                                <th className='sort' data-sort='motif'>
+                                  Motif de Dépense
+                                </th>
+                                <th className='sort' data-sort='totaAmount'>
+                                  Somme Dépensé
+                                </th>
 
-                              <th className='sort' data-sort='action'>
-                                Action
-                              </th>
-                            </tr>
-                          </thead>
-                          {depenseData?.length > 0 &&
-                            depenseData?.map((depense) => (
-                              <tbody className='list form-check-all'>
-                                <tr key={depense._id}>
-                                  <td>
-                                    {new Date(
-                                      depense.dateOfDepense
-                                    ).toLocaleDateString()}{' '}
-                                  </td>
+                                <th className='sort' data-sort='action'>
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            {filterSearchDepense?.length > 0 &&
+                              filterSearchDepense?.map((depense) => (
+                                <tbody className='list form-check-all'>
+                                  <tr key={depense._id}>
+                                    <td>
+                                      {new Date(
+                                        depense.dateOfDepense
+                                      ).toLocaleDateString()}{' '}
+                                    </td>
 
-                                  <td>
-                                    {capitalizeWords(depense.motifDepense)}
-                                  </td>
+                                    <td>
+                                      {capitalizeWords(depense.motifDepense)}
+                                    </td>
 
-                                  <td>
-                                    {formatPrice(depense.totalAmount)}
-                                    {' F '}
-                                  </td>
+                                    <td className='text-danger'>
+                                      {formatPrice(depense.totalAmount)}
+                                      {' F '}
+                                    </td>
 
-                                  <td>
-                                    <div className='d-flex gap-2'>
-                                      <div className='edit'>
-                                        <button
-                                          className='btn btn-sm btn-success edit-item-btn'
-                                          onClick={() => {
-                                            setFormModalTitle(
-                                              'Modifier les données'
-                                            );
-                                            setDepenseToUpdate(depense);
-                                            tog_form_modal();
-                                          }}
-                                        >
-                                          <i className='ri-pencil-fill text-white'></i>
-                                        </button>
-                                      </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
+                                    <td>
+                                      <div className='d-flex gap-2'>
+                                        <div className='edit'>
                                           <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
-                                            data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
+                                            className='btn btn-sm btn-success edit-item-btn'
                                             onClick={() => {
-                                              deleteButton(
-                                                depense._id,
-                                                `depense de ${depense.totalAmount} F
-                                                   `,
-                                                deleteDepense
+                                              setFormModalTitle(
+                                                'Modifier les données'
                                               );
+                                              setDepenseToUpdate(depense);
+                                              tog_form_modal();
                                             }}
                                           >
-                                            <i className='ri-delete-bin-fill text-white'></i>
+                                            <i className='ri-pencil-fill text-white'></i>
                                           </button>
                                         </div>
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            ))}
-                        </table>
-                      )}
+                                        {isDeleting && <LoadingSpiner />}
+                                        {!isDeleting && (
+                                          <div className='remove'>
+                                            <button
+                                              className='btn btn-sm btn-danger remove-item-btn'
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#deleteRecordModal'
+                                              onClick={() => {
+                                                deleteButton(
+                                                  depense._id,
+                                                  `depense de ${depense.totalAmount} F
+                                                   `,
+                                                  deleteDepense
+                                                );
+                                              }}
+                                            >
+                                              <i className='ri-delete-bin-fill text-white'></i>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              ))}
+                          </table>
+                        )}
                       <div className='noresult' style={{ display: 'none' }}>
                         <div className='text-center'>
                           <lord-icon

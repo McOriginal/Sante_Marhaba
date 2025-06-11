@@ -24,6 +24,23 @@ export default function FournisseurListe() {
     'Ajouter un Fournisseur'
   );
 
+  // State de Rechercher
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction pour filtrer les fournisseurs en fonction du terme de recherche
+  const filteredFournisseurs = fournisseurData?.filter((fournisseur) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      `${fournisseur.firstName} ${fournisseur.lastName}`
+        .toLowerCase()
+        .includes(search) ||
+      fournisseur.emailAdresse.toLowerCase().includes(search) ||
+      fournisseur.adresse.toLowerCase().includes(search) ||
+      fournisseur.phoneNumber.toString().includes(search) ||
+      fournisseur.marchandise.toLowerCase().includes(search)
+    );
+  });
+
   function tog_form_modal() {
     setForm_modal(!form_modal);
   }
@@ -56,12 +73,12 @@ export default function FournisseurListe() {
             <Col lg={12}>
               <Card>
                 <CardBody>
-                  <div id='fourniseursList'>
+                  <div id='fournisseursList'>
                     <Row className='g-4 mb-3'>
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -69,26 +86,21 @@ export default function FournisseurListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-ambulance align-center me-1'></i>{' '}
                             Ajouter un Fournisseur
-                          </Button>
-                          <Button
-                            color='soft-danger'
-                            // onClick="deleteMultiple()"
-                          >
-                            <i className='ri-delete-bin-2-line'></i>
                           </Button>
                         </div>
                       </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
+                          <div className='search-box me-4'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Search...'
+                              className='form-control search border border-dark rounded'
+                              placeholder='Rechercher...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                            <i className='ri-search-line search-icon'></i>
                           </div>
                         </div>
                       </Col>
@@ -101,122 +113,131 @@ export default function FournisseurListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {!fournisseurData?.length && !isLoading && !error && (
-                        <div className='text-center text-mutate'>
-                          Aucun Fournisseur pour le moment !
-                        </div>
-                      )}
-                      {!error && fournisseurData?.length > 0 && !isLoading && (
-                        <table
-                          className='table align-middle table-nowrap table-hover'
-                          id='fournisseurTable'
-                        >
-                          <thead className='table-light'>
-                            <tr>
-                              <th scope='col' style={{ width: '50px' }}>
-                                ID
-                              </th>
-                              <th className='sort' data-sort='fournisseur_name'>
-                                Nom
-                              </th>
-                              <th className='sort' data-sort='email'>
-                                Prénom
-                              </th>
-                              <th className='sort' data-sort='genre'>
-                                Genre
-                              </th>
+                      {!filteredFournisseurs?.length &&
+                        !isLoading &&
+                        !error && (
+                          <div className='text-center text-mutate'>
+                            Aucun Fournisseur trouvée !
+                          </div>
+                        )}
+                      {!error &&
+                        filteredFournisseurs?.length > 0 &&
+                        !isLoading && (
+                          <table
+                            className='table align-middle table-nowrap table-hover'
+                            id='fournisseurTable'
+                          >
+                            <thead className='table-light'>
+                              <tr>
+                                <th scope='col' style={{ width: '50px' }}>
+                                  ID
+                                </th>
+                                <th
+                                  className='sort'
+                                  data-sort='fournisseur_name'
+                                >
+                                  Nom
+                                </th>
+                                <th className='sort' data-sort='email'>
+                                  Prénom
+                                </th>
+                                <th className='sort' data-sort='genre'>
+                                  Genre
+                                </th>
 
-                              <th className='sort' data-sort='email'>
-                                Adresse Email
-                              </th>
+                                <th className='sort' data-sort='email'>
+                                  Adresse Email
+                                </th>
 
-                              <th className='sort' data-sort='adresse'>
-                                Domicile
-                              </th>
-                              <th className='sort' data-sort='phone'>
-                                Téléphone
-                              </th>
-                              <th className='sort' data-sort='marchandise'>
-                                Marchandise
-                              </th>
-                              <th className='sort' data-sort='action'>
-                                Action
-                              </th>
-                            </tr>
-                          </thead>
+                                <th className='sort' data-sort='adresse'>
+                                  Domicile
+                                </th>
+                                <th className='sort' data-sort='phone'>
+                                  Téléphone
+                                </th>
+                                <th className='sort' data-sort='marchandise'>
+                                  Marchandise
+                                </th>
+                                <th className='sort' data-sort='action'>
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
 
-                          {fournisseurData?.map((fourniseur, index) => (
-                            <tbody className='list form-check-all text-center'>
-                              <tr key={fourniseur._id}>
-                                <th scope='row'>{index + 1}</th>
-                                <td className='firstName'>
-                                  {capitalizeWords(fourniseur.firstName)}{' '}
-                                </td>
-                                <td className='firstName'>
-                                  {capitalizeWords(fourniseur.lastName)}{' '}
-                                </td>
-                                <td className='gender'>{fourniseur.gender} </td>
+                            {filteredFournisseurs?.map((fournisseur, index) => (
+                              <tbody className='list form-check-all text-center'>
+                                <tr key={fournisseur._id}>
+                                  <th scope='row'>{index + 1}</th>
+                                  <td className='firstName'>
+                                    {capitalizeWords(fournisseur.firstName)}{' '}
+                                  </td>
+                                  <td className='firstName'>
+                                    {capitalizeWords(fournisseur.lastName)}{' '}
+                                  </td>
+                                  <td className='gender'>
+                                    {fournisseur.gender}{' '}
+                                  </td>
 
-                                <td className='email'>
-                                  {fourniseur.emailAdresse}{' '}
-                                </td>
+                                  <td className='email'>
+                                    {fournisseur.emailAdresse}{' '}
+                                  </td>
 
-                                <td className='adresse'>
-                                  {capitalizeWords(fourniseur.adresse)}{' '}
-                                </td>
-                                <td className='phone'>
-                                  {formatPhoneNumber(fourniseur.phoneNumber)}
-                                </td>
-                                <td className='speciality'>
-                                  {capitalizeWords(fourniseur.marchandise)}{' '}
-                                </td>
+                                  <td className='adresse'>
+                                    {capitalizeWords(fournisseur.adresse)}{' '}
+                                  </td>
+                                  <td className='phone'>
+                                    {formatPhoneNumber(fournisseur.phoneNumber)}
+                                  </td>
+                                  <td className='speciality'>
+                                    {capitalizeWords(fournisseur.marchandise)}{' '}
+                                  </td>
 
-                                <td>
-                                  <div className='d-flex gap-2'>
-                                    <div className='edit'>
-                                      <button
-                                        className='btn btn-sm btn-success edit-item-btn'
-                                        data-bs-toggle='modal'
-                                        data-bs-target='#showModal'
-                                        onClick={() => {
-                                          setFormModalTitle(
-                                            'Modifier les données'
-                                          );
-                                          setFournisseurToUpdate(fourniseur);
-                                          tog_form_modal();
-                                        }}
-                                      >
-                                        <i className='ri-pencil-fill text-white'></i>
-                                      </button>
-                                    </div>
-                                    {isDeleting && <LoadingSpiner />}
-                                    {!isDeleting && (
-                                      <div className='remove'>
+                                  <td>
+                                    <div className='d-flex gap-2'>
+                                      <div className='edit'>
                                         <button
-                                          className='btn btn-sm btn-danger remove-item-btn'
+                                          className='btn btn-sm btn-success edit-item-btn'
                                           data-bs-toggle='modal'
-                                          data-bs-target='#deleteRecordModal'
+                                          data-bs-target='#showModal'
                                           onClick={() => {
-                                            deleteButton(
-                                              fourniseur._id,
-                                              fourniseur.firstName +
-                                                ' ' +
-                                                fourniseur.lastName,
-                                              deleteFournisseur
+                                            setFormModalTitle(
+                                              'Modifier les données'
                                             );
+                                            setFournisseurToUpdate(fournisseur);
+                                            tog_form_modal();
                                           }}
                                         >
-                                          <i className='ri-delete-bin-fill text-white'></i>
+                                          <i className='ri-pencil-fill text-white'></i>
                                         </button>
                                       </div>
-                                    )}
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          ))}
-                        </table>
-                      )}
+                                      {isDeleting && <LoadingSpiner />}
+                                      {!isDeleting && (
+                                        <div className='remove'>
+                                          <button
+                                            className='btn btn-sm btn-danger remove-item-btn'
+                                            data-bs-toggle='modal'
+                                            data-bs-target='#deleteRecordModal'
+                                            onClick={() => {
+                                              deleteButton(
+                                                fournisseur._id,
+                                                fournisseur.firstName +
+                                                  ' ' +
+                                                  fournisseur.lastName,
+                                                deleteFournisseur
+                                              );
+                                            }}
+                                          >
+                                            <i className='ri-delete-bin-fill text-white'></i>
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            ))}
+                          </table>
+                        )}
                     </div>
 
                     <div className='d-flex justify-content-end'>

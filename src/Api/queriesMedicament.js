@@ -51,7 +51,19 @@ export const useAllMedicament = () =>
   useQuery({
     queryKey: ['medicaments'],
     queryFn: () =>
-      api.get('/medicaments/getAllMedicaments').then((res) => res.data),
+      api
+        .get('/medicaments/getAllMedicamentsWithStock')
+        .then((res) => res.data),
+  });
+
+// Lire toutes les Medicaments avec le Stock Finis
+export const useAllMedicamentWithStockFinish = () =>
+  useQuery({
+    queryKey: ['medicaments'],
+    queryFn: () =>
+      api
+        .get('/medicaments/getAllMedicamentsWithStockFinish')
+        .then((res) => res.data),
   });
 
 // Obtenir une Medicament

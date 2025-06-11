@@ -33,13 +33,13 @@ export default function FactureListe() {
             </div>
           )}
           {isLoading && <LoadingSpiner />}
-          {paiementData.length === 0 && (
+          {paiementData?.length === 0 && (
             <div className='text-center'>Aucune Facture disponible.</div>
           )}
           {!error &&
             !isLoading &&
-            paiementData.length > 0 &&
-            paiementData.map((paiement) => (
+            paiementData?.length > 0 &&
+            paiementData?.map((paiement) => (
               <div
                 style={{ width: '100%', borderBottom: '2px dotted #0ababa' }}
               >
@@ -65,7 +65,7 @@ export default function FactureListe() {
                         }}
                       />
                       <CardTitle className='text-center '>
-                        <h2>Centre de Santé MARHABA</h2>
+                        <h3>Cabinet de soins MARHABA Santé</h3>
                         <p style={{ margin: '15px', fontSize: '10px' }}>
                           Kabala zone universitaire sur le goudron de COURALE
                         </p>

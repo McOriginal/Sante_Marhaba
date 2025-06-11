@@ -100,7 +100,7 @@ export default function TraitementsListe() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -116,11 +116,11 @@ export default function TraitementsListe() {
                       </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
+                          <div className='search-box me-4'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Recherche...'
+                              className='form-control search border border-dark rounded'
+                              placeholder='Rechercher...'
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -152,6 +152,9 @@ export default function TraitementsListe() {
               </div>
             )}
 
+            {!error && !isLoading && filterTraitementSearch?.length === 0 && (
+              <div className='text-center'>Aucun Traitement trouvée !</div>
+            )}
             {!error &&
               !isLoading &&
               filterTraitementSearch?.length > 0 &&

@@ -65,34 +65,16 @@ export default function Chambre() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>
+                            <i className='fas fa-home align-center me-1'></i>
                             Ajouter une chambre
                           </Button>
-                          <Button
-                            color='soft-danger'
-                            // onClick="deleteMultiple()"
-                          >
-                            <i className='ri-delete-bin-2-line'></i>
-                          </Button>
-                        </div>
-                      </Col>
-                      <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
-                            <input
-                              type='text'
-                              className='form-control search'
-                              placeholder='Search...'
-                            />
-                            <i className='ri-search-line search-icon'></i>
-                          </div>
                         </div>
                       </Col>
                     </Row>

@@ -23,6 +23,31 @@ export default function AppointmentListe() {
   const [appointmentToUpdate, setAppointmentToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Fixer un rendez-vous');
 
+  // Search State
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction de recherche
+  const filterSearchAppointement = appointmentData?.filter((appoint) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      `${appoint.traitement['patient'].firstName} ${appoint.traitement['patient'].lastName}`
+        .toLowerCase()
+        .includes(search) ||
+      appoint.traitement['motif'].toLowerCase().includes(search) ||
+      (appoint.appointmentDate &&
+        new Date(appoint.appointmentDate)
+          .toLocaleDateString('fr-FR')
+          .includes(search)) ||
+      (appoint.traitement['patient'].adresse || '')
+        .toLowerCase()
+        .includes(search) ||
+      (appoint.traitement['patient'].phoneNumber || '')
+        .toString()
+        .includes(search)
+    );
+  });
+
   function tog_form_modal() {
     setForm_modal(!form_modal);
   }
@@ -60,7 +85,7 @@ export default function AppointmentListe() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -69,7 +94,7 @@ export default function AppointmentListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-clock align-center me-1'></i>{' '}
                             Fixer un rendez-vous
                           </Button>
                         </div>
@@ -79,8 +104,10 @@ export default function AppointmentListe() {
                           <div className='search-box ms-2'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Search...'
+                              className='form-control search border border-dark rounded-3'
+                              placeholder='Rechercher...'
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
                             />
                           </div>
                         </div>
@@ -94,127 +121,133 @@ export default function AppointmentListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {appointmentData?.length === 0 && (
+                      {filterSearchAppointement?.length === 0 && (
                         <div className='text-center text-mutate'>
-                          Aucun Rendez-vous pour le moment !
+                          Aucun Rendez-vous trouvée !
                         </div>
                       )}
-                      {!error && !isLoading && appointmentData.length > 0 && (
-                        <table
-                          className='table align-middle table-nowrap table-hover'
-                          id='appointmentTable'
-                        >
-                          <thead className='table-light'>
-                            <tr>
-                              <th data-sort='appointmentDate'>
-                                Date de rendez-vous
-                              </th>
-                              <th data-sort='traitement'>Traitement</th>
-                              <th data-sort='firstName'>Patient</th>
+                      {!error &&
+                        !isLoading &&
+                        filterSearchAppointement.length > 0 && (
+                          <table
+                            className='table align-middle table-nowrap table-hover'
+                            id='appointmentTable'
+                          >
+                            <thead className='table-light'>
+                              <tr>
+                                <th data-sort='appointmentDate'>
+                                  Date de rendez-vous
+                                </th>
+                                <th data-sort='traitement'>Traitement</th>
+                                <th data-sort='firstName'>Patient</th>
 
-                              <th data-sort='date'>Date de naissance</th>
+                                <th data-sort='date'>Date de naissance</th>
 
-                              <th data-sort='adresse'>Domicile</th>
-                              <th data-sort='phone'>Téléphone</th>
-                              <th data-sort='action'>Action</th>
-                            </tr>
-                          </thead>
-                          {appointmentData?.length > 0 &&
-                            appointmentData?.map((appoint) => (
-                              <tbody className='list form-check-all text-center'>
-                                <tr key={appoint._id}>
-                                  <th>
-                                    {new Date(
-                                      appoint.appointmentDate
-                                    ).toLocaleDateString('fr-Fr', {
-                                      year: 'numeric',
-                                      month: '2-digit',
-                                      day: '2-digit',
-                                      weekday: 'short',
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                    })}{' '}
-                                  </th>
+                                <th data-sort='adresse'>Domicile</th>
+                                <th data-sort='phone'>Téléphone</th>
+                                <th data-sort='action'>Action</th>
+                              </tr>
+                            </thead>
+                            {filterSearchAppointement?.length > 0 &&
+                              filterSearchAppointement?.map((appoint) => (
+                                <tbody className='list form-check-all text-center'>
+                                  <tr key={appoint._id}>
+                                    <th>
+                                      {new Date(
+                                        appoint.appointmentDate
+                                      ).toLocaleDateString('fr-Fr', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        weekday: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                      })}{' '}
+                                    </th>
 
-                                  <td>
-                                    {capitalizeWords(
-                                      appoint.traitement['motif']
-                                    )}
-                                  </td>
-                                  <td>
-                                    {capitalizeWords(
-                                      appoint.traitement['patient'].firstName
-                                    )}{' '}
-                                    {capitalizeWords(
-                                      appoint.traitement['patient'].lastName
-                                    )}{' '}
-                                  </td>
+                                    <td>
+                                      {capitalizeWords(
+                                        appoint.traitement['motif']
+                                      )}
+                                    </td>
+                                    <td>
+                                      {capitalizeWords(
+                                        appoint.traitement['patient'].firstName
+                                      )}{' '}
+                                      {capitalizeWords(
+                                        appoint.traitement['patient'].lastName
+                                      )}{' '}
+                                    </td>
 
-                                  <td>
-                                    {new Date(
-                                      appoint.traitement['patient'].dateOfBirth
-                                    ).toLocaleDateString()}{' '}
-                                  </td>
+                                    <td>
+                                      {new Date(
+                                        appoint.traitement[
+                                          'patient'
+                                        ].dateOfBirth
+                                      ).toLocaleDateString()}{' '}
+                                    </td>
 
-                                  <td>
-                                    {capitalizeWords(
-                                      appoint.traitement['patient'].adresse
-                                    )}{' '}
-                                  </td>
-                                  <td>
-                                    {formatPhoneNumber(
-                                      appoint.traitement['patient'].phoneNumber
-                                    )}
-                                  </td>
+                                    <td>
+                                      {capitalizeWords(
+                                        appoint.traitement['patient'].adresse
+                                      )}{' '}
+                                    </td>
+                                    <td>
+                                      {formatPhoneNumber(
+                                        appoint.traitement['patient']
+                                          .phoneNumber
+                                      )}
+                                    </td>
 
-                                  <td>
-                                    <div className='d-flex gap-2'>
-                                      <div className='edit'>
-                                        <button
-                                          className='btn btn-sm btn-success edit-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
-                                          onClick={() => {
-                                            setFormModalTitle(
-                                              'Modifier les données'
-                                            );
-                                            setAppointmentToUpdate(appoint);
-                                            tog_form_modal();
-                                          }}
-                                        >
-                                          <i className='ri-pencil-fill text-white'></i>
-                                        </button>
-                                      </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
+                                    <td>
+                                      <div className='d-flex gap-2'>
+                                        <div className='edit'>
                                           <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
+                                            className='btn btn-sm btn-success edit-item-btn'
                                             data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
+                                            data-bs-target='#showModal'
                                             onClick={() => {
-                                              deleteButton(
-                                                appoint._id,
-                                                appoint.traitement['patient']
-                                                  .firstName +
-                                                  ' ' +
-                                                  appoint.traitement['patient']
-                                                    .lastName,
-                                                deleteAppointment
+                                              setFormModalTitle(
+                                                'Modifier les données'
                                               );
+                                              setAppointmentToUpdate(appoint);
+                                              tog_form_modal();
                                             }}
                                           >
-                                            <i className='ri-delete-bin-fill text-white'></i>
+                                            <i className='ri-pencil-fill text-white'></i>
                                           </button>
                                         </div>
-                                      )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            ))}
-                        </table>
-                      )}
+                                        {isDeleting && <LoadingSpiner />}
+                                        {!isDeleting && (
+                                          <div className='remove'>
+                                            <button
+                                              className='btn btn-sm btn-danger remove-item-btn'
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#deleteRecordModal'
+                                              onClick={() => {
+                                                deleteButton(
+                                                  appoint._id,
+                                                  appoint.traitement['patient']
+                                                    .firstName +
+                                                    ' ' +
+                                                    appoint.traitement[
+                                                      'patient'
+                                                    ].lastName,
+                                                  deleteAppointment
+                                                );
+                                              }}
+                                            >
+                                              <i className='ri-delete-bin-fill text-white'></i>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              ))}
+                          </table>
+                        )}
                       <div className='noresult' style={{ display: 'none' }}>
                         <div className='text-center'>
                           <lord-icon

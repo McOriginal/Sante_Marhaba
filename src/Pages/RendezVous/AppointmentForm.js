@@ -154,7 +154,7 @@ const AppointmentForm = ({ appointmentToEdit, tog_form_modal }) => {
                   traitmentData &&
                   traitmentData.map((traite) => (
                     <option key={traite._id} value={traite._id}>
-                      {traite.motif} {' de '}{' '}
+                      {capitalizeWords(traite.motif)} {' | '}
                       {capitalizeWords(traite.patient['firstName'])}{' '}
                       {capitalizeWords(traite.patient['lastName'])}
                     </option>

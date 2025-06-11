@@ -46,6 +46,7 @@ import AppointmentListe from '../Pages/RendezVous/AppointmentListe.js';
 import FactureListe from '../Pages/Paiements/FactureListe.js';
 import DepenseListe from '../Pages/Depenses/DepenseListe.js';
 import Rapports from '../Pages/Raports/Rapports.js';
+import MedicamentSansStock from '../Pages/Pharmacy/MedicamentSansStock.js';
 
 const authProtectedRoutes = [
   //dashboard
@@ -102,6 +103,9 @@ const authProtectedRoutes = [
 
   // Médicament Pharmaceutique
   { path: '/medicaments', component: <MedicamentListe /> },
+
+  // Médicament Pharmaceutique
+  { path: '/medicaments_no_stock', component: <MedicamentSansStock /> },
 
   // Ajouter une Approvisonnement
   { path: '/approvisonnement/:id', component: <ApprovisonnementForm /> },

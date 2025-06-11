@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Button,
   Card,
   CardBody,
   CardTitle,
@@ -13,26 +12,20 @@ import {
   UncontrolledDropdown,
 } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
-import FormModal from '../components/FormModal';
 
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 
-import { deleteButton } from '../components/AlerteModal';
-import {
-  useAllMedicament,
-  useDeleteMedicament,
-} from '../../Api/queriesMedicament';
-import MedicamentForm from './MedicamentForm';
+import { useAllMedicamentWithStockFinish } from '../../Api/queriesMedicament';
 import imgMedicament from './../../assets/images/medicament.jpg';
 import { useNavigate } from 'react-router-dom';
 
-export default function MedicamentListe() {
-  const [form_modal, setForm_modal] = useState(false);
-  const { data: medicaments, isLoading, error } = useAllMedicament();
-  const { mutate: deleteMedicament } = useDeleteMedicament();
-  const [medicamentToUpdate, setMedicamentToUpdate] = useState(null);
-  const [formModalTitle, setFormModalTitle] = useState('Ajouter un Médicament');
+export default function MedicamentSansStock() {
+  const {
+    data: medicaments,
+    isLoading,
+    error,
+  } = useAllMedicamentWithStockFinish();
 
   // Recherche State
   const [searchTerm, setSearchTerm] = useState('');
@@ -55,31 +48,11 @@ export default function MedicamentListe() {
     navigate(`/approvisonnement/${id}`);
   }
 
-  function tog_form_modal() {
-    setForm_modal(!form_modal);
-  }
   return (
     <React.Fragment>
       <div className='page-content'>
         <Container fluid>
           <Breadcrumbs title='Pharmacie' breadcrumbItem='Médicaments' />
-
-          {/* -------------------------- */}
-          <FormModal
-            form_modal={form_modal}
-            setForm_modal={setForm_modal}
-            tog_form_modal={tog_form_modal}
-            modal_title={formModalTitle}
-            size='md'
-            bodyContent={
-              <MedicamentForm
-                medicamentToEdit={medicamentToUpdate}
-                tog_form_modal={tog_form_modal}
-              />
-            }
-          />
-
-          {/* -------------------------- */}
 
           <Row>
             <Col lg={12}>
@@ -87,22 +60,6 @@ export default function MedicamentListe() {
                 <CardBody>
                   <div id='medicamentList'>
                     <Row className='g-4 mb-3'>
-                      <Col className='col-sm-auto'>
-                        <div className='d-flex gap-1'>
-                          <Button
-                            color='info'
-                            className='add-btn'
-                            id='create-btn'
-                            onClick={() => {
-                              setMedicamentToUpdate(null);
-                              tog_form_modal();
-                            }}
-                          >
-                            <i className='fas fa-capsules align-center me-1'></i>{' '}
-                            Ajouter un Médicament
-                          </Button>
-                        </div>
-                      </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
                           <div className='search-box me-4'>
@@ -121,7 +78,7 @@ export default function MedicamentListe() {
 
                   <p className='text-center'>
                     Liste des médicaments dont la <strong>Stock</strong> est
-                    disponible{' '}
+                    Finis ou près ce que{' '}
                   </p>
                 </CardBody>
               </Card>
@@ -174,36 +131,11 @@ export default function MedicamentListe() {
                           <DropdownItem
                             className='edit-item-btn'
                             onClick={() => {
-                              setFormModalTitle('Modifier les données');
-                              setMedicamentToUpdate(medica);
-                              tog_form_modal();
-                            }}
-                          >
-                            <i className='ri-pencil-fill align-bottom me-2 text-muted'></i>
-                            Modifier
-                          </DropdownItem>
-                          <DropdownItem
-                            className='edit-item-btn'
-                            onClick={() => {
                               navigateToMedicamentApprovisonnement(medica._id);
                             }}
                           >
                             <i className=' bx bx-analyse align-center me-2 text-muted'></i>
                             Approvisonnée
-                          </DropdownItem>
-                          <DropdownItem
-                            className='remove-item-btn'
-                            onClick={() => {
-                              deleteButton(
-                                medica._id,
-                                medica.name,
-                                deleteMedicament
-                              );
-                            }}
-                          >
-                            {' '}
-                            <i className='ri-delete-bin-fill align-bottom me-2 text-muted'></i>{' '}
-                            Delete{' '}
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledDropdown>

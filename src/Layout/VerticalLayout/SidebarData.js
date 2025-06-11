@@ -71,6 +71,7 @@ const SidebarData = [
     subItem: [
       { sublabel: 'Médicament', link: '/medicaments' },
       { sublabel: 'Approvisionnements', link: '/approvisonnements' },
+      { sublabel: 'Médicament Sans Stock', link: '/medicaments_no_stock' },
     ],
   },
 

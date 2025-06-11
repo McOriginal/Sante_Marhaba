@@ -28,6 +28,18 @@ export default function Materiels() {
   const [materielToUpdate, setMaterielToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter une Matériel');
 
+  // State de Recherche
+  const [searchTerm, seatSearchTerm] = useState('');
+
+  // Fonction pour la recherche
+  const filterSearchMateriels = materiels?.filter((mat) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      mat.name.toLowerCase().includes(search) ||
+      mat.nombre.toString().includes(search)
+    );
+  });
+
   function tog_form_modal() {
     setForm_modal(!form_modal);
   }
@@ -62,33 +74,28 @@ export default function Materiels() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-tools align-center me-1'></i>{' '}
                             Ajouter un Matériel
-                          </Button>
-                          <Button
-                            color='soft-danger'
-                            // onClick="deleteMultiple()"
-                          >
-                            <i className='ri-delete-bin-2-line'></i>
                           </Button>
                         </div>
                       </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
+                          <div className='search-box me-4'>
                             <input
                               type='text'
-                              className='form-control search'
-                              placeholder='Search...'
+                              className='form-control search border border-dark rounded'
+                              placeholder='Rechercher...'
+                              value={searchTerm}
+                              onChange={(e) => seatSearchTerm(e.target.value)}
                             />
-                            <i className='ri-search-line search-icon'></i>
                           </div>
                         </div>
                       </Col>
@@ -105,22 +112,22 @@ export default function Materiels() {
                 Erreur lors de chargement des données
               </div>
             )}
-            {!error && !isLoading && materiels.length === 0 && (
-              <div className='text-center'>Aucun Matériels disponible</div>
+            {!error && !isLoading && filterSearchMateriels.length === 0 && (
+              <div className='text-center'>Aucun Matériels trouvée</div>
             )}
             {!error &&
               !isLoading &&
-              materiels?.length > 0 &&
-              materiels?.map((mat) => (
-                <Col mg={6} xl={3}>
+              filterSearchMateriels?.length > 0 &&
+              filterSearchMateriels?.map((mat) => (
+                <Col md={6} xl={3} key={mat._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
                       borderRadius: '15px',
-                      height: '320px',
+                      height: '300px',
                     }}
                   >
-                    <CardHeader style={{ height: '70%' }}>
+                    <CardHeader style={{ height: '50%' }}>
                       <CardImg
                         top
                         className='img-fluid'

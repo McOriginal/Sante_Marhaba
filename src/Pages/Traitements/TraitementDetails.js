@@ -100,7 +100,7 @@ export default function TraitementDetails() {
                       >
                         <CardTitle className='text-center '>
                           <h2 className='fs-bold'>Dossier Médical </h2>
-                          <h5>Centre de Santé MARHABA</h5>
+                          <h5>Cabinet de soins MARHABA Santé</h5>
                           <p style={{ margin: '15px', fontSize: '10px' }}>
                             Kabala zone universitaire sur le goudron de COURALE
                           </p>
@@ -400,7 +400,7 @@ export default function TraitementDetails() {
                       />
                       <CardTitle className='text-center '>
                         <h2 className='fs-bold'>Ordonnance Médical </h2>
-                        <h5>Centre de Santé MARHABA</h5>
+                        <h5>Cabinet de soins MARHABA Santé</h5>
                         <p style={{ margin: '15px', fontSize: '10px' }}>
                           Kabala zone universitaire sur le goudron de COURALE
                         </p>

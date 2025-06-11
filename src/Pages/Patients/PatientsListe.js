@@ -70,7 +70,7 @@ export default function PatientsListe() {
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
-                            color='success'
+                            color='info'
                             className='add-btn'
                             id='create-btn'
                             onClick={() => {
@@ -84,11 +84,11 @@ export default function PatientsListe() {
                       </Col>
                       <Col className='col-sm'>
                         <div className='d-flex justify-content-sm-end'>
-                          <div className='search-box ms-2'>
+                          <div className='search-box me-4 border border-dark rounded'>
                             <input
                               type='text'
                               className='form-control search'
-                              placeholder='Rechercher un patient(e)...'
+                              placeholder='Rechercher...'
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
                             />
