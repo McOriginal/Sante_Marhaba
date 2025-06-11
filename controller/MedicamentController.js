@@ -31,7 +31,6 @@ exports.createMedicament = async (req, res) => {
 
     return res.status(201).json(medicament);
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ status: 'error', message: err.message });
   }
 };
@@ -79,10 +78,23 @@ exports.updateMedicament = async (req, res) => {
   }
 };
 
-//  Afficher une seule Medicament
-exports.getAllMedicament = async (req, res) => {
+//  Afficher une seule Medicament avec une stock minimum de (1)
+exports.getAllMedicamentWithStock = async (req, res) => {
   try {
-    const medicaments = await Medicament.find()
+    const medicaments = await Medicament.find({ stock: { $gt: 1 } })
+      // Trie par date de création, du plus récent au plus ancien
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(medicaments);
+  } catch (err) {
+    return res.status(400).json({ status: 'error', message: err.message });
+  }
+};
+
+//  Afficher une seule Medicament avec une stock terminée (0)
+exports.getAllMedicamentWithStockFinish = async (req, res) => {
+  try {
+    const medicaments = await Medicament.find({ stock: { $lt: 5 } })
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
 

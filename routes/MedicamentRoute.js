@@ -6,7 +6,16 @@ const medicamentController = require('../controller/MedicamentController');
 router.post('/addMedicament', medicamentController.createMedicament);
 
 // Afficher une toutes les Medicament
-router.get('/getAllMedicaments', medicamentController.getAllMedicament);
+router.get(
+  '/getAllMedicamentsWithStock',
+  medicamentController.getAllMedicamentWithStock
+);
+
+// Afficher une toutes les Medicament avec un stock terminée (0)
+router.get(
+  '/getAllMedicamentsWithStockFinish',
+  medicamentController.getAllMedicamentWithStockFinish
+);
 
 // Afficher une seule Medicament
 router.get('/getOneMedicament/:id', medicamentController.getOneMedicament);

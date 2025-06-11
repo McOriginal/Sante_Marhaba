@@ -7,7 +7,6 @@ const Traitement = require('../models/TraitementModel');
 exports.createOrdonnance = async (req, res) => {
   try {
     const { items, ...restOfData } = req.body;
-    console.log(req.body);
 
     // const cashierId = req.user?._id || null; // supposé que `req.user` est injecté par auth middleware
 
@@ -54,7 +53,6 @@ exports.getAllOrdonnances = async (req, res) => {
         },
       })
       .populate('items.medicaments');
-    console.log(ordonnances);
     return res.status(201).json(ordonnances);
   } catch (e) {
     return res.status(404).json(e);

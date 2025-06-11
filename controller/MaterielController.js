@@ -32,7 +32,6 @@ exports.createMateriel = async (req, res) => {
     });
     return res.status(201).json(materiel);
   } catch (err) {
-    console.log(err);
     return res.status(400).json({ status: 'error', message: err.message });
   }
 };
