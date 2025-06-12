@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -11,6 +12,7 @@ import {
 import { useOneOrdonnance } from '../../Api/queriesOrdonnance';
 import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import logo_medical from './../../assets/images/logo_medical.png';
+import html2pdf from 'html2pdf.js';
 
 const OrdonnanceDetails = ({
   show_modal,
@@ -24,6 +26,70 @@ const OrdonnanceDetails = ({
     isLoading,
   } = useOneOrdonnance(selectedOrdonnanceID);
 
+  // ------------------------------------------
+  // ------------------------------------------
+  // Export En PDF
+  // ------------------------------------------
+  // ------------------------------------------
+  const exportPDFOrdonnance = () => {
+    const element = document.getElementById('ordonnanceMedical');
+    const opt = {
+      filename: 'ordonnanceMedical.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    };
+
+    html2pdf()
+      .from(element)
+      .set(opt)
+      .save()
+      .catch((err) => console.error('Error generating PDF:', err));
+  };
+
+  // -----------------------------------------
+  // -----------------------------------------
+  // Impression
+  // -----------------------------------------
+  // -----------------------------------------
+
+  const handlePrintOrdonnance = () => {
+    const content = document.getElementById('ordonnanceMedical');
+    // Ouvre une nouvelle fenêtre pour l'impression
+    const printWindow = window.open('', '', 'width=800,height=600');
+
+    // Récupère tous les <style> et <link rel="stylesheet">
+    const styles = Array.from(
+      document.querySelectorAll('style, link[rel="stylesheet"]')
+    )
+      .map((node) => node.outerHTML)
+      .join('');
+
+    printWindow.document.write(`
+    <html>
+      <head>
+        <title>Impression d'Ordonnance</title>
+        ${styles}
+        <style>
+          @media print {
+            body {
+              margin: 20px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        ${content.innerHTML}
+      </body>
+    </html>
+  `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
   return (
     <Modal
       isOpen={show_modal}
@@ -34,8 +100,24 @@ const OrdonnanceDetails = ({
       scrollable={true}
       centered={true}
     >
+      {/* ---- Modal Header */}
       <div className='modal-header'>
-        <h5 className='modal-title mt-0'>Ordonnance Médical</h5>
+        <div className='d-flex gap-1 justify-content-around align-items-center w-100'>
+          <Button
+            color='info'
+            className='add-btn'
+            id='create-btn'
+            onClick={handlePrintOrdonnance}
+          >
+            <i className='fas fa-print align-center me-1'></i> Imprimer
+          </Button>
+
+          <Button color='danger' onClick={exportPDFOrdonnance}>
+            <i className='fas fa-paper-plane  me-1 '></i>
+            Exporter en PDF
+          </Button>
+        </div>
+
         <button
           type='button'
           onClick={() => setShow_modal(false)}
@@ -46,9 +128,14 @@ const OrdonnanceDetails = ({
           <span aria-hidden='true'>&times;</span>
         </button>
       </div>
+
+      {/* Modal Body */}
       <div className='modal-body'>
         {!error && !isLoading && (
-          <div className='mx-5'>
+          <div
+            className='mx-5 d-flex justify-content-center'
+            id={'ordonnanceMedical'}
+          >
             <Card
               style={{
                 boxShadow: '0px 0px 10px rgba(100, 169, 238, 0.5)',

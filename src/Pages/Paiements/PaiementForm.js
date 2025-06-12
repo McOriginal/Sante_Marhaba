@@ -139,6 +139,8 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       validation.setFieldValue('totalAmount', finalAmount);
     }
   }, [
+    validation,
+    ordonnanceData,
     validation.values.traitement,
     validation.values.reduction,
     traitementData,
@@ -155,33 +157,32 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
     >
       <Row>
         <Col md='12'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='traitement'>Traitement et Ordonnance</Label>
+          {!error && isFetchingTraitement && <LoadingSpiner />}
+          {error && (
+            <p className='text-getRectCenter text-danger'>
+              Erreur de chargement veillez acctualiser la page{' '}
+            </p>
+          )}
+          {!error && !isFetchingTraitement && (
+            <FormGroup className='mb-3'>
+              <Label htmlFor='traitement'>Traitement</Label>
 
-            <Input
-              name='traitement'
-              type='select'
-              className='form-control'
-              id='traitement'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.traitement || ''}
-              invalid={
-                validation.touched.traitement && validation.errors.traitement
-                  ? true
-                  : false
-              }
-            >
-              {error && (
-                <p className='text-getRectCenter text-danger'>
-                  Erreur de chargement veillez acctualiser la page{' '}
-                </p>
-              )}
-              {!error && isFetchingTraitement && <LoadingSpiner />}
-              <option value=''>Sélectionner le traitement</option>
-              {!error &&
-                !isFetchingTraitement &&
-                traitementData.map((trait) => (
+              <Input
+                name='traitement'
+                type='select'
+                className='form-control'
+                id='traitement'
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                value={validation.values.traitement || ''}
+                invalid={
+                  validation.touched.traitement && validation.errors.traitement
+                    ? true
+                    : false
+                }
+              >
+                <option value=''>Sélectionner le traitement</option>
+                {traitementData?.map((trait) => (
                   <option key={trait._id} value={trait._id}>
                     {capitalizeWords(trait.patient['firstName'])}{' '}
                     {capitalizeWords(trait.patient['lastName'])}
@@ -196,13 +197,14 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
                     })}
                   </option>
                 ))}
-            </Input>
-            {validation.touched.traitement && validation.errors.traitement ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.traitement}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
+              </Input>
+              {validation.touched.traitement && validation.errors.traitement ? (
+                <FormFeedback type='invalid'>
+                  {validation.errors.traitement}
+                </FormFeedback>
+              ) : null}
+            </FormGroup>
+          )}
         </Col>
       </Row>
 
@@ -224,7 +226,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
               className='form-control'
               id='totalAmount'
               onBlur={validation.handleBlur}
-              value={validation.values.totalAmount || ''}
+              defaultValue={validation.values.totalAmount || ''}
               invalid={
                 validation.touched.totalAmount && validation.errors.totalAmount
                   ? true

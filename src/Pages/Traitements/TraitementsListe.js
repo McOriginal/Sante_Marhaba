@@ -251,17 +251,16 @@ export default function TraitementsListe() {
                         {capitalizeWords(trait.motif)}{' '}
                       </CardTitle>
                       <CardText style={{ fontSize: '12px' }}>
-                        {capitalizeWords(trait?.patient['firstName']) +
-                          ' ' +
-                          capitalizeWords(trait?.patient['lastName'])}
-                        <p>
-                          {trait.patient['dateOfBirth']
-                            ? new Date(
-                                trait?.patient['dateOfBirth']
-                              ).toLocaleDateString()
-                            : '---------'}
-                        </p>
+                        {capitalizeWords(trait?.patient['firstName'])}{' '}
+                        {capitalizeWords(trait?.patient['lastName'])}
                       </CardText>
+                      <p style={{ fontSize: '12px', margin: '0px' }}>
+                        {trait.patient['dateOfBirth']
+                          ? new Date(
+                              trait?.patient['dateOfBirth']
+                            ).toLocaleDateString()
+                          : '---------'}
+                      </p>
                     </CardBody>
                   </Card>
                 </Col>
