@@ -1,5 +1,6 @@
 const express = require('express');
 // Import des routes
+const userRoute = require('./routes/UserRoute');
 const doctorRoute = require('./routes/doctorRoute');
 const patientRoute = require('./routes/PatientRoute');
 const fournisseurRoute = require('./routes/FournisseurRoute');
@@ -29,6 +30,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Ajoute un préfixe /api à toutes les routes
 
 app.use('/', patientRoute);
+
+// Utilisation des routes Utilisateur
+app.use('/api/users', userRoute);
 
 // Utilisation des routes Année Scolaire
 app.use('/api/patients', patientRoute);
