@@ -16,6 +16,9 @@ import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
 
 const Dashboard = () => {
   document.title = 'Santé MARHABA';
+  const authUser = localStorage.getItem('authUser');
+  const j = JSON.parse(authUser);
+  console.log(j.user.role);
 
   return (
     <React.Fragment>

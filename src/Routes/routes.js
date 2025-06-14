@@ -48,6 +48,7 @@ import DepenseListe from '../Pages/Depenses/DepenseListe.js';
 import Rapports from '../Pages/Raports/Rapports.js';
 import MedicamentSansStock from '../Pages/Pharmacy/MedicamentSansStock.js';
 
+// Routes pour les ADMINS
 const authProtectedRoutes = [
   //dashboard
   { path: '/dashboard', component: <Dashboard /> },
@@ -131,7 +132,44 @@ const authProtectedRoutes = [
   },
 ];
 
+// Routes pour les Médecins
+const medecinsRoutes = [
+  //dashboard
+  { path: '/dashboard-medecin', component: <Dashboard /> },
+
+  //appointments
+  { path: '/appointments', component: <AppointmentListe /> },
+
+  // Patient
+  { path: '/patients', component: <PatientsListe /> },
+
+  // Traitements
+  { path: '/traitements', component: <TraitementsListe /> },
+
+  // Traitement Detail
+  { path: '/traitements/details/:id', component: <TraitementDetails /> },
+
+  // Traitement Detail
+  { path: '/traitements/ordonnance/:id', component: <NewOrdonance /> },
+
+  // Ordonnance
+  { path: '/ordonnances', component: <OrdonnanceListe /> },
+
+  // Profile
+  { path: '/userprofile', component: <UserProfile /> },
+
+  // Outils Médicals
+
+  // Chambre
+  { path: '/chambres', component: <Chambre /> },
+
+  // Matériels
+  { path: '/materiels', component: <Materiels /> },
+];
+
 const publicRoutes = [
+  // { path: '/unauthorized', component: <Unauthorized /> },
+
   // Authentication Page
   { path: '/logout', component: <Logout /> },
   { path: '/login', component: <Login /> },
@@ -151,4 +189,4 @@ const publicRoutes = [
   { path: '/pages-comingsoon', component: <ComingSoon /> },
 ];
 
-export { authProtectedRoutes, publicRoutes };
+export { authProtectedRoutes, medecinsRoutes, publicRoutes };

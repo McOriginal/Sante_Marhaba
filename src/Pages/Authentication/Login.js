@@ -1,174 +1,160 @@
-import PropTypes from "prop-types";
-import React, { useEffect } from "react";
-import logolight from "../../assets/images/logo-light.png";
-import logodark from "../../assets/images/logo-dark.png";
+import React, { useState } from 'react';
+import logolight from '../../assets/images/logo-light.png';
+import logodark from '../../assets/images/logo-dark.png';
 
 import {
   Row,
   Col,
   CardBody,
   Card,
-  Alert,
   Container,
   Form,
   Input,
   FormFeedback,
   Label,
-} from "reactstrap";
+} from 'reactstrap';
 
-//redux
-import { useSelector, useDispatch } from "react-redux";
-
-import { Link } from "react-router-dom";
-import withRouter from "../../components/Common/withRouter";
+import { Link, useNavigate } from 'react-router-dom';
 
 // Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import { useLogin } from '../../Api/queriesAuth';
+import {
+  errorMessageAlert,
+  successMessageAlert,
+} from '../components/AlerteModal';
+import LoadingSpiner from '../components/LoadingSpiner';
 
-//Social Media Imports
-// import { GoogleLogin } from "react-google-login";
-// import TwitterLogin from "react-twitter-auth"
-// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+const Login = () => {
+  document.title = 'Inscription | Santé MARHABA ';
 
-// actions
-import { loginUser, socialLogin } from "../../store/actions";
+  // Query de Login
+  const { mutate: loginUser } = useLogin();
+  // State de chargement des données
+  const [isLoading, setIsLoading] = useState(false);
 
-//Import config
-// import { facebook, google } from "../../config";
-
-import { createSelector } from "reselect";
-
-const Login = (props) => {
-  document.title = "Login | Upzet - React Admin & Dashboard Template";
-
-  const dispatch = useDispatch();
+  // State de Navigation
+  const navigate = useNavigate();
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: "admin@Themesdesign.com" || "",
-      password: "123456" || "",
+      email: '',
+      password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      password: Yup.string().required("Please Enter Your Password"),
+      email: Yup.string().required('Veuillez entrer votre Email'),
+      password: Yup.string().required('Veuillez entrer votre mot de passe'),
     }),
-    onSubmit: (values) => {
-      dispatch(loginUser(values, props.router.navigate));
+    onSubmit: (values, { resetForm }) => {
+      // Désactiver le bouton de soumission pour éviter les doubles clics
+      setIsLoading(true);
+
+      // Appel de la mutation pour se connecter
+      loginUser(values, {
+        onSuccess: () => {
+          setIsLoading(false);
+
+          resetForm();
+          // Afficher un message de succès ou une alerte
+          successMessageAlert('Connexion réussie !');
+          // Redirection vers le tableau de bord
+          setTimeout(() => {
+            try {
+              const authUser = JSON.parse(localStorage.getItem('authUser'));
+              const role = authUser?.user?.role;
+
+              if (!role) {
+                return errorMessageAlert('Rôle utilisateur introuvable.');
+              }
+
+              switch (role) {
+                case 'admin':
+                  navigate('/dashboard');
+                  break;
+                case 'medecin':
+                  navigate('/dashboard-medecin');
+                  break;
+                case 'secretaire':
+                  navigate('/dashboard-secretaire');
+                  break;
+                default:
+                  errorMessageAlert('Rôle non reconnu.');
+              }
+            } catch (err) {
+              console.error(err);
+              errorMessageAlert('Erreur de redirection.');
+            }
+          }, 2000);
+        },
+        onError: (error) => {
+          setIsLoading(false);
+          const errorMessage =
+            error?.response?.data?.message ||
+            error ||
+            'Une erreur est survenue lors de la connexion.';
+          console.log(error);
+          errorMessageAlert(errorMessage);
+        },
+      });
     },
-  });
-
-  const loginpage = createSelector(
-    (state) => state.login,
-    (state) => ({
-      error: state.error,
-    })
-  );
-  // Inside your component
-  const { error } = useSelector(loginpage);
-
-  // handleValidSubmit
-  // const handleValidSubmit = (event, values) => {
-  //   dispatch(loginUser(values, props.router.navigate));
-  // };
-
-  // const signIn = (res, type) => {
-  //   if (type === "google" && res) {
-  //     const postData = {
-  //       name: res.profileObj.name,
-  //       email: res.profileObj.email,
-  //       token: res.tokenObj.access_token,
-  //       idToken: res.tokenId,
-  //     };
-  //     dispatch(socialLogin(postData, props.router.navigate, type));
-  //   } else if (type === "facebook" && res) {
-  //     const postData = {
-  //       name: res.name,
-  //       email: res.email,
-  //       token: res.accessToken,
-  //       idToken: res.tokenId,
-  //     };
-  //     dispatch(socialLogin(postData, props.router.navigate, type));
-  //   }
-  // };
-
-  const signIn = (type) => {
-    dispatch(socialLogin(type, props.router.navigate));
-  };
-
-  //for facebook and google authentication
-  const socialResponse = (type) => {
-    signIn(type);
-  };
-
-  useEffect(() => {
-    document.body.className = "bg-pattern";
-    // remove classname when component will unmount
-    return function cleanup() {
-      document.body.className = "";
-    };
   });
 
   return (
     <React.Fragment>
-      <div className="bg-overlay"></div>
-      <div className="account-pages my-5 pt-5">
+      <div className='bg-overlay'></div>
+      <div className='account-pages my-5 pt-5'>
         <Container>
-          <Row className="justify-content-center">
+          <Row className='justify-content-center'>
             <Col lg={6} md={8} xl={4}>
               <Card>
-                <CardBody className="p-4">
+                <CardBody className='p-4'>
                   <div>
-                    <div className="text-center">
-                      <Link to="/">
+                    <div className='text-center'>
+                      <Link to='/'>
                         <img
                           src={logodark}
-                          alt=""
-                          height="24"
-                          className="auth-logo logo-dark mx-auto"
+                          alt=''
+                          height='24'
+                          className='auth-logo logo-dark mx-auto'
                         />
                         <img
                           src={logolight}
-                          alt=""
-                          height="24"
-                          className="auth-logo logo-light mx-auto"
+                          alt=''
+                          height='24'
+                          className='auth-logo logo-light mx-auto'
                         />
                       </Link>
                     </div>
-                    <h4 className="font-size-18 text-muted mt-2 text-center">
-                      Welcome Back !
+                    <h4 className='font-size-18 text-muted mt-2 text-center'>
+                      Bienvenue !
                     </h4>
-                    <p className="mb-5 text-center">
-                      Sign in to continue to Upzet.
+                    <p className='mb-5 text-center'>
+                      Entrez vos coordonnées pour vous connecter à votre compte.
                     </p>
                     <Form
-                      className="form-horizontal"
+                      className='form-horizontal'
                       onSubmit={(e) => {
                         e.preventDefault();
                         validation.handleSubmit();
                         return false;
                       }}
                     >
-                      {error ? (
-                        <Alert color="danger">
-                          <div>{error}</div>
-                        </Alert>
-                      ) : null}
                       <Row>
                         <Col md={12}>
-                          <div className="mb-4">
-                            <Label className="form-label">Email</Label>
+                          <div className='mb-4'>
+                            <Label className='form-label'>Email</Label>
                             <Input
-                              name="email"
-                              className="form-control"
-                              placeholder="Enter email"
-                              type="email"
+                              name='email'
+                              className='form-control'
+                              placeholder='Enter email'
+                              type='email'
                               onChange={validation.handleChange}
                               onBlur={validation.handleBlur}
-                              value={validation.values.email || ""}
+                              value={validation.values.email || ''}
                               invalid={
                                 validation.touched.email &&
                                 validation.errors.email
@@ -178,18 +164,18 @@ const Login = (props) => {
                             />
                             {validation.touched.email &&
                             validation.errors.email ? (
-                              <FormFeedback type="invalid">
+                              <FormFeedback type='invalid'>
                                 <div>{validation.errors.email}</div>
                               </FormFeedback>
                             ) : null}
                           </div>
-                          <div className="mb-4">
-                            <Label className="form-label">Password</Label>
+                          <div className='mb-4'>
+                            <Label className='form-label'>Mot de passe</Label>
                             <Input
-                              name="password"
-                              value={validation.values.password || ""}
-                              type="password"
-                              placeholder="Enter Password"
+                              name='password'
+                              value={validation.values.password || ''}
+                              type='password'
+                              placeholder='Enter Password'
                               onChange={validation.handleChange}
                               onBlur={validation.handleBlur}
                               invalid={
@@ -201,107 +187,36 @@ const Login = (props) => {
                             />
                             {validation.touched.password &&
                             validation.errors.password ? (
-                              <FormFeedback type="invalid">
+                              <FormFeedback type='invalid'>
                                 <div> {validation.errors.password} </div>
                               </FormFeedback>
                             ) : null}
                           </div>
 
                           <Row>
-                            <Col>
-                              <div className="form-check">
-                                <input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  id="customControlInline"
-                                />
-                                <label
-                                  className="form-label form-check-label"
-                                  htmlFor="customControlInline"
-                                >
-                                  Remember me
-                                </label>
-                              </div>
-                            </Col>
-                            <Col className="col-7">
-                              <div className="text-md-end mt-3 mt-md-0">
+                            <Col className='col-7'>
+                              <div className='text-md-end mt-3 mt-md-0'>
                                 <Link
-                                  to="/auth-recoverpw"
-                                  className="text-muted"
+                                  to='/auth-recoverpw'
+                                  className='text-muted'
                                 >
-                                  <i className="mdi mdi-lock"></i> Forgot your
+                                  <i className='mdi mdi-lock'></i> Forgot your
                                   password?
                                 </Link>
                               </div>
                             </Col>
                           </Row>
-                          <div className="d-grid mt-4">
-                            <button
-                              className="btn btn-primary waves-effect waves-light"
-                              type="submit"
-                            >
-                              Log In
-                            </button>
-                          </div>
-                          <div className="mt-4 text-center">
-                            <h5 className="font-size-14 mb-3">Sign in with</h5>
-
-                            <ul className="list-inline">
-                              <li className="list-inline-item">
-                                {/* <FacebookLogin
-                                  appId={facebook.APP_ID}
-                                  autoLoad={false}
-                                  callback={facebookResponse}
-                                  render={(renderProps) => (
-                                    <Link
-                                      to="#"
-                                      className="social-list-item bg-primary text-white border-primary"
-                                      onClick={renderProps.onClick}
-                                    >
-                                      <i className="mdi mdi-facebook" />
-                                    </Link>
-                                  )}
-                                /> */}
-
-                                <Link
-                                  to="#"
-                                  className="btn btn-primary btn-icon me-1"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    socialResponse("facebook");
-                                  }}
-                                >
-                                  <i className="ri-facebook-fill fs-16" />
-                                </Link>
-                              </li>
-
-                              <li className="list-inline-item">
-                                {/* <GoogleLogin
-                                  clientId={google.CLIENT_ID}
-                                  render={(renderProps) => (
-                                    <Link
-                                      to="#"
-                                      className="social-list-item bg-danger text-white border-danger"
-                                      onClick={renderProps.onClick}
-                                    >
-                                      <i className="mdi mdi-google" />
-                                    </Link>
-                                  )}
-                                  onSuccess={googleResponse}
-                                  onFailure={() => {}}
-                                /> */}
-                                <Link
-                                  to="#"
-                                  className="btn btn-danger btn-icon me-1"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    socialResponse("google");
-                                  }}
-                                >
-                                  <i className="ri-google-fill fs-16" />
-                                </Link>
-                              </li>
-                            </ul>
+                          <div className='d-grid mt-4'>
+                            {isLoading ? (
+                              <LoadingSpiner />
+                            ) : (
+                              <button
+                                className='btn btn-primary waves-effect waves-light'
+                                type='submit'
+                              >
+                                Se Connecter
+                              </button>
+                            )}
                           </div>
                         </Col>
                       </Row>
@@ -309,17 +224,20 @@ const Login = (props) => {
                   </div>
                 </CardBody>
               </Card>
-              <div className="mt-5 text-center">
-                <p className="text-white-50">
-                  Don't have an account ?{" "}
-                  <Link to="/register" className="fw-medium text-primary">
-                    {" "}
-                    Register{" "}
-                  </Link>{" "}
+              <div className='mt-5 text-center'>
+                <p className='text-white-50'>
+                  Vous n'avez pas de compte ?{' '}
+                  <Link to='/register' className='fw-medium text-primary'>
+                    {' '}
+                    S'inscrire{' '}
+                  </Link>{' '}
                 </p>
-                <p className="text-white-50">
-                  © {new Date().getFullYear()} Upzet. Crafted with{" "}
-                  <i className="mdi mdi-heart text-danger"></i> by Themesdesign
+                <p className='text-white-50'>
+                  © {new Date().getFullYear()} Inscription | Santé MARHABA.{' '}
+                  <i className='mdi mdi-heart text-danger'></i> Créé Par{' '}
+                  <Link to={'https://www.cissemohamed.com'} target='blank'>
+                    Cisse Mohamed
+                  </Link>
                 </p>
               </div>
             </Col>
@@ -330,8 +248,4 @@ const Login = (props) => {
   );
 };
 
-export default withRouter(Login);
-
-Login.propTypes = {
-  history: PropTypes.object,
-};
+export default Login;

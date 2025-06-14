@@ -11,7 +11,7 @@ import {
 import { withTranslation } from 'react-i18next';
 // Redux
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import withRouter from '../withRouter';
 
 // users
@@ -22,6 +22,8 @@ const ProfileMenu = (props) => {
   const [menu, setMenu] = useState(false);
 
   const [username, setusername] = useState('Admin');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem('authUser')) {
@@ -37,6 +39,11 @@ const ProfileMenu = (props) => {
       }
     }
   }, [props.success]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authUser');
+    navigate('/login');
+  };
 
   return (
     <React.Fragment>
@@ -66,10 +73,13 @@ const ProfileMenu = (props) => {
           </DropdownItem>
 
           <div className='dropdown-divider' />
-          <Link to='/logout' className='dropdown-item'>
-            <i className='ri-shut-down-line align-middle me-2 text-danger' />
-            <span>{props.t('Logout')}</span>
-          </Link>
+          <div
+            className='dropdown-item bg-danger text-white cursor-pointer'
+            onClick={handleLogout}
+          >
+            <i className='ri-shut-down-line align-middle me-2 text-white' />
+            Déconnecter
+          </div>
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>

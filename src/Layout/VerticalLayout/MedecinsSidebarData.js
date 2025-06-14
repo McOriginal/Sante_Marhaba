@@ -1,0 +1,111 @@
+const MedecinsSidebarData = [
+  {
+    label: 'Menu',
+    isMainMenu: true,
+  },
+  {
+    label: 'Dashboard',
+    icon: 'mdi mdi-home-variant-outline',
+    isHasArrow: true,
+    url: '/dashboard-medecin',
+  },
+
+  {
+    label: 'Rendez-vous',
+    icon: 'mdi mdi-calendar-outline',
+    isHasArrow: true,
+    url: '/appointments',
+  },
+
+  // --------------------------------------
+
+  // ----------------------------------------------------------------------
+  // Patients, Traitements & Ordonnances
+  {
+    label: 'Traitements & Ordonnances',
+    isMainMenu: true,
+  },
+  {
+    label: 'Patients',
+    icon: 'fas fa-procedures',
+    isHasArrow: true,
+    url: '/patients',
+  },
+  {
+    label: 'Traitements',
+    // icon: 'fas fa-file-medical-alt',
+    icon: 'fas fa-heartbeat',
+    isHasArrow: true,
+    url: '/traitements',
+  },
+  {
+    label: 'Ordonnances',
+    icon: 'fas fa-first-aid',
+    isHasArrow: true,
+    url: '/ordonnances',
+  },
+
+  // // Transactions
+  // {
+  //   label: 'Paiements',
+  //   isMainMenu: true,
+  // },
+  // {
+  //   label: 'Transactions',
+  //   icon: 'fas fa-euro-sign',
+  //   subItem: [
+  //     { sublabel: 'Paiement', link: '/paiements' },
+  //     { sublabel: 'Factures', link: '/factures' },
+  //     { sublabel: 'Dépense', link: '/depenses' },
+  //   ],
+  // },
+
+  // // Pharmacie
+  // {
+  //   label: 'Suivie Pharmaceutique',
+  //   isMainMenu: true,
+  // },
+  // {
+  //   label: 'Pharmacie',
+  //   icon: 'dripicons-pill',
+  //   subItem: [
+  //     { sublabel: 'Médicament', link: '/medicaments' },
+  //     { sublabel: 'Approvisionnements', link: '/approvisonnements' },
+  //     { sublabel: 'Médicament Sans Stock', link: '/medicaments_no_stock' },
+  //   ],
+  // },
+
+  // // ----------------------------------------------------------------------
+  // // Médecins
+  // {
+  //   label: 'Médecins & Fournisseurs',
+  //   isMainMenu: true,
+  // },
+  // {
+  //   label: 'Médecins',
+  //   icon: 'fas fa-user-md',
+  //   isHasArrow: true,
+  //   url: '/doctors',
+  // },
+  // {
+  //   label: 'Fournisseurs',
+  //   icon: 'fas fa-ambulance',
+  //   isHasArrow: true,
+  //   url: '/fournisseurs',
+  // },
+
+  // Outils Médical
+  {
+    label: 'Matériels',
+    isMainMenu: true,
+  },
+  {
+    label: 'Outis Médicals',
+    icon: 'fas fa-toolbox',
+    subItem: [
+      { sublabel: 'Chambre', link: '/chambres' },
+      { sublabel: 'Matériels', link: '/materiels' },
+    ],
+  },
+];
+export default MedecinsSidebarData;

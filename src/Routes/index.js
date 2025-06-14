@@ -11,11 +11,11 @@ import { layoutTypes } from '../constants/layout';
 import NonAuthLayout from '../Layout/NonAuthLayout';
 import VerticalLayout from '../Layout/VerticalLayout/index';
 import HorizontalLayout from '../Layout/HorizontalLayout/index';
-import { AuthProtected } from './AuthProtected';
 
-import { authProtectedRoutes, publicRoutes } from './routes';
+import { authProtectedRoutes, medecinsRoutes, publicRoutes } from './routes';
 
 import { createSelector } from 'reselect';
+import PrivateRoute from '../Auth/PrivateRoutes';
 
 const getLayout = (layoutType) => {
   let Layout = VerticalLayout;
@@ -62,6 +62,34 @@ const Index = () => {
           <Route
             path={route.path}
             element={
+              <PrivateRoute allowedRoles={['admin']}>
+                <Layout>{route.component}</Layout>
+              </PrivateRoute>
+            }
+            key={idx}
+            exact={true}
+          />
+        ))}
+      </Route>
+      <Route>
+        {medecinsRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={
+              <PrivateRoute allowedRoles={['medecin']}>
+                <Layout>{route.component}</Layout>
+              </PrivateRoute>
+            }
+            key={idx}
+            exact={true}
+          />
+        ))}
+      </Route>
+      {/* <Route>
+        {authProtectedRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={
               <AuthProtected>
                 <Layout>{route.component}</Layout>
               </AuthProtected>
@@ -70,7 +98,7 @@ const Index = () => {
             exact={true}
           />
         ))}
-      </Route>
+      </Route> */}
     </Routes>
   );
 };
