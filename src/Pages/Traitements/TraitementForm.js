@@ -148,7 +148,6 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             tog_form_modal();
           },
           onError: (err) => {
-            console.log(err);
             const errorMessage =
               err?.response?.data?.message ||
               err?.message ||

@@ -118,7 +118,7 @@ const SelectedMounthTotalTraitement = () => {
             </Card>
           </Col>
           <Col md={4}>
-            <h4 className='text-end mt-5' style={{ color: '#BE5B50' }}>
+            <h4 className='text-center mt-5' style={{ color: '#BE5B50' }}>
               Rapports Mensuel
             </h4>
           </Col>
@@ -127,7 +127,7 @@ const SelectedMounthTotalTraitement = () => {
         {/* Résultats */}
         <Row>
           {/* Bénefices */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #00D4FF)',
@@ -146,7 +146,7 @@ const SelectedMounthTotalTraitement = () => {
             </Card>{' '}
           </Col>
           {/* Paiements */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #00D4FF)',
@@ -169,7 +169,7 @@ const SelectedMounthTotalTraitement = () => {
           </Col>
 
           {/* Dépences */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #00D4FF)',
@@ -193,7 +193,7 @@ const SelectedMounthTotalTraitement = () => {
           </Col>
 
           {/* Traitements */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #00D4FF)',
@@ -213,7 +213,7 @@ const SelectedMounthTotalTraitement = () => {
           </Col>
 
           {/* Total Ordonnances */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #00D4FF)',

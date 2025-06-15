@@ -98,7 +98,7 @@ export default function Chambre() {
               !isLoading &&
               chambres?.length > 0 &&
               chambres?.map((chamb) => (
-                <Col md={4} xl={3}>
+                <Col sm={4} xl={3} key={chamb._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(105, 206, 236, 0.5)',

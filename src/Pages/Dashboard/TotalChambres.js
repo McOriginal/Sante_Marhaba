@@ -13,7 +13,7 @@ export default function TotalChambre() {
 
   // Return the total number of chambres
   return (
-    <Col md={4}>
+    <div>
       {chambreLoading && <LoadingSpiner />}
       {!chambreError && !chambreLoading && (
         <Card
@@ -39,6 +39,6 @@ export default function TotalChambre() {
           </CardBody>
         </Card>
       )}
-    </Col>
+    </div>
   );
 }

@@ -22,7 +22,10 @@ import {
   useDeleteTraitement,
 } from '../../Api/queriesTraitement';
 import LoadingSpiner from '../components/LoadingSpiner';
-import { capitalizeWords } from '../components/capitalizeFunction';
+import {
+  capitalizeWords,
+  formatPhoneNumber,
+} from '../components/capitalizeFunction';
 import img1 from '../../assets/images/t1.jpg';
 import img2 from '../../assets/images/t2.jpg';
 import img3 from '../../assets/images/t3.jpg';
@@ -38,6 +41,9 @@ export default function TraitementsListe() {
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un patien(e)');
   const images = [img1, img2, img3, img4];
   const randomImage = images[Math.floor(Math.random() * images.length)];
+
+  // State de changement du mode d'affichage
+  const [displayMode, setDisplayMode] = useState('list'); // 'list' ou 'grid'
 
   // State de Recherche
   const [searchTerm, setSearchTerm] = useState('');
@@ -109,7 +115,7 @@ export default function TraitementsListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
+                            <i className='fas fa-heartbeat align-center me-1'></i>{' '}
                             Ajouter un Traitement
                           </Button>
                         </div>
@@ -139,6 +145,35 @@ export default function TraitementsListe() {
                       </Link>{' '}
                       pour retourner à la liste des patients.
                     </p>
+
+                    <div className='d-flex pe-4 gap-4 justify-content-end'>
+                      <Button
+                        onClick={() => setDisplayMode('grid')}
+                        style={{
+                          background:
+                            displayMode === 'grid' ? ' #ffff03' : 'transparent',
+                          border: '1px solid #ffff03',
+                          color: ' #010101',
+                          boxShadow: '0px 0px 2px rgba(0,0,0,0.4)',
+                        }}
+                      >
+                        {' '}
+                        <i className='fas fa-grip-vertical px-1'></i>{' '}
+                      </Button>
+                      <Button
+                        onClick={() => setDisplayMode('list')}
+                        style={{
+                          background:
+                            displayMode === 'list' ? ' #ffff03' : 'transparent',
+                          border: '1px solid #ffff03',
+                          color: ' #010101',
+                          boxShadow: '0px 0px 2px rgba(0,0,0,0.4)',
+                        }}
+                      >
+                        {' '}
+                        <i className='fas fa-list'></i>{' '}
+                      </Button>
+                    </div>
                   </div>
                 </CardBody>
               </Card>
@@ -155,11 +190,116 @@ export default function TraitementsListe() {
             {!error && !isLoading && filterTraitementSearch?.length === 0 && (
               <div className='text-center'>Aucun Traitement trouvée !</div>
             )}
-            {!error &&
-              !isLoading &&
+            {displayMode === 'list' ? (
+              <div className='table-responsive table-card mt-3 mb-1'>
+                <table
+                  className='table align-middle table-nowrap table-hover'
+                  id='traitementTable'
+                >
+                  <thead className='table-light'>
+                    <tr>
+                      <th scope='col' style={{ width: '40px' }}>
+                        Date
+                      </th>
+                      <th data-sort='patient_name'>Patient</th>
+                      <th data-sort='date'>Date de naissance</th>
+                      <th data-sort='phone'>Téléphone</th>
+                      <th data-sort='traitement'>Traitement</th>
+
+                      <th data-sort='date'>Date</th>
+                      <th data-sort='action'>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className='list form-check-all text-center'>
+                    {!error &&
+                      !isLoading &&
+                      filterTraitementSearch?.length > 0 &&
+                      filterTraitementSearch?.map((trait) => (
+                        <tr key={trait._id}>
+                          <th>
+                            {new Date(trait.createdAt).toLocaleDateString()}
+                          </th>
+                          <td>
+                            {capitalizeWords(trait?.patient['firstName'])}{' '}
+                            {capitalizeWords(trait?.patient['lastName'])}{' '}
+                          </td>
+                          <td>
+                            {trait?.patient['dateOfBirth']
+                              ? new Date(
+                                  trait?.patient['dateOfBirth']
+                                ).toLocaleDateString()
+                              : '-----'}{' '}
+                          </td>
+                          <td>
+                            {trait?.patient['phoneNumber']
+                              ? formatPhoneNumber(trait?.patient['phoneNumber'])
+                              : '----'}{' '}
+                          </td>
+                          <td>{capitalizeWords(trait?.motif)} </td>
+                          <td>
+                            {new Date(trait?.startDate).toLocaleDateString()} -{' '}
+                            {capitalizeWords(trait?.startTime)}{' '}
+                          </td>
+                          <td>
+                            <UncontrolledDropdown className='dropdown d-inline-block'>
+                              <DropdownToggle
+                                className='btn btn-soft-secondary btn-sm'
+                                tag='button'
+                              >
+                                <i className='bx bx-caret-down-square fs-2 text-info'></i>
+                              </DropdownToggle>
+                              <DropdownMenu className='dropdown-menu-end'>
+                                <DropdownItem
+                                  onClick={() => {
+                                    handleNavigateToOrdonnance(trait._id);
+                                  }}
+                                >
+                                  <i className='bx bx-joystick-button align-center me-2 text-info'></i>
+                                  Ordonnance
+                                </DropdownItem>
+                                <DropdownItem
+                                  onClick={() => {
+                                    handleNavigateToDetails(trait._id);
+                                  }}
+                                >
+                                  <i className='bx bx-show align-center me-2 text-info'></i>
+                                  Détails
+                                </DropdownItem>
+                                <DropdownItem
+                                  onClick={() => {
+                                    setFormModalTitle('Modifier les données');
+                                    setTraitementToUpdate(trait);
+                                    tog_form_modal();
+                                  }}
+                                >
+                                  <i className='ri-pencil-fill align-center me-2 text-warning'></i>
+                                  Modifier
+                                </DropdownItem>
+                                <DropdownItem
+                                  onClick={() => {
+                                    deleteButton(
+                                      trait._id,
+                                      trait.motif,
+                                      deleteTraitement
+                                    );
+                                  }}
+                                >
+                                  {' '}
+                                  <i className='ri-delete-bin-fill align-center me-2 text-danger'></i>{' '}
+                                  Supprimer{' '}
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
               filterTraitementSearch?.length > 0 &&
               filterTraitementSearch?.map((trait) => (
-                <Col md={4} xl={3} key={trait._id}>
+                <Col sm={4} xl={3} key={trait._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
@@ -264,7 +404,8 @@ export default function TraitementsListe() {
                     </CardBody>
                   </Card>
                 </Col>
-              ))}
+              ))
+            )}
           </Row>
         </Container>
       </div>

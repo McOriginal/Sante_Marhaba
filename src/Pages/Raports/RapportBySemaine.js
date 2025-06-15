@@ -86,7 +86,7 @@ const RapportBySemaine = () => {
         {/* Filtrage Bouton */}
         <Row>
           <Col md={8}>
-            <h4 className='text-end mt-5' style={{ color: '#27548A' }}>
+            <h4 className='text-center mt-5' style={{ color: '#27548A' }}>
               Rapports de 7 Dernier Jours
             </h4>
           </Col>
@@ -95,7 +95,7 @@ const RapportBySemaine = () => {
         {/* Résultats */}
         <Row>
           {/* Bénefices */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #222831)',
@@ -114,7 +114,7 @@ const RapportBySemaine = () => {
             </Card>{' '}
           </Col>
           {/* Paiements */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #222831)',
@@ -137,7 +137,7 @@ const RapportBySemaine = () => {
           </Col>
 
           {/* Dépences */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #222831)',
@@ -161,7 +161,7 @@ const RapportBySemaine = () => {
           </Col>
 
           {/* Traitements */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #222831)',
@@ -181,7 +181,7 @@ const RapportBySemaine = () => {
           </Col>
 
           {/* Total Ordonnances */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #090979, #222831)',

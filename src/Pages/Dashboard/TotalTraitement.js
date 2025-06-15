@@ -20,7 +20,7 @@ export default function TotalTraitement() {
   } = useAllTraitement();
 
   return (
-    <Col md={4}>
+    <div>
       {loadingTraitement && <LoadingSpiner />}
       {!traitementError && !loadingTraitement && (
         <Card
@@ -42,6 +42,6 @@ export default function TotalTraitement() {
           </CardBody>
         </Card>
       )}
-    </Col>
+    </div>
   );
 }

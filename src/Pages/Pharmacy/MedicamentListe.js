@@ -141,7 +141,7 @@ export default function MedicamentListe() {
               !isLoading &&
               filterSearchMedicaments?.length > 0 &&
               filterSearchMedicaments?.map((medica) => (
-                <Col md={6} xl={4} key={medica._id}>
+                <Col sm={6} lg={4} key={medica._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
@@ -209,7 +209,6 @@ export default function MedicamentListe() {
                       </UncontrolledDropdown>
                     </div>
                     <img
-                      top
                       className='img-fluid'
                       style={{
                         borderRadius: '15px 15px 0 0',

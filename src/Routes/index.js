@@ -85,20 +85,6 @@ const Index = () => {
           />
         ))}
       </Route>
-      {/* <Route>
-        {authProtectedRoutes.map((route, idx) => (
-          <Route
-            path={route.path}
-            element={
-              <AuthProtected>
-                <Layout>{route.component}</Layout>
-              </AuthProtected>
-            }
-            key={idx}
-            exact={true}
-          />
-        ))}
-      </Route> */}
     </Routes>
   );
 };

@@ -19,7 +19,7 @@ export default function TotalDoctors() {
   } = useAllDoctors();
 
   return (
-    <Col md={4}>
+    <div>
       {doctorsLoading && <LoadingSpiner />}
       {!doctorsError && !doctorsLoading && (
         <Card
@@ -41,6 +41,6 @@ export default function TotalDoctors() {
           </CardBody>
         </Card>
       )}
-    </Col>
+    </div>
   );
 }

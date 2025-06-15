@@ -13,7 +13,12 @@ import Breadcrumbs from '../../components/Common/Breadcrumb';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import { useAllPaiements } from '../../Api/queriesPaiement';
-import logo_medical from './../../assets/images/logo_medical.png';
+import {
+  hospitalAdresse,
+  hospitalName,
+  hospitalTel,
+  logoMedical,
+} from '../Logo/logo';
 
 export default function FactureListe() {
   const { data: paiementData, isLoading, error } = useAllPaiements();
@@ -55,7 +60,7 @@ export default function FactureListe() {
                   <CardBody>
                     <CardHeader>
                       <CardImg
-                        src={logo_medical}
+                        src={logoMedical}
                         style={{
                           width: '70px',
                           position: 'absolute',
@@ -64,12 +69,12 @@ export default function FactureListe() {
                         }}
                       />
                       <CardTitle className='text-center '>
-                        <h3>Cabinet de soins MARHABA Santé</h3>
+                        <h3> {hospitalName} </h3>
                         <p style={{ margin: '15px', fontSize: '10px' }}>
-                          Kabala zone universitaire sur le goudron de COURALE
+                          {hospitalAdresse}{' '}
                         </p>
                         <p style={{ margin: '15px', fontSize: '10px' }}>
-                          78-87-91-34 / 63-00-67-89
+                          {hospitalTel}{' '}
                         </p>
                       </CardTitle>
                       <CardText style={{ fontSize: '15px', margin: '35px 0' }}>
@@ -77,7 +82,7 @@ export default function FactureListe() {
                         {new Date(paiement.createdAt).toLocaleDateString()}
                       </CardText>
                       <CardImg
-                        src={logo_medical}
+                        src={logoMedical}
                         style={{
                           width: '70px',
                           position: 'absolute',

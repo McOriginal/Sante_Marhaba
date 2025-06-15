@@ -103,7 +103,7 @@ const RapportByDay = () => {
             </Card>
           </Col>
           <Col md={4}>
-            <h4 className='text-end mt-5' style={{ color: '#BE5B50' }}>
+            <h4 className='text-center mt-5' style={{ color: '#BE5B50' }}>
               Rapports Journalier
             </h4>
           </Col>
@@ -112,7 +112,7 @@ const RapportByDay = () => {
         {/* Résultats */}
         <Row>
           {/* Bénefices */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #4ED7F1, #309898)',
@@ -131,7 +131,7 @@ const RapportByDay = () => {
             </Card>{' '}
           </Col>
           {/* Paiements */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #4ED7F1, #309898)',
@@ -154,7 +154,7 @@ const RapportByDay = () => {
           </Col>
 
           {/* Dépences */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #4ED7F1, #309898)',
@@ -178,7 +178,7 @@ const RapportByDay = () => {
           </Col>
 
           {/* Traitements */}
-          <Col md={4}>
+          <Col sm={6} lg={4}>
             <Card
               style={{
                 background: 'linear-gradient(to top right , #4ED7F1, #309898)',

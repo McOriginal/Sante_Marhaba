@@ -5,12 +5,6 @@ import { connect } from 'react-redux';
 //i18n
 import { withTranslation } from 'react-i18next';
 
-//import images
-// import logoSm from '../../assets/images/logo-sm.png';
-// import logoDark from '../../assets/images/logo-dark.png';
-// import logoLight from '../../assets/images/logo-light.png';
-import logo from '../../assets/images/logo_medical.png';
-
 // Redux Store
 import {
   showRightSidebarAction,
@@ -18,6 +12,11 @@ import {
   changeSidebarType,
 } from '../../store/actions';
 import ProfileMenu from '../../components/Common/TopbarDropdown/ProfileMenu';
+import {
+  hospitalLittleName,
+  hospitalName,
+  logoMedical,
+} from '../../Pages/Logo/logo';
 
 const Header = (props) => {
   function toggleFullscreen() {
@@ -63,32 +62,15 @@ const Header = (props) => {
         <div className='navbar-header'>
           <div className='d-flex'>
             <div className='navbar-brand-box text-center'>
-              {/* <Link to='/' className='logo logo-dark'>
-                <span className='logo-sm'>
-                  <img src={logoSm} alt='logo-sm-dark' height='22' />
-                </span>
-                <span className='logo-lg'>
-                  <img src={logoDark} alt='logo-dark' height='24' />
-                </span>
-              </Link>
-
-              <Link to='/' className='logo logo-light'>
-                <span className='logo-sm'>
-                  <img src={logoSm} alt='logo-sm-light' height='22' />
-                </span>
-                <span className='logo-lg'>
-                  <img src={logoLight} alt='logo-light' height='24' />
-                </span>
-              </Link> */}
               <span>
                 <img
-                  src={logo}
+                  src={logoMedical}
                   style={{
                     width: '80px',
                   }}
                   alt=''
                 />
-                <h5 className='text-white'> Santé MARHABA</h5>
+                <h5 className='text-white'>{hospitalLittleName} </h5>
               </span>
             </div>
 
@@ -103,17 +85,14 @@ const Header = (props) => {
               <i className='ri-menu-2-line align-middle'></i>
             </button>
 
-            <h4
+            <p
+              className='d-flex justify-content-center align-items-center fw-bold font-size-16'
               style={{
                 color: ' #27548A',
-                textAlign: 'center',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
               }}
             >
-              Cabinet de soins MARHABA Santé
-            </h4>
+              {hospitalName}
+            </p>
           </div>
 
           <div className='d-flex'>

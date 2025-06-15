@@ -11,13 +11,17 @@ import {
 } from 'reactstrap';
 import { useOneOrdonnance } from '../../Api/queriesOrdonnance';
 import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
-import logo_medical from './../../assets/images/logo_medical.png';
 import html2pdf from 'html2pdf.js';
+import {
+  hospitalAdresse,
+  hospitalName,
+  hospitalTel,
+  logoMedical,
+} from '../Logo/logo';
 
 const OrdonnanceDetails = ({
   show_modal,
   tog_show_modal,
-  setShow_modal,
   selectedOrdonnanceID,
 }) => {
   const {
@@ -120,7 +124,7 @@ const OrdonnanceDetails = ({
 
         <button
           type='button'
-          onClick={() => setShow_modal(false)}
+          onClick={() => tog_show_modal()}
           className='close'
           data-dismiss='modal'
           aria-label='Close'
@@ -149,7 +153,7 @@ const OrdonnanceDetails = ({
               <CardBody>
                 <CardHeader style={{ background: 'rgba(100, 169, 238, 0.5)' }}>
                   <CardImg
-                    src={logo_medical}
+                    src={logoMedical}
                     style={{
                       width: '70px',
                       position: 'absolute',
@@ -159,12 +163,12 @@ const OrdonnanceDetails = ({
                   />
                   <CardTitle className='text-center '>
                     <h2 className='fs-bold'>Ordonnance Médical </h2>
-                    <h5>Centre de Santé MARHABA</h5>
+                    <h5>{hospitalName} </h5>
                     <p style={{ margin: '15px', fontSize: '10px' }}>
-                      Kabala zone universitaire sur le goudron de COURALE
+                      {hospitalAdresse}
                     </p>
                     <p style={{ margin: '15px', fontSize: '10px' }}>
-                      78-87-91-34 / 63-00-67-89
+                      {hospitalTel}
                     </p>
                   </CardTitle>
                   <CardText>
@@ -174,7 +178,7 @@ const OrdonnanceDetails = ({
                     ).toLocaleDateString()}
                   </CardText>
                   <CardImg
-                    src={logo_medical}
+                    src={logoMedical}
                     style={{
                       width: '70px',
                       position: 'absolute',

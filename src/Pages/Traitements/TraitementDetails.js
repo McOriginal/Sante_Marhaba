@@ -22,8 +22,13 @@ import {
 import { useParams } from 'react-router-dom';
 import React from 'react';
 import { useTraitementOrdonnance } from '../../Api/queriesOrdonnance';
-import logo_medical from './../../assets/images/logo_medical.png';
 import html2pdf from 'html2pdf.js';
+import {
+  hospitalAdresse,
+  hospitalName,
+  hospitalTel,
+  logoMedical,
+} from '../Logo/logo';
 
 export default function TraitementDetails() {
   const { id } = useParams();
@@ -221,12 +226,12 @@ export default function TraitementDetails() {
                       >
                         <CardTitle className='text-center '>
                           <h2 className='fs-bold'>Dossier Médical </h2>
-                          <h5>Cabinet de soins MARHABA Santé</h5>
+                          <h5>{hospitalName} </h5>
                           <p style={{ margin: '5px', fontSize: '10px' }}>
-                            Kabala zone universitaire sur le goudron de COURALE
+                            {hospitalAdresse}
                           </p>
                           <p style={{ margin: '5px', fontSize: '10px' }}>
-                            78-87-91-34 / 63-00-67-89
+                            {hospitalTel}
                           </p>
                         </CardTitle>
                       </CardHeader>
@@ -261,10 +266,12 @@ export default function TraitementDetails() {
                               )}
                             </CardText>
                             <CardText>
-                              <strong> Date de Naissance:</strong>{' '}
-                              {new Date(
-                                traitementsDetails?.patient['dateOfBirth']
-                              ).toLocaleDateString()}
+                              <strong> Age:</strong>{' '}
+                              {traitementsDetails?.patient['age']
+                                ? capitalizeWords(
+                                    traitementsDetails?.patient['age']
+                                  )
+                                : '------'}
                             </CardText>
                           </div>
                           <div className='d-flex justify-content-around'>
@@ -276,9 +283,11 @@ export default function TraitementDetails() {
                             </CardText>
                             <CardText>
                               <strong> Téléphone:</strong>{' '}
-                              {formatPhoneNumber(
-                                traitementsDetails?.patient['phoneNumber']
-                              )}
+                              {traitementsDetails?.patient['phoneNumber']
+                                ? formatPhoneNumber(
+                                    traitementsDetails?.patient['phoneNumber']
+                                  )
+                                : '------'}
                             </CardText>
                             <CardText>
                               <strong> Ethnie:</strong>{' '}
@@ -300,13 +309,13 @@ export default function TraitementDetails() {
                                 traitementsDetails?.patient['profession']
                               )
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
                         </Col>
@@ -328,7 +337,6 @@ export default function TraitementDetails() {
                           </CardText>
                           <CardText>
                             <strong>Début maladie:</strong>{' '}
-                            {/* formater la date en français, ex: Lundi, 12,04,2025 */}
                             {new Date(
                               traitementsDetails?.startDate
                             ).toLocaleDateString('fr-FR', {
@@ -361,13 +369,13 @@ export default function TraitementDetails() {
                             {traitementsDetails?.nc ? (
                               capitalizeWords(traitementsDetails?.nc)
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
                           <CardText className='d-flex align-items-end'>
@@ -375,13 +383,13 @@ export default function TraitementDetails() {
                             {traitementsDetails?.ac ? (
                               capitalizeWords(traitementsDetails?.ac)
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
                           <CardText className='d-flex align-items-end'>
@@ -389,13 +397,13 @@ export default function TraitementDetails() {
                             {traitementsDetails?.asc ? (
                               capitalizeWords(traitementsDetails.asc)
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
 
@@ -407,13 +415,13 @@ export default function TraitementDetails() {
                             {traitementsDetails?.result ? (
                               traitementsDetails?.result
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
 
@@ -422,13 +430,13 @@ export default function TraitementDetails() {
                             {traitementsDetails?.observation ? (
                               traitementsDetails?.observation
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
                           <CardText className='d-flex align-items-end'>
@@ -436,19 +444,19 @@ export default function TraitementDetails() {
                             {traitementsDetails?.diagnostic ? (
                               traitementsDetails?.diagnostic
                             ) : (
-                              <div
+                              <span
                                 style={{
                                   border: '1px dotted black',
                                   height: '1px',
                                   width: '100%',
                                 }}
-                              ></div>
+                              ></span>
                             )}
                           </CardText>
                         </Col>
 
                         {/* Médecin soignant */}
-                        <Col
+                        <div
                           sm='12'
                           className='my-1 border border-top border-2 border-info'
                         >
@@ -488,7 +496,7 @@ export default function TraitementDetails() {
                               traitementsDetails?.doctor['phoneNumber']
                             )}
                           </CardText>
-                        </Col>
+                        </div>
                       </Row>
                     </CardBody>
                   </Col>
@@ -555,7 +563,7 @@ export default function TraitementDetails() {
                       style={{ background: 'rgba(100, 169, 238, 0.5)' }}
                     >
                       <CardImg
-                        src={logo_medical}
+                        src={logoMedical}
                         style={{
                           width: '70px',
                           position: 'absolute',
@@ -565,12 +573,12 @@ export default function TraitementDetails() {
                       />
                       <CardTitle className='text-center '>
                         <h2 className='fs-bold'>Ordonnance Médical </h2>
-                        <h5>Cabinet de soins MARHABA Santé</h5>
+                        <h5>{hospitalName} </h5>
                         <p style={{ margin: '15px', fontSize: '10px' }}>
-                          Kabala zone universitaire sur le goudron de COURALE
+                          {hospitalAdresse}
                         </p>
                         <p style={{ margin: '15px', fontSize: '10px' }}>
-                          78-87-91-34 / 63-00-67-89
+                          {hospitalTel}
                         </p>
                       </CardTitle>
                       <CardText>
@@ -578,7 +586,7 @@ export default function TraitementDetails() {
                         {new Date(ordo.createdAt).toLocaleDateString()}
                       </CardText>
                       <CardImg
-                        src={logo_medical}
+                        src={logoMedical}
                         style={{
                           width: '70px',
                           position: 'absolute',

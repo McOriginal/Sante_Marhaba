@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import logolight from '../../assets/images/logo-light.png';
-import logodark from '../../assets/images/logo-dark.png';
 
 import {
   Row,
@@ -25,9 +23,10 @@ import {
   successMessageAlert,
 } from '../components/AlerteModal';
 import LoadingSpiner from '../components/LoadingSpiner';
+import { logoMedical } from '../Logo/logo';
 
 const Login = () => {
-  document.title = 'Inscription | Santé MARHABA ';
+  document.title = 'Connexion | Santé MARHABA ';
 
   // Query de Login
   const { mutate: loginUser } = useLogin();
@@ -85,7 +84,6 @@ const Login = () => {
                   errorMessageAlert('Rôle non reconnu.');
               }
             } catch (err) {
-              console.error(err);
               errorMessageAlert('Erreur de redirection.');
             }
           }, 2000);
@@ -96,7 +94,6 @@ const Login = () => {
             error?.response?.data?.message ||
             error ||
             'Une erreur est survenue lors de la connexion.';
-          console.log(error);
           errorMessageAlert(errorMessage);
         },
       });
@@ -105,144 +102,132 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <div className='bg-overlay'></div>
-      <div className='account-pages my-5 pt-5'>
-        <Container>
-          <Row className='justify-content-center'>
-            <Col lg={6} md={8} xl={4}>
-              <Card>
-                <CardBody className='p-4'>
-                  <div>
-                    <div className='text-center'>
-                      <Link to='/'>
+      <div className='bg-login'>
+        <div className='bg-overlay'></div>
+        <div className='account-pages  pt-5'>
+          <Container>
+            <Row className='justify-content-center'>
+              <Col lg={6} md={8} xl={4}>
+                <Card>
+                  <CardBody className='p-4'>
+                    <div>
+                      <div className='text-center'>
                         <img
-                          src={logodark}
+                          src={logoMedical}
                           alt=''
-                          height='24'
+                          height='54'
                           className='auth-logo logo-dark mx-auto'
                         />
-                        <img
-                          src={logolight}
-                          alt=''
-                          height='24'
-                          className='auth-logo logo-light mx-auto'
-                        />
-                      </Link>
-                    </div>
-                    <h4 className='font-size-18 text-muted mt-2 text-center'>
-                      Bienvenue !
-                    </h4>
-                    <p className='mb-5 text-center'>
-                      Entrez vos coordonnées pour vous connecter à votre compte.
-                    </p>
-                    <Form
-                      className='form-horizontal'
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
-                      }}
-                    >
-                      <Row>
-                        <Col md={12}>
-                          <div className='mb-4'>
-                            <Label className='form-label'>Email</Label>
-                            <Input
-                              name='email'
-                              className='form-control'
-                              placeholder='Enter email'
-                              type='email'
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              value={validation.values.email || ''}
-                              invalid={
-                                validation.touched.email &&
-                                validation.errors.email
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.email &&
-                            validation.errors.email ? (
-                              <FormFeedback type='invalid'>
-                                <div>{validation.errors.email}</div>
-                              </FormFeedback>
-                            ) : null}
-                          </div>
-                          <div className='mb-4'>
-                            <Label className='form-label'>Mot de passe</Label>
-                            <Input
-                              name='password'
-                              value={validation.values.password || ''}
-                              type='password'
-                              placeholder='Enter Password'
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              invalid={
-                                validation.touched.password &&
-                                validation.errors.password
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.password &&
-                            validation.errors.password ? (
-                              <FormFeedback type='invalid'>
-                                <div> {validation.errors.password} </div>
-                              </FormFeedback>
-                            ) : null}
-                          </div>
+                      </div>
+                      <h4 className='font-size-18 text-info mt-2 text-center'>
+                        Cabinet de soins MARHABA Santé
+                      </h4>
+                      <p className='my-3 text-center'>
+                        Entrez vos coordonnées pour vous connecter à votre
+                        compte.
+                      </p>
+                      <Form
+                        className='form-horizontal'
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          validation.handleSubmit();
+                          return false;
+                        }}
+                      >
+                        <Row>
+                          <Col md={12}>
+                            <div className='mb-4'>
+                              <Label className='form-label'>Email</Label>
+                              <Input
+                                name='email'
+                                className='form-control'
+                                placeholder='Enter email'
+                                type='email'
+                                onChange={validation.handleChange}
+                                onBlur={validation.handleBlur}
+                                value={validation.values.email || ''}
+                                invalid={
+                                  validation.touched.email &&
+                                  validation.errors.email
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {validation.touched.email &&
+                              validation.errors.email ? (
+                                <FormFeedback type='invalid'>
+                                  <div>{validation.errors.email}</div>
+                                </FormFeedback>
+                              ) : null}
+                            </div>
+                            <div className='mb-4'>
+                              <Label className='form-label'>Mot de passe</Label>
+                              <Input
+                                name='password'
+                                value={validation.values.password || ''}
+                                type='password'
+                                placeholder='Enter Password'
+                                onChange={validation.handleChange}
+                                onBlur={validation.handleBlur}
+                                invalid={
+                                  validation.touched.password &&
+                                  validation.errors.password
+                                    ? true
+                                    : false
+                                }
+                              />
+                              {validation.touched.password &&
+                              validation.errors.password ? (
+                                <FormFeedback type='invalid'>
+                                  <div> {validation.errors.password} </div>
+                                </FormFeedback>
+                              ) : null}
+                            </div>
 
-                          <Row>
-                            <Col className='col-7'>
-                              <div className='text-md-end mt-3 mt-md-0'>
-                                <Link
-                                  to='/auth-recoverpw'
-                                  className='text-muted'
+                            <Row>
+                              <Col className='col-7'>
+                                <div className='text-md-end mt-3 mt-md-0'>
+                                  <Link
+                                    to='/auth-recoverpw'
+                                    className='text-warning'
+                                  >
+                                    <i className='mdi mdi-lock'></i> Mot de
+                                    passe oubliée !
+                                  </Link>
+                                </div>
+                              </Col>
+                            </Row>
+                            <div className='d-grid mt-4'>
+                              {isLoading ? (
+                                <LoadingSpiner />
+                              ) : (
+                                <button
+                                  className='btn btn-info waves-effect waves-light'
+                                  type='submit'
                                 >
-                                  <i className='mdi mdi-lock'></i> Forgot your
-                                  password?
-                                </Link>
-                              </div>
-                            </Col>
-                          </Row>
-                          <div className='d-grid mt-4'>
-                            {isLoading ? (
-                              <LoadingSpiner />
-                            ) : (
-                              <button
-                                className='btn btn-primary waves-effect waves-light'
-                                type='submit'
-                              >
-                                Se Connecter
-                              </button>
-                            )}
-                          </div>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </div>
-                </CardBody>
-              </Card>
-              <div className='mt-5 text-center'>
-                <p className='text-white-50'>
-                  Vous n'avez pas de compte ?{' '}
-                  <Link to='/register' className='fw-medium text-primary'>
-                    {' '}
-                    S'inscrire{' '}
-                  </Link>{' '}
-                </p>
-                <p className='text-white-50'>
-                  © {new Date().getFullYear()} Inscription | Santé MARHABA.{' '}
-                  <i className='mdi mdi-heart text-danger'></i> Créé Par{' '}
-                  <Link to={'https://www.cissemohamed.com'} target='blank'>
-                    Cisse Mohamed
-                  </Link>
-                </p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+                                  Se Connecter
+                                </button>
+                              )}
+                            </div>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </div>
+                  </CardBody>
+                </Card>
+                <div className='mt-5 text-center'>
+                  <p className='text-white-50'>
+                    © {new Date().getFullYear()} Santé MARHABA |{' '}
+                    <i className='mdi mdi-heart text-danger'></i> Créé Par{' '}
+                    <Link to={'https://www.cissemohamed.com'} target='blank'>
+                      Cisse Mohamed
+                    </Link>
+                  </p>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
     </React.Fragment>
   );

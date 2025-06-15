@@ -19,7 +19,7 @@ export default function TotalPatients() {
   } = useAllPatients();
 
   return (
-    <Col md={4}>
+    <div>
       {patientLoading && <LoadingSpiner />}
       {!patientError && !patientLoading && (
         <Card
@@ -41,6 +41,6 @@ export default function TotalPatients() {
           </CardBody>
         </Card>
       )}
-    </Col>
+    </div>
   );
 }

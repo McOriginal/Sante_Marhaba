@@ -18,7 +18,7 @@ export default function TotalFounisseurs() {
   } = useAllFournisseur();
 
   return (
-    <Col md={4}>
+    <div>
       {fournisseurLoading && <LoadingSpiner />}
       {!fournisseurError && !fournisseurLoading && (
         <Card
@@ -40,6 +40,6 @@ export default function TotalFounisseurs() {
           </CardBody>
         </Card>
       )}
-    </Col>
+    </div>
   );
 }

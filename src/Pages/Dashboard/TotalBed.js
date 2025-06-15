@@ -28,7 +28,7 @@ export default function TotalBed() {
 
   // useAllChambres is assumed to be a custom hook that fetches chambre data
   return (
-    <Col md={4}>
+    <div>
       {chambreLoading && <LoadingSpiner />}
       {!chambreError && !chambreLoading && (
         <Card
@@ -49,6 +49,6 @@ export default function TotalBed() {
           </CardBody>
         </Card>
       )}
-    </Col>
+    </div>
   );
 }

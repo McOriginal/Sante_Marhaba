@@ -18,14 +18,13 @@ import { useFormik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 
 // import images
-import logolight from '../../assets/images/logo-light.png';
-import logodark from '../../assets/images/logo-dark.png';
 import { useRegister } from '../../Api/queriesAuth';
 import {
   errorMessageAlert,
   successMessageAlert,
 } from '../components/AlerteModal';
 import LoadingSpiner from '../components/LoadingSpiner';
+import { logoMedical } from '../Logo/logo';
 
 const Register = () => {
   document.title = 'Inscription | Santé MARHABA ';
@@ -81,7 +80,6 @@ const Register = () => {
             error?.message ||
             error ||
             "Une erreur est survenue lors de l'inscription.";
-          console.log(errorMessage);
           errorMessageAlert(errorMessage);
         },
       });
@@ -98,25 +96,19 @@ const Register = () => {
               <Card className='mt-5'>
                 <CardBody className='p-4'>
                   <div className='text-center'>
-                    <Link to='/' className=''>
-                      <img
-                        src={logodark}
-                        alt=''
-                        height='24'
-                        className='auth-logo logo-dark mx-auto'
-                      />
-                      <img
-                        src={logolight}
-                        alt=''
-                        height='24'
-                        className='auth-logo logo-light mx-auto'
-                      />
-                    </Link>
+                    <img
+                      src={logoMedical}
+                      alt=''
+                      height='54'
+                      className='auth-logo logo-dark mx-auto'
+                    />
                   </div>
-
-                  <h4 className='font-size-18 text-muted text-center mt-2'>
-                    Créer un compte
+                  <h4 className='font-size-18 text-info mt-2 text-center'>
+                    Cabinet de soins MARHABA Santé
                   </h4>
+                  <p className='font-size-16 text-muted text-center mt-2'>
+                    Créer un compte
+                  </p>
 
                   <Form
                     className='form-horizontal'
@@ -233,10 +225,10 @@ const Register = () => {
                             <LoadingSpiner />
                           ) : (
                             <button
-                              className='btn btn-primary waves-effect waves-light'
+                              className='btn btn-info waves-effect waves-light'
                               type='submit'
                             >
-                              S'inscrire
+                              Créer le Compte
                             </button>
                           )}
                         </div>
@@ -247,14 +239,7 @@ const Register = () => {
               </Card>
               <div className='mt-5 text-center'>
                 <p className='text-white-50'>
-                  Vous avez déjà un compte ?
-                  <Link to='/login' className='fw-medium text-primary'>
-                    {' '}
-                    Se Connecter{' '}
-                  </Link>{' '}
-                </p>
-                <p className='text-white-50'>
-                  © {new Date().getFullYear()} Inscription | Santé MARHABA.{' '}
+                  © {new Date().getFullYear()} Santé MARHABA |{' '}
                   <i className='mdi mdi-heart text-danger'></i> Créé Par{' '}
                   <Link to={'https://www.cissemohamed.com'} target='blank'>
                     Cisse Mohamed

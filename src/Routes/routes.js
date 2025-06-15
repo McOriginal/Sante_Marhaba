@@ -7,7 +7,6 @@ import Dashboard from '../Pages/Dashboard';
 // Import Authentication pages
 import Login from '../Pages/Authentication/Login';
 import ForgetPasswordPage from '../Pages/Authentication/ForgetPassword';
-import Logout from '../Pages/Authentication/Logout';
 import Register from '../Pages/Authentication/Register';
 import UserProfile from '../Pages/Authentication/user-profile';
 
@@ -171,7 +170,6 @@ const publicRoutes = [
   // { path: '/unauthorized', component: <Unauthorized /> },
 
   // Authentication Page
-  { path: '/logout', component: <Logout /> },
   { path: '/login', component: <Login /> },
   { path: '/forgot-password', component: <ForgetPasswordPage /> },
   { path: '/register', component: <Register /> },

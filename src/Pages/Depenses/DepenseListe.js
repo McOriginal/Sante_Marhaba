@@ -133,9 +133,9 @@ export default function DepenseListe() {
                                 </th>
                               </tr>
                             </thead>
-                            {filterSearchDepense?.length > 0 &&
-                              filterSearchDepense?.map((depense) => (
-                                <tbody className='list form-check-all'>
+                            <tbody className='list form-check-all'>
+                              {filterSearchDepense?.length > 0 &&
+                                filterSearchDepense?.map((depense) => (
                                   <tr key={depense._id}>
                                     <td>
                                       {new Date(
@@ -191,8 +191,8 @@ export default function DepenseListe() {
                                       </div>
                                     </td>
                                   </tr>
-                                </tbody>
-                              ))}
+                                ))}
+                            </tbody>
                           </table>
                         )}
                       <div className='noresult' style={{ display: 'none' }}>

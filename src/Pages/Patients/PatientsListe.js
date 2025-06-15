@@ -17,7 +17,7 @@ export default function PatientsListe() {
   const { data, isLoading, error } = useAllPatients();
   const { mutate: deletePatient, isLoading: isDeleting } = useDeletePatient();
   const [patientToUpdate, setpatientToUpdate] = useState(null);
-  const [formModalTitle, setFormModalTitle] = useState('Ajouter un patien(e)');
+  const [formModalTitle, setFormModalTitle] = useState('Ajouter un Patient');
 
   // Barre de recherche
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,8 +77,8 @@ export default function PatientsListe() {
                               tog_form_modal();
                             }}
                           >
-                            <i className='ri-add-line align-bottom me-1'></i>{' '}
-                            Ajouter un(e) Patient(e)
+                            <i className='fas fa-procedures align-center me-1'></i>{' '}
+                            Nouveau Patient
                           </Button>
                         </div>
                       </Col>
@@ -122,7 +122,7 @@ export default function PatientsListe() {
                               <th data-sort='patient_name'>Nom</th>
                               <th data-sort='email'>Prénom</th>
                               <th data-sort='groupeSanguin'>Groupe Sanguin</th>
-                              <th data-sort='date'>Date de naissance</th>
+                              <th data-sort='age'>Age</th>
 
                               <th data-sort='adresse'>Domicile</th>
                               <th data-sort='phone'>Téléphone</th>
@@ -143,10 +143,8 @@ export default function PatientsListe() {
                                   </td>
 
                                   <td>
-                                    {patient.dateOfBirth
-                                      ? new Date(
-                                          patient.dateOfBirth
-                                        ).toLocaleDateString()
+                                    {patient.age
+                                      ? capitalizeWords(patient.age)
                                       : '----'}
                                   </td>
 
@@ -212,36 +210,6 @@ export default function PatientsListe() {
                           </tbody>
                         </table>
                       )}
-                      <div className='noresult' style={{ display: 'none' }}>
-                        <div className='text-center'>
-                          <lord-icon
-                            src='https://cdn.lordicon.com/msoeawqm.json'
-                            trigger='loop'
-                            colors='primary:#121331,secondary:#08a88a'
-                            style={{ width: '75px', height: '75px' }}
-                          ></lord-icon>
-                          <h5 className='mt-2'>Sorry! No Result Found</h5>
-                          <p className='text-muted mb-0'>
-                            We've searched more than 150+ Orders We did not find
-                            any orders for you search.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </CardBody>

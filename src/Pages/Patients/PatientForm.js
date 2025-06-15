@@ -34,7 +34,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
     initialValues: {
       firstName: patientToEdit?.firstName || '',
       lastName: patientToEdit?.lastName || '',
-      dateOfBirth: patientToEdit?.dateOfBirth?.substring(0, 10) || '',
+      age: patientToEdit?.age || '',
       gender: patientToEdit?.gender || '',
       phoneNumber: patientToEdit?.phoneNumber || undefined,
       adresse: patientToEdit?.adresse || '',
@@ -51,7 +51,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
         .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ Prénom est obligatoire'),
       gender: Yup.string().required('Ce champ est obligatoire'),
-      dateOfBirth: Yup.date(),
+      age: Yup.string(),
       phoneNumber: Yup.number(),
       groupeSanguin: Yup.string().required('Ce champ est obligatoire'),
       ethnie: Yup.string(),
@@ -248,25 +248,23 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='dateOfBirth'>Date de Naissance</Label>
+            <Label htmlFor='age'>Age</Label>
             <Input
-              name='dateOfBirth'
-              max={new Date().toISOString().split('T')[0]} // Prevent future dates
-              type='date'
+              name='age'
+              type='text'
+              placeholder='Ex: 33ans ; 8 mois ; 6 semaines ; 2 jours...'
               className='form-control'
-              id='dateOfBirth'
+              id='age'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.dateOfBirth || ''}
+              value={validation.values.age || ''}
               invalid={
-                validation.touched.dateOfBirth && validation.errors.dateOfBirth
-                  ? true
-                  : false
+                validation.touched.age && validation.errors.age ? true : false
               }
             />
-            {validation.touched.dateOfBirth && validation.errors.dateOfBirth ? (
+            {validation.touched.age && validation.errors.age ? (
               <FormFeedback type='invalid'>
-                {validation.errors.dateOfBirth}
+                {validation.errors.age}
               </FormFeedback>
             ) : null}
           </FormGroup>
@@ -327,18 +325,40 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
           <FormGroup className='mb-3'>
             <Label htmlFor='ethnie'>Ethnie</Label>
             <Input
-              name='ethnie'
               type='select'
-              className='form-control'
+              name='ethnie'
               id='ethnie'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.ethnie || ''}
-              invalid={
-                validation.touched.ethnie && validation.errors.ethnie
-                  ? true
-                  : false
+              value={
+                validation.values.ethnie &&
+                ![
+                  'bambara',
+                  'bobo',
+                  'bozo',
+                  'dogon',
+                  'malinke',
+                  'minianka',
+                  'peul',
+                  'samogo',
+                  'senufo',
+                  'songhai',
+                  'soninke',
+                  'tamasheq',
+                  'touareg',
+                ].includes(validation.values.ethnie)
+                  ? 'autre'
+                  : validation.values.ethnie
               }
+              onChange={(e) => {
+                const selected = e.target.value;
+                if (selected === 'autre') {
+                  // On vide ethnie pour que l’utilisateur saisisse manuellement
+                  validation.setFieldValue('ethnie', '');
+                } else {
+                  validation.setFieldValue('ethnie', selected);
+                }
+              }}
+              onBlur={validation.handleBlur}
+              invalid={validation.touched.ethnie && !!validation.errors.ethnie}
             >
               <option value=''>Sélectionner un ethnie</option>
               <option value='bambara'>Bambara</option>
@@ -354,13 +374,47 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               <option value='soninke'>Soninke</option>
               <option value='tamasheq'>Tamasheq</option>
               <option value='touareg'>Touareg</option>
+              <option value='autre'>Autre...</option>
             </Input>
-            {validation.touched.ethnie && validation.errors.ethnie ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.ethnie}
-              </FormFeedback>
-            ) : null}
+            {validation.touched.ethnie && validation.errors.ethnie && (
+              <FormFeedback>{validation.errors.ethnie}</FormFeedback>
+            )}
           </FormGroup>
+
+          {/* Champ texte uniquement si "autre" est sélectionné */}
+          {![
+            'bambara',
+            'bobo',
+            'bozo',
+            'dogon',
+            'malinke',
+            'minianka',
+            'peul',
+            'samogo',
+            'senufo',
+            'songhai',
+            'soninke',
+            'tamasheq',
+            'touareg',
+          ].includes(validation.values.ethnie) && (
+            <FormGroup className='mb-3'>
+              <Label htmlFor='ethnieAutre'>Entrez une nouvelle ethnie</Label>
+              <Input
+                name='ethnie'
+                type='text'
+                id='ethnieAutre'
+                value={validation.values.ethnie}
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                invalid={
+                  validation.touched.ethnie && !!validation.errors.ethnie
+                }
+              />
+              {validation.touched.ethnie && validation.errors.ethnie && (
+                <FormFeedback>{validation.errors.ethnie}</FormFeedback>
+              )}
+            </FormGroup>
+          )}
         </Col>
       </Row>
       <Row>

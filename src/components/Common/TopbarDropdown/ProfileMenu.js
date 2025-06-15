@@ -16,6 +16,10 @@ import withRouter from '../withRouter';
 
 // users
 import user1 from '../../../assets/images/users/avatar-1.jpg';
+import {
+  contectedUserName,
+  user,
+} from '../../../Pages/Authentication/userInfos';
 
 const ProfileMenu = (props) => {
   // Declare a new state variable, which we'll call "menu"
@@ -53,17 +57,14 @@ const ProfileMenu = (props) => {
         className='d-inline-block'
       >
         <DropdownToggle
-          className='btn header-item '
+          className='btn header-item justify-content-center d-flex align-items-center'
           id='page-header-user-dropdown'
           tag='button'
         >
-          <img
-            className='rounded-circle header-profile-user'
-            src={user1}
-            alt='Header Avatar'
-          />
-          <span className='d-none d-xl-inline-block ms-2 me-2'>{username}</span>
-          <i className='mdi mdi-chevron-down d-none d-xl-inline-block' />
+          <span className='fw-bold font-size-11 text-warning d-inline-block ms-2 me-2'>
+            {contectedUserName}
+          </span>
+          <i className='mdi mdi-chevron-down d-xl-inline-block' />
         </DropdownToggle>
         <DropdownMenu className='dropdown-menu-end'>
           <DropdownItem tag='a' href='/userprofile'>

@@ -80,9 +80,3 @@ export function deleteButton(itemId, itemName, onDelete) {
       }
     });
 }
-
-// return (
-//   <Button color='danger' onClick={handleDelete} disabled={disabled}>
-//     Supprimer
-//   </Button>
-// );

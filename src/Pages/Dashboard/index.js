@@ -13,12 +13,13 @@ import TotalBed from './TotalBed';
 import TotalTraitement from './TotalTraitement';
 import BarChartDataRaportsTraitement from '../Raports/DataRaportsTraitement';
 import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
+import { contectedUserName, user } from '../Authentication/userInfos';
 
 const Dashboard = () => {
   document.title = 'Santé MARHABA';
-  const authUser = localStorage.getItem('authUser');
-  const j = JSON.parse(authUser);
-  console.log(j.user.role);
+  // const authUser = localStorage.getItem('authUser');
+  // const j = JSON.parse(authUser);
+  // console.log(j.user.role);
 
   return (
     <React.Fragment>
@@ -32,27 +33,35 @@ const Dashboard = () => {
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             <Row>
-              {/* Total Doctors */}
-              <TotalDoctors />
+              <Col sm={6} lg={4}>
+                {/* Total Doctors */}
+                <TotalDoctors />
+              </Col>
+              <Col sm={6} lg={4}>
+                {/* Total Patients */}
+                <TotalPatients />
+              </Col>
+              <Col sm={6} lg={4}>
+                {/* Total Fournisseurs */}
 
-              {/* Total Patients */}
-              <TotalPatients />
+                <TotalFounisseurs />
+              </Col>
+              <Col sm={6} lg={4}>
+                {/* Total Lits */}
 
-              {/* Total Fournisseurs */}
+                <TotalBed />
+              </Col>
+              <Col sm={6} lg={4}>
+                {/* Total Chambres */}
 
-              <TotalFounisseurs />
+                <TotalChambre />
+              </Col>
 
-              {/* Total Lits */}
+              <Col sm={6} lg={4}>
+                {/* Total Traitements */}
 
-              <TotalBed />
-
-              {/* Total Chambres */}
-
-              <TotalChambre />
-
-              {/* Total Traitements */}
-
-              <TotalTraitement />
+                <TotalTraitement />
+              </Col>
             </Row>
           </motion.div>
 

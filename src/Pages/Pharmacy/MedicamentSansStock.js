@@ -141,7 +141,6 @@ export default function MedicamentSansStock() {
                       </UncontrolledDropdown>
                     </div>
                     <img
-                      top
                       className='img-fluid'
                       style={{
                         borderRadius: '15px 15px 0 0',

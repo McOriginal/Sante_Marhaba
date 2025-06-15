@@ -107,7 +107,6 @@ export default function NewOrdonance() {
 
   // Validation de commande et AJOUTE DANS LA BASE DE DONNEES
   const handleSubmitOrder = () => {
-  
     // Vérification de quantité dans le STOCK
     if (ordonnanceItems.length === 0) return;
 
@@ -275,7 +274,6 @@ export default function NewOrdonance() {
                             style={{ cursor: 'pointer' }}
                           >
                             <CardImg
-                              top
                               style={{
                                 height: '100px',
                                 objectFit: 'contain',
