@@ -64,7 +64,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET ||
         'ZER45TYUIOPQSDbcdefghijklmnsopqrstuvwxyzFG4567H',
       {
-        expiresIn: '7d', // ou '1h'
+        expiresIn: '1d', // expire dans '24h'
       }
     );
 

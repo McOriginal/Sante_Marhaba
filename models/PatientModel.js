@@ -16,8 +16,8 @@ const patientSchema = new mongoose.Schema(
       enum: ['Masculin', 'Féminin'],
       default: 'Masculin',
     },
-    dateOfBirth: {
-      type: Date,
+    age: {
+      type: String,
       required: true,
     },
     phoneNumber: {
