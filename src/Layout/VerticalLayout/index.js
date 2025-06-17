@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import withRouter from '../../components/Common/withRouter';
 
@@ -22,6 +22,9 @@ import {
 } from '../../store/actions';
 
 import { createSelector } from 'reselect';
+import { AuthContext } from '../../Auth/AuthContext';
+import SidebarMedecins from './SidebarMedecins';
+import { connectedUserRole } from '../../Pages/Authentication/userInfos';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
@@ -113,15 +116,49 @@ const Layout = (props) => {
     window.scrollTo(0, 0);
   }, []);
 
-  return (
-    <React.Fragment>
-      <div id='layout-wrapper'>
-        <Header toggleMenuCallback={toggleMenuCallback} />
+  // ---------------------------------------------------
+  // ---------------------------------------------------
+  // Vérification de role d'utilisateur pour afficher le SIDEBAR en fonction de cela
+  const [contentSidebar, setContentSidebar] = useState();
+  const role = connectedUserRole;
+
+  useEffect(() => {
+    if (!role) return;
+
+    if (role === 'admin') {
+      setContentSidebar(
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}
           isMobile={isMobile}
         />
+      );
+    } else if (role === 'medecin') {
+      setContentSidebar(
+        <SidebarMedecins
+          theme={leftSideBarTheme}
+          type={leftSideBarType}
+          isMobile={isMobile}
+        />
+      );
+    }
+  }, [role, leftSideBarTheme, leftSideBarType, isMobile]);
+
+  // ---------------------------------------------------
+  // ---------------------------------------------------
+
+  return (
+    <React.Fragment>
+      <div id='layout-wrapper'>
+        <Header toggleMenuCallback={toggleMenuCallback} />
+
+        {/* ----------------------------------------------------- */}
+        {/* ---------- Dinamyque SIDBAR Content------------------------------------ */}
+
+        {contentSidebar}
+
+        {/* ----------------------------------------------------- */}
+
         <div className='main-content'>{props.children}</div>
         <Footer />
       </div>

@@ -1,23 +1,26 @@
+let connectedUserId = null;
+let connectedUserName = null;
+let connectedUserEmail = null;
+let connectedUserRole = null;
+
 const authUser = localStorage.getItem('authUser');
-const dataParse = JSON.parse(authUser);
 
-// extracting user information from localStorage
+if (authUser) {
+  try {
+    const dataParse = JSON.parse(authUser);
 
-// Getting User name
-const contectedUserName = dataParse.user.name;
-
-// Getting User id
-const contectedUserId = dataParse.user._id;
-
-// Getting User email
-const contectedUserEmail = dataParse.user.email;
-
-// Getting User role
-const contectedUserRole = dataParse.user.role;
+    connectedUserId = dataParse?.user?._id || null;
+    connectedUserName = dataParse?.user?.name || null;
+    connectedUserEmail = dataParse?.user?.email || null;
+    connectedUserRole = dataParse?.user?.role || null;
+  } catch (error) {
+    console.error('Erreur lors du parsing de authUser :', error);
+  }
+}
 
 export {
-  contectedUserId,
-  contectedUserName,
-  contectedUserEmail,
-  contectedUserRole,
+  connectedUserId,
+  connectedUserName,
+  connectedUserEmail,
+  connectedUserRole,
 };

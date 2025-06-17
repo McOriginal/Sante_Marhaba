@@ -63,8 +63,9 @@ const Login = () => {
           // Redirection vers le tableau de bord
           setTimeout(() => {
             try {
-              const authUser = JSON.parse(localStorage.getItem('authUser'));
-              const role = authUser?.user?.role;
+              const authUser = localStorage.getItem('authUser');
+              const dataParse = JSON.parse(authUser);
+              const role = dataParse?.user?.role;
 
               if (!role) {
                 return errorMessageAlert('Rôle utilisateur introuvable.');
@@ -83,6 +84,12 @@ const Login = () => {
                 default:
                   errorMessageAlert('Rôle non reconnu.');
               }
+              // Recharger la page pour mettre à jour l'état de l'application
+              // Cela peut être utile si vous avez des données qui doivent être rafraîchies
+              // mais dans ce cas, on utilise navigate pour aller à la bonne page
+              window.location.reload();
+
+              // -----------------------
             } catch (err) {
               errorMessageAlert('Erreur de redirection.');
             }
@@ -104,11 +111,11 @@ const Login = () => {
     <React.Fragment>
       <div className='bg-login'>
         <div className='bg-overlay'></div>
-        <div className='account-pages  pt-5'>
+        <div className='account-pages  pt-5 '>
           <Container>
             <Row className='justify-content-center'>
               <Col lg={6} md={8} xl={4}>
-                <Card>
+                <Card className='border border-info border-2'>
                   <CardBody className='p-4'>
                     <div>
                       <div className='text-center'>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 
 import { Row, Container, Col } from 'reactstrap';
@@ -13,19 +13,15 @@ import TotalBed from './TotalBed';
 import TotalTraitement from './TotalTraitement';
 import BarChartDataRaportsTraitement from '../Raports/DataRaportsTraitement';
 import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
-import { contectedUserName, user } from '../Authentication/userInfos';
 
 const Dashboard = () => {
   document.title = 'Santé MARHABA';
-  // const authUser = localStorage.getItem('authUser');
-  // const j = JSON.parse(authUser);
-  // console.log(j.user.role);
 
   return (
     <React.Fragment>
       <div className='page-content'>
         <Container fluid={true}>
-          <Breadcrumbs title='Santé MARHABA' breadcrumbItem='Dashboard' />
+          <Breadcrumbs title='Santé MARHABA' breadcrumbItem='Tabelau de Bord' />
 
           <motion.div
             initial={{ opacity: 0, y: 70 }}

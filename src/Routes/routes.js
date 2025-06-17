@@ -47,11 +47,7 @@ import DepenseListe from '../Pages/Depenses/DepenseListe.js';
 import Rapports from '../Pages/Raports/Rapports.js';
 import MedicamentSansStock from '../Pages/Pharmacy/MedicamentSansStock.js';
 
-// Routes pour les ADMINS
-const authProtectedRoutes = [
-  //dashboard
-  { path: '/dashboard', component: <Dashboard /> },
-
+const sharedRoutes = [
   //appointments
   { path: '/appointments', component: <AppointmentListe /> },
 
@@ -66,6 +62,14 @@ const authProtectedRoutes = [
 
   // Traitement Detail
   { path: '/traitements/ordonnance/:id', component: <NewOrdonance /> },
+
+  // Outils Médicals
+];
+
+// Routes pour les ADMINS
+const authProtectedRoutes = [
+  //dashboard
+  { path: '/dashboard', component: <Dashboard /> },
 
   // Ordonnance
   { path: '/ordonnances', component: <OrdonnanceListe /> },
@@ -133,37 +137,18 @@ const authProtectedRoutes = [
 
 // Routes pour les Médecins
 const medecinsRoutes = [
+  {
+    path: '/',
+    exact: true,
+    component: <Navigate to='/dashboard-medecin' />,
+  },
   //dashboard
   { path: '/dashboard-medecin', component: <Dashboard /> },
-
-  //appointments
-  { path: '/appointments', component: <AppointmentListe /> },
-
-  // Patient
-  { path: '/patients', component: <PatientsListe /> },
-
-  // Traitements
-  { path: '/traitements', component: <TraitementsListe /> },
-
-  // Traitement Detail
-  { path: '/traitements/details/:id', component: <TraitementDetails /> },
-
-  // Traitement Detail
-  { path: '/traitements/ordonnance/:id', component: <NewOrdonance /> },
-
-  // Ordonnance
-  { path: '/ordonnances', component: <OrdonnanceListe /> },
-
   // Profile
   { path: '/userprofile', component: <UserProfile /> },
 
-  // Outils Médicals
-
-  // Chambre
-  { path: '/chambres', component: <Chambre /> },
-
-  // Matériels
-  { path: '/materiels', component: <Materiels /> },
+  // Routes Partagées
+  // ...sharedRoutes,
 ];
 
 const publicRoutes = [
@@ -187,4 +172,4 @@ const publicRoutes = [
   { path: '/pages-comingsoon', component: <ComingSoon /> },
 ];
 
-export { authProtectedRoutes, medecinsRoutes, publicRoutes };
+export { authProtectedRoutes, medecinsRoutes, publicRoutes, sharedRoutes };

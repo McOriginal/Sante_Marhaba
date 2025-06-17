@@ -9,6 +9,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   if (!allowedRoles.includes(auth?.user?.role))
     return <Navigate to='/unauthorized' />;
 
+  // Sinon l'utilisateur est authentifié et a le rôle autorisé, afficher les pages
   return children;
 };
 

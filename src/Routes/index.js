@@ -12,10 +12,17 @@ import NonAuthLayout from '../Layout/NonAuthLayout';
 import VerticalLayout from '../Layout/VerticalLayout/index';
 import HorizontalLayout from '../Layout/HorizontalLayout/index';
 
-import { authProtectedRoutes, medecinsRoutes, publicRoutes } from './routes';
+import {
+  authProtectedRoutes,
+  medecinsRoutes,
+  publicRoutes,
+  sharedRoutes,
+} from './routes';
 
 import { createSelector } from 'reselect';
 import PrivateRoute from '../Auth/PrivateRoutes';
+import ConnectedUserRoute from '../Auth/ConnectedUserRoute';
+import Login from '../Pages/Authentication/Login';
 
 const getLayout = (layoutType) => {
   let Layout = VerticalLayout;
@@ -46,6 +53,20 @@ const Index = () => {
 
   return (
     <Routes>
+      {/* Route pour vérifie si l'utilisateur est connecté alors il ne poura pas acceder à LOGIN page */}
+      <Route>
+        <Route
+          path='/login'
+          element={
+            <ConnectedUserRoute>
+              <Login />
+            </ConnectedUserRoute>
+          }
+          exact={true}
+        />
+      </Route>
+
+      {/* -------- Route PUBLIC pour tous------------------------------ */}
       <Route>
         {publicRoutes.map((route, idx) => (
           <Route
@@ -57,6 +78,19 @@ const Index = () => {
         ))}
       </Route>
 
+      {/* --------------- Routes Partager entre les utilisateurs --------------------------- */}
+      <Route>
+        {sharedRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={<Layout>{route.component}</Layout>}
+            key={idx}
+            exact={true}
+          />
+        ))}
+      </Route>
+
+      {/* ------------- Routes uniquement pour les ADMIN ------------------- */}
       <Route>
         {authProtectedRoutes.map((route, idx) => (
           <Route
@@ -71,6 +105,8 @@ const Index = () => {
           />
         ))}
       </Route>
+
+      {/*  Routes uniquement pour les  Médecins */}
       <Route>
         {medecinsRoutes.map((route, idx) => (
           <Route

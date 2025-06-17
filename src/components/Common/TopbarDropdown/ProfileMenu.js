@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
   Dropdown,
@@ -14,12 +14,8 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import withRouter from '../withRouter';
 
-// users
-import user1 from '../../../assets/images/users/avatar-1.jpg';
-import {
-  contectedUserName,
-  user,
-} from '../../../Pages/Authentication/userInfos';
+import { AuthContext } from '../../../Auth/AuthContext';
+import { connectedUserName } from '../../../Pages/Authentication/userInfos';
 
 const ProfileMenu = (props) => {
   // Declare a new state variable, which we'll call "menu"
@@ -44,10 +40,8 @@ const ProfileMenu = (props) => {
     }
   }, [props.success]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('authUser');
-    navigate('/login');
-  };
+  const { logout } = useContext(AuthContext);
+  // const handleLogout = logout();
 
   return (
     <React.Fragment>
@@ -62,7 +56,7 @@ const ProfileMenu = (props) => {
           tag='button'
         >
           <span className='fw-bold font-size-11 text-warning d-inline-block ms-2 me-2'>
-            {contectedUserName}
+            {connectedUserName}
           </span>
           <i className='mdi mdi-chevron-down d-xl-inline-block' />
         </DropdownToggle>
@@ -74,13 +68,13 @@ const ProfileMenu = (props) => {
           </DropdownItem>
 
           <div className='dropdown-divider' />
-          <div
+          <DropdownItem
+            onClick={() => logout()}
             className='dropdown-item bg-danger text-white cursor-pointer'
-            onClick={handleLogout}
           >
             <i className='ri-shut-down-line align-middle me-2 text-white' />
             Déconnecter
-          </div>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>
