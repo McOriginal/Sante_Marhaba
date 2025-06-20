@@ -14,6 +14,7 @@ const approvisonementsRoute = require('./routes/ApprovisonementRoute');
 const appointmentRoute = require('./routes/AppointementRoute');
 const depenseRoute = require('./routes/DepenseRoute');
 
+const nodemailer = require('nodemailer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
