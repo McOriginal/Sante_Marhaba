@@ -136,10 +136,11 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       const reduction = Number(validation.values.reduction) || 0;
       const finalAmount = Math.max(totalTraitementOrdonnance - reduction, 0);
 
-      validation.setFieldValue('totalAmount', finalAmount);
+      if (validation.values.totalAmount !== finalAmount) {
+        validation.setFieldValue('totalAmount', finalAmount);
+      }
     }
   }, [
-    validation,
     ordonnanceData,
     validation.values.traitement,
     validation.values.reduction,
@@ -227,6 +228,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
               id='totalAmount'
               onBlur={validation.handleBlur}
               defaultValue={validation.values.totalAmount || ''}
+              value={validation.values.totalAmount || ''}
               invalid={
                 validation.touched.totalAmount && validation.errors.totalAmount
                   ? true
