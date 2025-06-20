@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import jwtDecode from 'jwt-decode';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -10,6 +10,9 @@ export const AuthProvider = ({ children }) => {
     return user ? JSON.parse(user) : null;
   });
 
+  // State de navigation
+  const navigate = useNavigate();
+
   const login = (data) => {
     localStorage.setItem('authUser', JSON.stringify(data));
     setAuth(data);
@@ -18,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('authUser');
     setAuth(null);
+    navigate('/login'); // Redirection vers la page de connexion
   };
 
   const getRole = () => {

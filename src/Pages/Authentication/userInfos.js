@@ -9,7 +9,7 @@ if (authUser) {
   try {
     const dataParse = JSON.parse(authUser);
 
-    connectedUserId = dataParse?.user?._id || null;
+    connectedUserId = dataParse?.user?.id || null;
     connectedUserName = dataParse?.user?.name || null;
     connectedUserEmail = dataParse?.user?.email || null;
     connectedUserRole = dataParse?.user?.role || null;

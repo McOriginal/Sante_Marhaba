@@ -1,183 +1,85 @@
-
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Alert,
-  CardBody,
-  Button,
-  Label,
-  Input,
-  FormFeedback,
-  Form,
-} from "reactstrap";
+import React, { useContext } from 'react';
+import { Container, Row, Col, Card, CardBody, Button } from 'reactstrap';
 
 // Formik Validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
 
-import withRouter from "../../components/Common/withRouter";
+import withRouter from '../../components/Common/withRouter';
 
 //Import Breadcrumb
-import Breadcrumb from "../../components/Common/Breadcrumb";
+import Breadcrumb from '../../components/Common/Breadcrumb';
 
-import avatar from "../../assets/images/users/avatar-1.jpg";
+import avatar from '../../assets/images/doc_man_avatar.jpg';
+import {
+  connectedUserEmail,
+  connectedUserId,
+  connectedUserName,
+} from './userInfos';
+import { AuthContext } from '../../Auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
 // actions
-import { editProfile, resetProfileFlag } from "../../store/actions";
-
-import { createSelector } from 'reselect';
 
 const UserProfile = () => {
-  document.title = "Profile | Upzet - React Admin & Dashboard Template";
+  document.title = 'Profile | MARHABA Santé';
 
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [email, setemail] = useState("");
-  const [name, setname] = useState("");
-  const [idx, setidx] = useState(1);
+  const { logout } = useContext(AuthContext);
 
-  const userprofilepage = createSelector(
-    (state ) => state.profile,
-    (state) => ({
-        error: state.error,
-        success: state.success,
-    })
-  );
-// Inside your component
-const { error, success } = useSelector(userprofilepage);
-
-  useEffect(() => {
-    if (localStorage.getItem("authUser")) {
-      const obj = JSON.parse(localStorage.getItem("authUser"));
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        setname(obj.displayName);
-        setemail(obj.email);
-        setidx(obj.uid);
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        setname(obj.username);
-        setemail(obj.email);
-        setidx(obj.uid);
-      }
-      setTimeout(() => {
-        dispatch(resetProfileFlag());
-      }, 3000);
-    }
-  }, [dispatch, success]);
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      username: name || "",
-      idx: idx || "",
-    },
-    validationSchema: Yup.object({
-      username: Yup.string().required("Please Enter Your UserName"),
-    }),
-    onSubmit: (values) => {
-      dispatch(editProfile(values));
-    },
-  });
+  // Inside your component
 
   return (
     <React.Fragment>
-        <div className="page-content">
-          <Container fluid>
-            <Breadcrumb title="Upzet" breadcrumbItem="Profile" />
+      <div className='page-content'>
+        <Container fluid>
+          <Breadcrumb title='Utilisateur' breadcrumbItem='Profile' />
 
-            <Row>
-              <Col lg="12">
-                {error && error ? (
-                  <Alert color="danger">
-                    <div>{error}</div>
-                  </Alert>
-                ) : null}
-                {success ? (
-                  <Alert color="success">
-                    <div>{success}</div>
-                  </Alert>
-                ) : null}
-
-                <Card>
-                  <CardBody>
-                    <div className="d-flex">
-                      <div className="ms-3">
-                        <img
-                          src={avatar}
-                          alt=""
-                          className="avatar-md rounded-circle img-thumbnail"
-                        />
-                      </div>
-                      <div className="flex-grow-1 align-self-center">
-                        <div className="text-muted">
-                          <h5>{name}</h5>
-                          <p className="mb-1">{email}</p>
-                          <p className="mb-0">Id no: #{idx}</p>
-                        </div>
+          <Row>
+            <Col md='8' className='mx-auto'>
+              <Card>
+                <CardBody>
+                  <div className='d-flex align-items-center justify-content-around flex-column gap-3 p-3'>
+                    <div
+                      className='ms-3'
+                      style={{ width: '80px', height: '80px' }}
+                    >
+                      <img
+                        src={avatar}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                        alt=''
+                        className='avatar-md rounded-circle img-thumbnail'
+                      />
+                    </div>
+                    <div className='text-center'>
+                      <div className='text-muted'>
+                        <h5>Dr. {connectedUserName}</h5>
+                        <p className='mb-1'>{connectedUserEmail}</p>
                       </div>
                     </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
 
-            <h4 className="card-title mb-4">Change User Name</h4>
-
-            <Card>
-              <CardBody>
-                <Form
-                  className="form-horizontal"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    validation.handleSubmit();
-                    return false;
-                  }}
-                >
-                  <div className="form-group">
-                    <Label className="form-label">User Name</Label>
-                    <Input
-                      name="username"
-                      // value={name}
-                      className="form-control"
-                      placeholder="Enter User Name"
-                      type="text"
-                      onChange={validation.handleChange}
-                      onBlur={validation.handleBlur}
-                      value={validation.values.username || ""}
-                      invalid={
-                        validation.touched.username &&
-                        validation.errors.username
-                          ? true
-                          : false
-                      }
-                    />
-                    {validation.touched.username &&
-                    validation.errors.username ? (
-                      <FormFeedback type="invalid">
-                        <div>{validation.errors.username}</div>
-                      </FormFeedback>
-                    ) : null}
-                    <Input name="idx" value={idx} type="hidden" />
+                    <div className='mt-4 d-flex flex-column gap-4'>
+                      <Button
+                        color='warning'
+                        onClick={() => navigate('/updatePassword')}
+                      >
+                        Changer mon mot de passe
+                      </Button>
+                      <Button color='danger' onClick={() => logout()}>
+                        Déconnecter
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-center mt-4">
-                    <Button type="submit" color="danger">
-                      Update User Name
-                    </Button>
-                  </div>
-                </Form>
-              </CardBody>
-            </Card>
-          </Container>
-        </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </React.Fragment>
   );
 };

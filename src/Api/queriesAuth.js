@@ -35,3 +35,26 @@ export const useLogin = () => {
     },
   });
 };
+
+// Update Password
+// Mettre à jour un étudiant
+export const useUpdatePassword = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => api.put(`/users/updatePassword/${id}`, data),
+    onSuccess: () => queryClient.invalidateQueries(['users']),
+  });
+};
+
+// Reset Password
+export const useSendVerifyCodePasswordPassword = () => {
+  return useMutation({
+    mutationFn: (data) => api.post('/users/sendVerifyCodePassword', data),
+  });
+};
+// Reset Password
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: (data) => api.put('/users/resetPassword', data),
+  });
+};

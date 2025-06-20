@@ -46,6 +46,9 @@ import FactureListe from '../Pages/Paiements/FactureListe.js';
 import DepenseListe from '../Pages/Depenses/DepenseListe.js';
 import Rapports from '../Pages/Raports/Rapports.js';
 import MedicamentSansStock from '../Pages/Pharmacy/MedicamentSansStock.js';
+import UpdatePassword from '../Pages/Authentication/UpdatePassword.js';
+import VerifyCode from '../Pages/Authentication/VerifyCode.js';
+import ResetPassword from '../Pages/Authentication/ResetPassword.js';
 
 const sharedRoutes = [
   //appointments
@@ -63,7 +66,8 @@ const sharedRoutes = [
   // Traitement Detail
   { path: '/traitements/ordonnance/:id', component: <NewOrdonance /> },
 
-  // Outils Médicals
+  // Changer le mot de passe
+  { path: '/updatePassword', component: <UpdatePassword /> },
 ];
 
 // Routes pour les ADMINS
@@ -155,9 +159,11 @@ const publicRoutes = [
   // { path: '/unauthorized', component: <Unauthorized /> },
 
   // Authentication Page
-  { path: '/login', component: <Login /> },
-  { path: '/forgot-password', component: <ForgetPasswordPage /> },
   { path: '/register', component: <Register /> },
+  { path: '/login', component: <Login /> },
+  { path: '/forgotPassword', component: <ForgetPasswordPage /> },
+  { path: '/verifyCode', component: <VerifyCode /> },
+  { path: '/resetPassword', component: <ResetPassword /> },
 
   // Authentication Inner Pages
   { path: '/auth-login', component: <Login1 /> },

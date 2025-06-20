@@ -83,7 +83,11 @@ const Index = () => {
         {sharedRoutes.map((route, idx) => (
           <Route
             path={route.path}
-            element={<Layout>{route.component}</Layout>}
+            element={
+              <PrivateRoute allowedRoles={['admin', 'medecin', 'secretaire']}>
+                <Layout>{route.component}</Layout>
+              </PrivateRoute>
+            }
             key={idx}
             exact={true}
           />
