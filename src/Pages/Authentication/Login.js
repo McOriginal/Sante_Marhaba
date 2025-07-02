@@ -35,7 +35,12 @@ const Login = () => {
 
   // State de Navigation
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
+  // handle show password toggle
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
@@ -147,7 +152,7 @@ const Login = () => {
                               <Label className='form-label'>Email</Label>
                               <Input
                                 name='email'
-                                className='form-control'
+                                className='form-control border border-secondary'
                                 placeholder='Enter email'
                                 type='email'
                                 onChange={validation.handleChange}
@@ -169,28 +174,48 @@ const Login = () => {
                             </div>
                             <div className='mb-4'>
                               <Label className='form-label'>Mot de passe</Label>
-                              <Input
-                                name='password'
-                                value={validation.values.password || ''}
-                                type='password'
-                                placeholder='Enter Password'
-                                onChange={validation.handleChange}
-                                onBlur={validation.handleBlur}
-                                invalid={
-                                  validation.touched.password &&
-                                  validation.errors.password
-                                    ? true
-                                    : false
-                                }
-                              />
-                              {validation.touched.password &&
-                              validation.errors.password ? (
-                                <FormFeedback type='invalid'>
-                                  <div> {validation.errors.password} </div>
-                                </FormFeedback>
-                              ) : null}
-                            </div>
+                              <div className='d-flex gap-2 justify-content-center flex-nowrap  pb-3'>
+                                <div className=' w-100'>
+                                  <Input
+                                    name='password'
+                                    value={validation.values.password || ''}
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder='Enter Password'
+                                    className='form-controle border border-secondary'
+                                    onChange={validation.handleChange}
+                                    onBlur={validation.handleBlur}
+                                    invalid={
+                                      validation.touched.password &&
+                                      validation.errors.password
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  {validation.touched.password &&
+                                  validation.errors.password ? (
+                                    <FormFeedback type='invalid'>
+                                      <div> {validation.errors.password} </div>
+                                    </FormFeedback>
+                                  ) : null}
+                                </div>
 
+                                {/* Password visible */}
+                                <div className='show-details '>
+                                  <button
+                                    className='btn btn-sm btn-secondary show-item-btn'
+                                    data-bs-toggle='modal'
+                                    data-bs-target='#showdetails'
+                                    onClick={handleShowPassword}
+                                  >
+                                    {showPassword ? (
+                                      <i className='ri-eye-off-fill'></i>
+                                    ) : (
+                                      <i className='ri-eye-fill'></i>
+                                    )}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
                             <Row>
                               <Col className='col-7'>
                                 <div className='text-md-end mt-3 mt-md-0'>

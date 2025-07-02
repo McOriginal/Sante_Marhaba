@@ -27,8 +27,8 @@ const UpdatePassword = () => {
   // Query to update password
   const { mutate: updatePassword } = useUpdatePassword();
   const { logout } = useContext(AuthContext);
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // handle show password toggle
   const handleShowPassword = () => {
