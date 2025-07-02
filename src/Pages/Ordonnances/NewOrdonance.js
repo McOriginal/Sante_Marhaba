@@ -40,6 +40,20 @@ export default function NewOrdonance() {
 
   const { mutate: decrementStocks } = useDecrementMultipleStocks();
 
+  // Recherche State
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fontion pour Rechercher
+  const filterSearchMedicaments = medicamentsData?.filter((medica) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      medica?.name.toString().toLowerCase().includes(search) ||
+      medica?.price.toString().includes(search) ||
+      medica?.stock.toString().includes(search)
+    );
+  });
+
   // Query pour ajouter une COMMANDE dans la base de données
   const { mutate: createOrdonnance } = useCreateOrdonnance();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -144,12 +158,15 @@ export default function NewOrdonance() {
             clearCart();
             successMessageAlert('Ordonnance validée avec succès !');
             setIsSubmitting(false);
-            navigate('/ordonnances');
+
+            // Rédirection sur la page PAIEMENT
+            navigate('/paiements');
           },
           onError: (err) => {
             const message =
+              err?.response?.data?.message ||
               err ||
-              err.message ||
+              err?.message ||
               "Erreur lors de la validation de l'Ordonnance.";
             errorMessageAlert(message);
             setIsSubmitting(false);
@@ -158,7 +175,10 @@ export default function NewOrdonance() {
       },
       onError: (err) => {
         const message =
-          err || err.message || "Erreur lors de la validation de l'Ordonnance.";
+          err?.response?.data?.message ||
+          err ||
+          err?.message ||
+          "Erreur lors de la validation de l'Ordonnance.";
         errorMessageAlert(message);
         setIsSubmitting(false);
       },
@@ -172,89 +192,32 @@ export default function NewOrdonance() {
           <Breadcrumbs title='Traitements' breadcrumbItem='Odonnances' />
 
           <Row>
-            {/* Panier */}
-            <Col lg={6}>
-              <Card>
-                <CardBody>
-                  <CardTitle className='mb-4'>
-                    <div className='d-flex justify-content-between align-items-center'>
-                      <h4>Ordonnance Patient</h4>
-                      <h5 className='text-warning'>
-                        Total : {formatPrice(totalAmount)} F
-                      </h5>
-                    </div>
-                  </CardTitle>
-
-                  {ordonnanceItems.length === 0 && (
-                    <p className='text-center'>
-                      Veuillez cliquez sur un produit pour l'ajouter
-                    </p>
-                  )}
-                  {ordonnanceItems.map((item) => (
-                    <div
-                      key={item.ordonnance._id}
-                      className='d-flex justify-content-between align-items-center mb-2 border-bottom border-black p-2 shadow shadow-md'
-                    >
-                      <div>
-                        <strong>{capitalizeWords(item.ordonnance.name)}</strong>
-                        <div>
-                          {item.quantity} × {formatPrice(item.ordonnance.price)}{' '}
-                          F ={' '}
-                          {formatPrice(item.ordonnance.price * item.quantity)} F
-                        </div>
-                      </div>
-                      <div className='d-flex gap-2'>
-                        <Button
-                          color='danger'
-                          size='sm'
-                          onClick={() => decreaseQuantity(item.ordonnance._id)}
-                        >
-                          -
-                        </Button>
-                        <Button
-                          color='success'
-                          size='sm'
-                          onClick={() => increaseQuantity(item.ordonnance._id)}
-                        >
-                          +
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-
-                  <hr />
-
-                  {isSubmitting && <LoadingSpiner />}
-
-                  {ordonnanceItems.length > 0 && !isSubmitting && (
-                    <div className='d-flex gap-4 mt-3'>
-                      <Button
-                        color='warning'
-                        className='fw-bold'
-                        onClick={clearCart}
-                      >
-                        Annuler
-                      </Button>
-
-                      <div className='d-grid' style={{ width: '100%' }}>
-                        <Button
-                          color='primary'
-                          className='fw-bold'
-                          onClick={handleSubmitOrder}
-                        >
-                          Valide
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </CardBody>
-              </Card>
-            </Col>
-            {/* ------------------------------------------------------------- */}
-            {/* ------------------------------------------------------------- */}
-            {/* ------------------------------------------------------------- */}
             {/* Liste des produits */}
-            <Col md={12}>
+            <Col sm={7}>
+              {/* Champ de Recherche */}
+              <div className='col-sm mb-4'>
+                <div className='d-flex justify-content-sm-end gap-3'>
+                  {searchTerm !== '' && (
+                    <Button color='warning' onClick={() => setSearchTerm('')}>
+                      <i className='fas fa-window-close'></i>
+                    </Button>
+                  )}
+
+                  <div className='search-box me-4'>
+                    <input
+                      type='text'
+                      className='form-control search border border-dark rounded'
+                      placeholder='Rechercher...'
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* ----------------------------------------- */}
+              {/* ----------------------------------------- */}
+              {/* ----------------------------------------- */}
               <Card>
                 <CardBody>
                   {isLoading && <LoadingSpiner />}
@@ -263,10 +226,19 @@ export default function NewOrdonance() {
                       Une erreur est survenue ! Veuillez actualiser la page.
                     </div>
                   )}
+
+                  {!error &&
+                    !isLoading &&
+                    filterSearchMedicaments?.length === 0 && (
+                      <div className='text-center'>
+                        Aucun Médicament disponible
+                      </div>
+                    )}
+
                   <Row>
                     {!error &&
-                      medicamentsData?.length > 0 &&
-                      medicamentsData?.map((ordonnance) => (
+                      filterSearchMedicaments?.length > 0 &&
+                      filterSearchMedicaments?.map((ordonnance) => (
                         <Col md={3} sm={6} key={ordonnance._id}>
                           <Card
                             className='shadow shadow-lg'
@@ -314,6 +286,95 @@ export default function NewOrdonance() {
                 </CardBody>
               </Card>
             </Col>
+            {/* ------------------------------------------------------------- */}
+            {/* ------------------------------------------------------------- */}
+            {/* ------------------------------------------------------------- */}
+            {/* Panier */}
+
+            <Col sm={5}>
+              {isSubmitting && <LoadingSpiner />}
+
+              {ordonnanceItems?.length > 0 && !isSubmitting && (
+                <div className='d-flex gap-4 mb-3'>
+                  <Button
+                    color='warning'
+                    className='fw-bold'
+                    onClick={clearCart}
+                  >
+                    <i className=' fas fa-window-close'></i>
+                  </Button>
+
+                  <div className='d-grid' style={{ width: '100%' }}>
+                    <Button
+                      color='primary'
+                      className='fw-bold'
+                      onClick={handleSubmitOrder}
+                    >
+                      Valide
+                    </Button>
+                  </div>
+                </div>
+              )}
+              <Card>
+                <CardBody>
+                  <CardTitle className='mb-4'>
+                    <div className='d-flex justify-content-between align-items-center'>
+                      <h6>Ordonnance Patient</h6>
+                      <h5 className='text-warning'>
+                        Total : {formatPrice(totalAmount)} F
+                      </h5>
+                    </div>
+                  </CardTitle>
+
+                  {ordonnanceItems?.length === 0 && (
+                    <p className='text-center'>
+                      Veuillez cliquez sur un Médicament pour l'ajouter
+                    </p>
+                  )}
+                  {ordonnanceItems?.map((item) => (
+                    <div
+                      key={item?.ordonnance?._id}
+                      className='d-flex justify-content-between align-items-center mb-2 border-bottom border-black p-2 shadow shadow-md'
+                    >
+                      <div>
+                        <strong>
+                          {capitalizeWords(item?.ordonnance?.name)}
+                        </strong>
+                        <div>
+                          {item?.quantity} ×{' '}
+                          {formatPrice(item?.ordonnance?.price)} F ={' '}
+                          {formatPrice(item?.ordonnance.price * item?.quantity)}{' '}
+                          F
+                        </div>
+                      </div>
+                      <div className='d-flex gap-2'>
+                        <Button
+                          color='danger'
+                          size='sm'
+                          onClick={() =>
+                            decreaseQuantity(item?.ordonnance?._id)
+                          }
+                        >
+                          -
+                        </Button>
+                        <Button
+                          color='success'
+                          size='sm'
+                          onClick={() =>
+                            increaseQuantity(item?.ordonnance?._id)
+                          }
+                        >
+                          +
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </CardBody>
+              </Card>
+            </Col>
+            {/* ------------------------------------------------------------- */}
+            {/* ------------------------------------------------------------- */}
+            {/* ------------------------------------------------------------- */}
           </Row>
         </Container>
       </div>

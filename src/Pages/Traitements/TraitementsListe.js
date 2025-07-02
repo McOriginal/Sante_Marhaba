@@ -36,7 +36,8 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function TraitementsListe() {
   const [form_modal, setForm_modal] = useState(false);
   const { data: traitements, isLoading, error } = useAllTraitement();
-  const { mutate: deleteTraitement } = useDeleteTraitement();
+  const { mutate: deleteTraitement, isLoading: isDeletting } =
+    useDeleteTraitement();
   const [traitementToUpdate, setTraitementToUpdate] = useState(null);
   const [formModalTitle, setFormModalTitle] = useState('Ajouter un patien(e)');
   const images = [img1, img2, img3, img4];
@@ -51,11 +52,20 @@ export default function TraitementsListe() {
   const filterTraitementSearch = traitements?.filter((trait) => {
     const search = searchTerm.toLowerCase();
     return (
-      `${trait.patient?.firstName || ''} ${trait.patient?.lastName || ''}`
+      `${trait?.patient?.firstName || ''} ${trait?.patient?.lastName || ''}`
         .toLowerCase()
         .includes(search) ||
-      (trait.motif || '').toLowerCase().includes(search) ||
-      new Date(trait.createdAt).toLocaleDateString().toString().includes(search)
+      (trait?.motif || '').toLowerCase().includes(search) ||
+      (trait?.patient?.age || '').toLowerCase().includes(search) ||
+      (trait?.startTime || '').toLowerCase().includes(search) ||
+      new Date(trait?.createdAt)
+        .toLocaleDateString()
+        .toString()
+        .includes(search) ||
+      new Date(trait?.startDate)
+        .toLocaleDateString()
+        .toString()
+        .includes(search)
     );
   });
 
@@ -143,7 +153,7 @@ export default function TraitementsListe() {
                       >
                         Cliquez ici
                       </Link>{' '}
-                      pour retourner à la liste des patients.
+                      pour retourner sur la liste Patients.
                     </p>
 
                     <div className='d-flex pe-4 gap-4 justify-content-end'>
@@ -190,23 +200,26 @@ export default function TraitementsListe() {
             {!error && !isLoading && filterTraitementSearch?.length === 0 && (
               <div className='text-center'>Aucun Traitement trouvée !</div>
             )}
-            {displayMode === 'list' ? (
+            {!error &&
+            !isLoading &&
+            filterTraitementSearch?.length > 0 &&
+            displayMode === 'list' ? (
               <div className='table-responsive table-card mt-3 mb-1'>
                 <table
-                  className='table align-middle table-nowrap table-hover'
+                  className='table align-middle text-center table-nowrap table-hover'
                   id='traitementTable'
                 >
-                  <thead className='table-light'>
+                  <thead className='table-light  border-bottom border-secondary'>
                     <tr>
                       <th scope='col' style={{ width: '40px' }}>
                         Date
                       </th>
                       <th data-sort='patient_name'>Patient</th>
-                      <th data-sort='date'>Date de naissance</th>
+                      <th data-sort='age'>Age</th>
                       <th data-sort='phone'>Téléphone</th>
                       <th data-sort='traitement'>Traitement</th>
 
-                      <th data-sort='date'>Date</th>
+                      <th data-sort='date'>Début Maladie</th>
                       <th data-sort='action'>Action</th>
                     </tr>
                   </thead>
@@ -215,24 +228,25 @@ export default function TraitementsListe() {
                       !isLoading &&
                       filterTraitementSearch?.length > 0 &&
                       filterTraitementSearch?.map((trait) => (
-                        <tr key={trait._id}>
+                        <tr
+                          key={trait._id}
+                          className='text-center border-secondary border-bottom'
+                        >
                           <th>
                             {new Date(trait.createdAt).toLocaleDateString()}
                           </th>
                           <td>
-                            {capitalizeWords(trait?.patient['firstName'])}{' '}
-                            {capitalizeWords(trait?.patient['lastName'])}{' '}
+                            {capitalizeWords(trait?.patient?.firstName)}{' '}
+                            {capitalizeWords(trait?.patient?.lastName)}{' '}
                           </td>
                           <td>
-                            {trait?.patient['dateOfBirth']
-                              ? new Date(
-                                  trait?.patient['dateOfBirth']
-                                ).toLocaleDateString()
+                            {trait?.patient?.age
+                              ? trait?.patient?.age
                               : '-----'}{' '}
                           </td>
                           <td>
-                            {trait?.patient['phoneNumber']
-                              ? formatPhoneNumber(trait?.patient['phoneNumber'])
+                            {trait?.patient?.phoneNumber
+                              ? formatPhoneNumber(trait?.patient?.phoneNumber)
                               : '----'}{' '}
                           </td>
                           <td>{capitalizeWords(trait?.motif)} </td>
@@ -241,55 +255,59 @@ export default function TraitementsListe() {
                             {capitalizeWords(trait?.startTime)}{' '}
                           </td>
                           <td>
-                            <UncontrolledDropdown className='dropdown d-inline-block'>
-                              <DropdownToggle
-                                className='btn btn-soft-secondary btn-sm'
-                                tag='button'
-                              >
-                                <i className='bx bx-caret-down-square fs-2 text-info'></i>
-                              </DropdownToggle>
-                              <DropdownMenu className='dropdown-menu-end'>
-                                <DropdownItem
-                                  onClick={() => {
-                                    handleNavigateToOrdonnance(trait._id);
-                                  }}
+                            {isDeletting && <LoadingSpiner />}
+
+                            {!isDeletting && (
+                              <UncontrolledDropdown className='dropdown d-inline-block'>
+                                <DropdownToggle
+                                  className='btn btn-soft-secondary btn-sm'
+                                  tag='button'
                                 >
-                                  <i className='bx bx-joystick-button align-center me-2 text-info'></i>
-                                  Ordonnance
-                                </DropdownItem>
-                                <DropdownItem
-                                  onClick={() => {
-                                    handleNavigateToDetails(trait._id);
-                                  }}
-                                >
-                                  <i className='bx bx-show align-center me-2 text-info'></i>
-                                  Détails
-                                </DropdownItem>
-                                <DropdownItem
-                                  onClick={() => {
-                                    setFormModalTitle('Modifier les données');
-                                    setTraitementToUpdate(trait);
-                                    tog_form_modal();
-                                  }}
-                                >
-                                  <i className='ri-pencil-fill align-center me-2 text-warning'></i>
-                                  Modifier
-                                </DropdownItem>
-                                <DropdownItem
-                                  onClick={() => {
-                                    deleteButton(
-                                      trait._id,
-                                      trait.motif,
-                                      deleteTraitement
-                                    );
-                                  }}
-                                >
-                                  {' '}
-                                  <i className='ri-delete-bin-fill align-center me-2 text-danger'></i>{' '}
-                                  Supprimer{' '}
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </UncontrolledDropdown>
+                                  <i className='bx bx-caret-down-square fs-2 text-info'></i>
+                                </DropdownToggle>
+                                <DropdownMenu className='dropdown-menu-end'>
+                                  <DropdownItem
+                                    onClick={() => {
+                                      handleNavigateToOrdonnance(trait._id);
+                                    }}
+                                  >
+                                    <i className='bx bx-joystick-button align-center me-2 text-info'></i>
+                                    Ordonnance
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    onClick={() => {
+                                      handleNavigateToDetails(trait._id);
+                                    }}
+                                  >
+                                    <i className='bx bx-show align-center me-2 text-info'></i>
+                                    Détails
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    onClick={() => {
+                                      setFormModalTitle('Modifier les données');
+                                      setTraitementToUpdate(trait);
+                                      tog_form_modal();
+                                    }}
+                                  >
+                                    <i className='ri-pencil-fill align-center me-2 text-warning'></i>
+                                    Modifier
+                                  </DropdownItem>
+                                  <DropdownItem
+                                    onClick={() => {
+                                      deleteButton(
+                                        trait._id,
+                                        trait.motif,
+                                        deleteTraitement
+                                      );
+                                    }}
+                                  >
+                                    {' '}
+                                    <i className='ri-delete-bin-fill align-center me-2 text-danger'></i>{' '}
+                                    Supprimer{' '}
+                                  </DropdownItem>
+                                </DropdownMenu>
+                              </UncontrolledDropdown>
+                            )}
                           </td>
                         </tr>
                       ))}

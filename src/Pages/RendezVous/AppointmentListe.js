@@ -31,18 +31,18 @@ export default function AppointmentListe() {
     const search = searchTerm.toLowerCase();
 
     return (
-      `${appoint.traitement['patient'].firstName} ${appoint.traitement['patient'].lastName}`
+      `${appoint?.traitement?.patient?.firstName} ${appoint?.traitement?.patient?.lastName}`
         .toLowerCase()
         .includes(search) ||
-      appoint.traitement['motif'].toLowerCase().includes(search) ||
-      (appoint.appointmentDate &&
-        new Date(appoint.appointmentDate)
+      appoint?.traitement?.motif?.toLowerCase().includes(search) ||
+      (appoint?.appointmentDate &&
+        new Date(appoint?.appointmentDate)
           .toLocaleDateString('fr-FR')
           .includes(search)) ||
-      (appoint.traitement['patient'].adresse || '')
+      (appoint?.traitement?.patient?.adresse || '')
         .toLowerCase()
         .includes(search) ||
-      (appoint.traitement['patient'].phoneNumber || '')
+      (appoint?.traitement?.patient?.phoneNumber || '')
         .toString()
         .includes(search)
     );
@@ -141,7 +141,7 @@ export default function AppointmentListe() {
                                 <th data-sort='traitement'>Traitement</th>
                                 <th data-sort='firstName'>Patient</th>
 
-                                <th data-sort='date'>Date de naissance</th>
+                                <th data-sort='date'>Age</th>
 
                                 <th data-sort='adresse'>Domicile</th>
                                 <th data-sort='phone'>Téléphone</th>
@@ -151,10 +151,10 @@ export default function AppointmentListe() {
                             <tbody className='list form-check-all text-center'>
                               {filterSearchAppointement?.length > 0 &&
                                 filterSearchAppointement?.map((appoint) => (
-                                  <tr key={appoint._id}>
+                                  <tr key={appoint?._id}>
                                     <th>
                                       {new Date(
-                                        appoint.appointmentDate
+                                        appoint?.appointmentDate
                                       ).toLocaleDateString('fr-Fr', {
                                         year: 'numeric',
                                         month: '2-digit',
@@ -167,35 +167,29 @@ export default function AppointmentListe() {
 
                                     <td>
                                       {capitalizeWords(
-                                        appoint.traitement['motif']
+                                        appoint?.traitement?.motif
                                       )}
                                     </td>
                                     <td>
                                       {capitalizeWords(
-                                        appoint.traitement['patient'].firstName
+                                        appoint?.traitement?.patient?.firstName
                                       )}{' '}
                                       {capitalizeWords(
-                                        appoint.traitement['patient'].lastName
+                                        appoint?.traitement?.patient?.lastName
                                       )}{' '}
                                     </td>
 
-                                    <td>
-                                      {new Date(
-                                        appoint.traitement[
-                                          'patient'
-                                        ].dateOfBirth
-                                      ).toLocaleDateString()}{' '}
-                                    </td>
+                                    <td>{appoint?.traitement?.patient?.age}</td>
 
                                     <td>
                                       {capitalizeWords(
-                                        appoint.traitement['patient'].adresse
-                                      )}{' '}
+                                        appoint?.traitement?.patient?.adresse
+                                      )}
                                     </td>
                                     <td>
                                       {formatPhoneNumber(
-                                        appoint.traitement['patient']
-                                          .phoneNumber
+                                        appoint?.traitement?.patient
+                                          ?.phoneNumber
                                       )}
                                     </td>
 
@@ -226,13 +220,12 @@ export default function AppointmentListe() {
                                               data-bs-target='#deleteRecordModal'
                                               onClick={() => {
                                                 deleteButton(
-                                                  appoint._id,
-                                                  appoint.traitement['patient']
-                                                    .firstName +
+                                                  appoint?._id,
+                                                  appoint?.traitement?.patient
+                                                    ?.firstName +
                                                     ' ' +
-                                                    appoint.traitement[
-                                                      'patient'
-                                                    ].lastName,
+                                                    appoint?.traitement?.patient
+                                                      ?.lastName,
                                                   deleteAppointment
                                                 );
                                               }}
@@ -248,36 +241,6 @@ export default function AppointmentListe() {
                             </tbody>
                           </table>
                         )}
-                      <div className='noresult' style={{ display: 'none' }}>
-                        <div className='text-center'>
-                          <lord-icon
-                            src='https://cdn.lordicon.com/msoeawqm.json'
-                            trigger='loop'
-                            colors='primary:#121331,secondary:#08a88a'
-                            style={{ width: '75px', height: '75px' }}
-                          ></lord-icon>
-                          <h5 className='mt-2'>Sorry! No Result Found</h5>
-                          <p className='text-muted mb-0'>
-                            We've searched more than 150+ Orders We did not find
-                            any orders for you search.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </CardBody>

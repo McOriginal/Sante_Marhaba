@@ -268,7 +268,7 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
             <Input
               name='phoneNumber'
               placeholder='70 00 00 00'
-              type='tel'
+              type='number'
               className='form-control'
               id='phoneNumber'
               onChange={validation.handleChange}

@@ -70,7 +70,7 @@ export default function OrdonnanceListe() {
             const payload = {
               ordonnanceId: ordo._id,
               items: ordo.items.map((item) => ({
-                medicamentId: item.medicaments, // ou item.ordonnance._id selon ta donnée
+                medicamentId: item.medicaments,
                 quantity: item.quantity,
               })),
             };
@@ -112,6 +112,7 @@ export default function OrdonnanceListe() {
   }
   // ------------------------------------------------------------
 
+  console.log('Ordonnances: ', ordonnances);
   return (
     <React.Fragment>
       <div className='page-content'>
@@ -149,12 +150,12 @@ export default function OrdonnanceListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {ordonnances?.length === 0 && (
+                      {!error && !isLoading && ordonnances?.length === 0 && (
                         <div className='text-center text-mutate'>
-                          Aucun ordo pour le moment !
+                          Aucune ordonnance pour le moment !
                         </div>
                       )}
-                      {!error && !isLoading && (
+                      {!error && !isLoading && ordonnances?.length > 0 && (
                         <table
                           className='table align-middle table-nowrap table-hover'
                           id='ordonnanceTable'
@@ -162,10 +163,10 @@ export default function OrdonnanceListe() {
                           <thead className='table-light'>
                             <tr>
                               <th scope='col' style={{ width: '50px' }}>
-                                ID
-                              </th>
-                              <th className='sort' data-sort='date'>
                                 Date d'ordonnance
+                              </th>
+                              <th className='sort' data-sort='patient'>
+                                Patient
                               </th>
                               <th className='sort' data-sort='ordonnance_name'>
                                 Type de traitement
@@ -185,22 +186,31 @@ export default function OrdonnanceListe() {
                           <tbody className='list form-check-all text-center'>
                             {ordonnances?.length > 0 &&
                               ordonnances?.map((ordo, index) => (
-                                <tr key={ordo._id}>
-                                  <th scope='row'>{index + 1}</th>
-
-                                  <td>
+                                <tr key={ordo?._id}>
+                                  <th scope='row'>
                                     {new Date(
-                                      ordo.createdAt
+                                      ordo?.createdAt
                                     ).toLocaleDateString('fr-Fr', {
                                       weekday: 'short',
                                       year: 'numeric',
                                       month: '2-digit',
                                       day: '2-digit',
                                     })}
+                                  </th>
+                                  <td>
+                                    {capitalizeWords(
+                                      ordo?.traitement?.patient?.firstName
+                                    )}{' '}
+                                    {capitalizeWords(
+                                      ordo?.traitement?.patient?.lastName
+                                    )}
                                   </td>
                                   <td>
-                                    {capitalizeWords(ordo.traitement['motif'])}
+                                    {ordo?.traitement
+                                      ? capitalizeWords(ordo?.traitement?.motif)
+                                      : '-----'}
                                   </td>
+
                                   <td>
                                     {new Date(
                                       ordo.createdAt
@@ -242,26 +252,6 @@ export default function OrdonnanceListe() {
                                           <i className=' bx bx-show-alt text-white'></i>
                                         </button>
                                       </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
-                                          <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
-                                            data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
-                                            onClick={() => {
-                                              deleteButton(
-                                                ordo._id,
-                                                'ordonnance: ' +
-                                                  ordo.traitement['motif'],
-                                                deleteOrdonnance
-                                              );
-                                            }}
-                                          >
-                                            <i className='ri-delete-bin-fill text-white'></i>
-                                          </button>
-                                        </div>
-                                      )}
                                     </div>
                                   </td>
                                 </tr>
@@ -269,36 +259,6 @@ export default function OrdonnanceListe() {
                           </tbody>
                         </table>
                       )}
-                      <div className='noresult' style={{ display: 'none' }}>
-                        <div className='text-center'>
-                          <lord-icon
-                            src='https://cdn.lordicon.com/msoeawqm.json'
-                            trigger='loop'
-                            colors='primary:#121331,secondary:#08a88a'
-                            style={{ width: '75px', height: '75px' }}
-                          ></lord-icon>
-                          <h5 className='mt-2'>Sorry! No Result Found</h5>
-                          <p className='text-muted mb-0'>
-                            We've searched more than 150+ Orders We did not find
-                            any orders for you search.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </CardBody>

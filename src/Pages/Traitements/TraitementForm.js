@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 
 import classnames from 'classnames';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   useCreateTraitement,
   useUpdateTraitement,
@@ -146,6 +146,8 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             setisLoading(false);
             resetForm();
             tog_form_modal();
+            console.log('VALUES: ', values);
+            console.log('ID: ', values._id);
           },
           onError: (err) => {
             const errorMessage =
@@ -245,12 +247,13 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
           className='twitter-bs-wizard-tab-content'
         >
           <TabPane tabId={1}>
-            {' '}
             <FormGroup>
-              <Label>Patient</Label>
+              <Label htmlFor='patient'>Patient</Label>
               <Input
                 type='select'
                 name='patient'
+                id='patient'
+                className='border border-secondary form-control'
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.patient || ''}
@@ -270,9 +273,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                   patientData?.length > 0 &&
                   patientData.map((p) => (
                     <option key={p._id} value={p._id}>
-                      {capitalizeWords(p.firstName)} -
-                      {capitalizeWords(p.lastName)} -
-                      {new Date(p.dateOfBirth).toLocaleDateString()}
+                      {capitalizeWords(p?.firstName)} {' - '}
+                      {capitalizeWords(p?.lastName)} {' - '}{' '}
+                      {capitalizeWords(p?.age)}
                     </option>
                   ))}
               </Input>
@@ -283,10 +286,13 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label>Motif</Label>
+              <Label htmlFor='motif'>Motif</Label>
               <Input
                 type='text'
                 name='motif'
+                id='motif'
+                className='border border-secondary form-control'
+                placeholder='Entrez le motif de Traitement'
                 value={validation.values.motif || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -299,10 +305,12 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label>Début Maladie</Label>
+              <Label htmlFor='startDate'>Début Maladie</Label>
               <Input
                 type='date'
                 name='startDate'
+                id='startDate'
+                className='border border-secondary form-control'
                 max={new Date().toISOString().split('T')[0]} // Prevent future dates
                 value={validation.values.startDate || ''}
                 onChange={validation.handleChange}
@@ -318,10 +326,12 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label>Période du jour</Label>
+              <Label htmlFor='startTime'>Période du jour</Label>
               <Input
                 type='select'
                 name='startTime'
+                id='startTime'
+                className='border border-secondary form-control'
                 value={validation.values.startTime || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -341,52 +351,66 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             </FormGroup>
           </TabPane>
           <TabPane tabId={2}>
-            {' '}
             <FormGroup>
-              <Label>Taille (cm)</Label>
+              <Label htmlFor='height'>Taille (cm)</Label>
               <Input
                 type='number'
                 name='height'
+                id='height'
+                className='border border-secondary form-control'
+                placeholder='Taille de Patient en cm'
                 value={validation.values.height}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>Poids (kg)</Label>
+              <Label htmlFor='width'>Poids (kg)</Label>
               <Input
                 type='number'
                 name='width'
+                id='width'
+                className='border border-secondary form-control'
+                placeholder='Poids de Patient en kg'
                 value={validation.values.width}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>NC</Label>
+              <Label htmlFor='nc'>NC</Label>
               <Input
                 type='text'
                 name='nc'
+                id='nc'
+                className='border border-secondary form-control'
+                placeholder='Entrez NC'
                 value={validation.values.nc}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>AC</Label>
+              <Label htmlFor='ac'>AC</Label>
               <Input
                 type='text'
                 name='ac'
+                id='ac'
+                className='border border-secondary form-control'
+                placeholder='Entrez AC'
                 value={validation.values.ac}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>ASC</Label>
+              <Label htmlFor='asc'>ASC</Label>
               <Input
                 type='text'
                 name='asc'
+                id='asc'
+                className='border border-secondary form-control'
+                placeholder='Entrez ASC'
                 value={validation.values.asc}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -394,42 +418,52 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             </FormGroup>
           </TabPane>
           <TabPane tabId={3}>
-            {' '}
             <FormGroup>
-              <Label>Diagnostic</Label>
+              <Label htmlFor='diagnostic'>Diagnostic</Label>
               <Input
                 type='textarea'
                 name='diagnostic'
+                id='diagnostic'
+                className='border border-secondary form-control'
+                placeholder='Resultat du Diagnostic'
                 value={validation.values.diagnostic}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>Résultat</Label>
+              <Label htmlFor='result'>Résultat</Label>
               <Input
                 type='textarea'
                 name='result'
+                id='result'
+                className='border border-secondary form-control'
+                placeholder='Resultat du Traitement global'
                 value={validation.values.result}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>Observation</Label>
+              <Label htmlFor='observation'>Observation</Label>
               <Input
                 type='textarea'
                 name='observation'
+                id='observation'
+                className='border border-secondary form-control'
+                placeholder='Observation du Traitement'
                 value={validation.values.observation}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
             </FormGroup>
             <FormGroup>
-              <Label>Médecin</Label>
+              <Label htmlFor='medecin'>Médecin</Label>
               <Input
                 type='select'
                 name='doctor'
+                id='medecin'
+                className='border border-secondary form-control'
                 value={validation.values.doctor}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -438,14 +472,14 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                 {patientError && (
                   <div className='fw-bold text-danger text-center'></div>
                 )}
-                <option value=''>Sélectionner un patient</option>
+                <option value=''>Sélectionner un Médecin</option>
                 {!doctorError &&
                   !doctorLoading &&
                   doctorData?.length > 0 &&
                   doctorData.map((doc) => (
                     <option key={doc._id} value={doc._id}>
-                      {capitalizeWords(doc.firstName)} -
-                      {capitalizeWords(doc.lastName)} -
+                      {capitalizeWords(doc.firstName)} {' - '}
+                      {capitalizeWords(doc.lastName)} {' - '}
                       {new Date(doc.dateOfBirth).toLocaleDateString()}
                     </option>
                   ))}
@@ -458,13 +492,17 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             </FormGroup>
           </TabPane>
           <TabPane tabId={4}>
-            {' '}
             <FormGroup>
-              <Label htmlFor='totalAmount'>Montant total</Label>
+              <Label htmlFor='totalAmount'>Montant total </Label>
+              <p className='text-mutate'>
+                Uniquement la somme total de votre frais de traitement,{' '}
+                <span className='text-info'>sans l'Ordonnances</span>{' '}
+              </p>
               <Input
                 type='number'
                 name='totalAmount'
                 id='totalAmount'
+                className='border border-secondary from-control'
                 placeholder='Montant total du traitement'
                 value={validation.values.totalAmount || ''}
                 onChange={validation.handleChange}

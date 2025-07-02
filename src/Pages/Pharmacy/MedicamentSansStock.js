@@ -77,8 +77,7 @@ export default function MedicamentSansStock() {
                   </div>
 
                   <p className='text-center'>
-                    Liste des médicaments dont la <strong>Stock</strong> est
-                    Finis ou près ce que{' '}
+                    Liste des médicaments sans <strong>Stock</strong>
                   </p>
                 </CardBody>
               </Card>

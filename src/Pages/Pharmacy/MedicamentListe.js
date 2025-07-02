@@ -42,9 +42,9 @@ export default function MedicamentListe() {
     const search = searchTerm.toLowerCase();
 
     return (
-      medica.name.toString().toLowerCase().includes(search) ||
-      medica.price.toString().includes(search) ||
-      medica.stock.toString().includes(search)
+      medica?.name.toString().toLowerCase().includes(search) ||
+      medica?.price.toString().includes(search) ||
+      medica?.stock.toString().includes(search)
     );
   });
 
@@ -118,11 +118,6 @@ export default function MedicamentListe() {
                       </Col>
                     </Row>
                   </div>
-
-                  <p className='text-center'>
-                    Liste des médicaments dont la <strong>Stock</strong> est
-                    disponible{' '}
-                  </p>
                 </CardBody>
               </Card>
             </Col>

@@ -17,6 +17,7 @@ import {
 } from '../components/AlerteModal';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { useCreatePatient, useUpdatePatient } from '../../Api/queriesPatient';
+import { useNavigate } from 'react-router-dom';
 
 const PatientForm = ({ patientToEdit, tog_form_modal }) => {
   // Patient Query pour créer un etudiant
@@ -25,6 +26,9 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
   // Patient Query pour Mettre à jour un etudiant
   const { mutate: updatePatient } = useUpdatePatient();
   const [isLoading, setisLoading] = useState(false);
+
+  // STATE de navigation
+  const navigate = useNavigate();
 
   // Form validation
   const validation = useFormik({
@@ -51,7 +55,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
         .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ Prénom est obligatoire'),
       gender: Yup.string().required('Ce champ est obligatoire'),
-      age: Yup.string(),
+      age: Yup.string().required('Ce champ est obligatoire'),
       phoneNumber: Yup.number(),
       groupeSanguin: Yup.string().required('Ce champ est obligatoire'),
       ethnie: Yup.string(),
@@ -101,6 +105,9 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
             setisLoading(false);
             resetForm();
             tog_form_modal();
+
+            // Redirection vers la page de Traitement
+            navigate('/traitements');
           },
           onError: (err) => {
             const errorMessage =
@@ -131,7 +138,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='firstName'
               placeholder='Entrez un nom...'
               type='text'
-              className='form-control'
+              className='border border-secondary form-control'
               id='firstName'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -156,7 +163,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='lastName'
               placeholder='Entrez un prénom...'
               type='text'
-              className='form-control'
+              className='border border-secondary form-control'
               id='lastName'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -184,7 +191,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='gender'
               placeholder='Sélectionner le Genre...'
               type='select'
-              className='form-control'
+              className='border border-secondary form-control'
               id='gender'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -213,7 +220,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
             <Input
               name='groupeSanguin'
               type='select'
-              className='form-control'
+              className='border border-secondary form-control'
               id='groupeSanguin'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -253,7 +260,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='age'
               type='text'
               placeholder='Ex: 33ans ; 8 mois ; 6 semaines ; 2 jours...'
-              className='form-control'
+              className='border border-secondary form-control'
               id='age'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -276,7 +283,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='adresse'
               placeholder='Kabala...'
               type='text'
-              className='form-control'
+              className='border border-secondary  form-control'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.adresse || ''}
@@ -303,7 +310,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='phoneNumber'
               placeholder='70 00 00 00'
               type='number'
-              className='form-control'
+              className='border border-secondary form-control'
               id='phoneNumber'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -328,6 +335,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               type='select'
               name='ethnie'
               id='ethnie'
+              className='border border-secondary form-control'
               value={
                 validation.values.ethnie &&
                 ![
@@ -403,6 +411,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
                 name='ethnie'
                 type='text'
                 id='ethnieAutre'
+                className='border border-secondary  form-control'
                 value={validation.values.ethnie}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -425,7 +434,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='profession'
               placeholder='Elève; Maçon; Femme de Menage.....'
               type='text'
-              className='form-control'
+              className='border border-secondary form-control'
               id='profession'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}

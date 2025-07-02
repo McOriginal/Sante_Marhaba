@@ -8,7 +8,8 @@ export { hospitalName };
 const hospitalLittleName = 'MARHABA Santé';
 export { hospitalLittleName };
 
-const hospitalAdresse = 'Kabala zone universitaire sur le goudron de COURALE';
+const hospitalAdresse =
+  "Kabala en face de l'université sur la route de Kouralé";
 export { hospitalAdresse };
 
 const hospitalTel = '78-87-91-34 / 63-00-67-89';

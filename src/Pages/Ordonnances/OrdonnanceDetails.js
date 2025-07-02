@@ -195,16 +195,16 @@ const OrdonnanceDetails = ({
                   <CardText>
                     <strong> Nom et Prénom:</strong>{' '}
                     {capitalizeWords(
-                      selectedOrdonnance?.traitements?.patient['firstName']
+                      selectedOrdonnance?.traitements?.patient?.firstName
                     )}{' '}
                     {capitalizeWords(
-                      selectedOrdonnance?.traitements?.patient['lastName']
+                      selectedOrdonnance?.traitements?.patient?.lastName
                     )}
                   </CardText>
                   <CardText>
                     <strong> Sexe:</strong>{' '}
                     {capitalizeWords(
-                      selectedOrdonnance?.traitements?.patient['gender']
+                      selectedOrdonnance?.traitements?.patient?.gender
                     )}
                   </CardText>
                 </div>
@@ -220,8 +220,8 @@ const OrdonnanceDetails = ({
                           key={index}
                           className='border-2 border-grey border-bottom py-2  text-center'
                         >
-                          {formatPrice(medi.quantity)} {' => '}
-                          {capitalizeWords(medi.medicaments['name'])}
+                          {formatPrice(medi?.quantity)} {' => '}
+                          {capitalizeWords(medi?.medicaments?.name)}
                           <span className='mx-2'>
                             {' '}
                             {capitalizeWords(
@@ -230,7 +230,7 @@ const OrdonnanceDetails = ({
                           </span>
                           <strong className='ms-4 text-primary'>
                             {' '}
-                            {formatPrice(medi?.medicaments['price'])} F
+                            {formatPrice(medi?.medicaments?.price)} F
                           </strong>
                         </li>
                       )
@@ -248,9 +248,7 @@ const OrdonnanceDetails = ({
                   </CardText>
                   <CardText style={{ fontSize: '12px' }}>
                     <strong> Total Traitement: </strong>{' '}
-                    {formatPrice(
-                      selectedOrdonnance?.traitements['totalAmount']
-                    )}{' '}
+                    {formatPrice(selectedOrdonnance?.traitements?.totalAmount)}{' '}
                     FCFA
                   </CardText>
                 </div>
@@ -258,7 +256,7 @@ const OrdonnanceDetails = ({
                   <strong> Total Général: </strong>{' '}
                   <span className='fs-5'>
                     {formatPrice(
-                      selectedOrdonnance?.traitements['totalAmount'] +
+                      selectedOrdonnance?.traitements?.totalAmount +
                         selectedOrdonnance?.ordonnances?.totalAmount
                     )}{' '}
                     FCFA

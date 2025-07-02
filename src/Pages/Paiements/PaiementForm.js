@@ -20,7 +20,7 @@ import {
   useCreatePaiement,
   useUpdatePaiement,
 } from '../../Api/queriesPaiement';
-import { capitalizeWords } from '../components/capitalizeFunction';
+import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import { useAllTraitement } from '../../Api/queriesTraitement';
 import { useAllOrdonnances } from '../../Api/queriesOrdonnance';
 
@@ -49,13 +49,12 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
     enableReinitialize: true,
 
     initialValues: {
-      traitement: paiementToEdit?.traitement._id || '',
+      traitement: paiementToEdit?.traitement?._id || '',
       paiementDate: paiementToEdit?.paiementDate.substring(0, 10) || '',
       totalAmount: paiementToEdit?.totalAmount || undefined,
       reduction: paiementToEdit?.reduction || undefined,
       totalPaye: paiementToEdit?.totalPaye || undefined,
       methode: paiementToEdit?.methode || '',
-      statut: paiementToEdit?.statut || '',
     },
     validationSchema: Yup.object({
       traitement: Yup.string().required('Ce champ est obligatoire'),
@@ -64,7 +63,6 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       reduction: Yup.number().typeError('Ce doit être un nombre valide'),
       totalPaye: Yup.number().required('Ce champ est obligatoire'),
       methode: Yup.string().required('Ce champ est obligatoire'),
-      statut: Yup.string().required('Ce champ est obligatoire'),
     }),
 
     onSubmit: (values, { resetForm }) => {
@@ -77,7 +75,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
 
       if (paiementToEdit) {
         updatePaiement(
-          { id: paiementToEdit._id, data: paiementsDataLoaded },
+          { id: paiementToEdit?._id, data: paiementsDataLoaded },
           {
             onSuccess: () => {
               successMessageAlert('Données mise à jour avec succès');
@@ -98,22 +96,25 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
 
       // Sinon on créer un nouveau étudiant
       else {
-        createPaiement(values, {
-          onSuccess: () => {
-            successMessageAlert('Paiement ajoutée avec succès');
-            setisLoading(false);
-            resetForm();
-            tog_form_modal();
-          },
-          onError: (err) => {
-            const errorMessage =
-              err?.response?.data?.message ||
-              err?.message ||
-              "Oh Oh ! une erreur est survenu lors de l'enregistrement";
-            errorMessageAlert(errorMessage);
-            setisLoading(false);
-          },
-        });
+        createPaiement(
+          { ...values, totalAmount: validation.values.totalAmount },
+          {
+            onSuccess: () => {
+              successMessageAlert('Paiement ajoutée avec succès');
+              setisLoading(false);
+              resetForm();
+              tog_form_modal();
+            },
+            onError: (err) => {
+              const errorMessage =
+                err?.response?.data?.message ||
+                err?.message ||
+                "Oh Oh ! une erreur est survenu lors de l'enregistrement";
+              errorMessageAlert(errorMessage);
+              setisLoading(false);
+            },
+          }
+        );
       }
     },
   });
@@ -125,7 +126,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
 
     // Trouver l'ordonnaces en fonction de ID de traitement sélectionné
     const selectedOrdonnance = ordonnanceData?.find(
-      (ordo) => ordo.traitement._id === validation.values.traitement
+      (ordo) => ordo?.traitement?._id === validation.values.traitement
     );
 
     if (selectedTraitement) {
@@ -156,6 +157,14 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
         return false;
       }}
     >
+      {validation.values.totalAmount !== undefined && (
+        <h6 className='text-end '>
+          Total:{' '}
+          <span className='text-warning'>
+            {formatPrice(validation.values.totalAmount)} F
+          </span>
+        </h6>
+      )}
       <Row>
         <Col md='12'>
           {!error && isFetchingTraitement && <LoadingSpiner />}
@@ -184,13 +193,13 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
               >
                 <option value=''>Sélectionner le traitement</option>
                 {traitementData?.map((trait) => (
-                  <option key={trait._id} value={trait._id}>
-                    {capitalizeWords(trait.patient['firstName'])}{' '}
-                    {capitalizeWords(trait.patient['lastName'])}
+                  <option key={trait?._id} value={trait._id}>
+                    {capitalizeWords(trait?.patient?.firstName)}{' '}
+                    {capitalizeWords(trait?.patient?.lastName)}
                     {' | '}
-                    {capitalizeWords(trait.motif)}
+                    {capitalizeWords(trait?.motif)}
                     {' | '}{' '}
-                    {new Date(trait.createdAt).toLocaleDateString('fr-Fr', {
+                    {new Date(trait?.createdAt).toLocaleDateString('fr-Fr', {
                       weekday: 'short',
                       year: 'numeric',
                       month: 'short',
@@ -210,7 +219,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       </Row>
 
       <Row>
-        <Col md='12'>
+        {/* <Col md='12'>
           <FormGroup className='mb-3'>
             <Label htmlFor='totalAmount'>
               Somme Total{' '}
@@ -241,7 +250,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
               </FormFeedback>
             ) : null}
           </FormGroup>
-        </Col>
+        </Col> */}
       </Row>
       <Row>
         <Col md='6'>
@@ -303,7 +312,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
         </Col>
       </Row>
       <Row>
-        <Col md='12'>
+        <Col md='6'>
           <FormGroup className='mb-3'>
             <Label htmlFor='paiementDate'>Date de Paiement</Label>
 
@@ -331,8 +340,6 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
             ) : null}
           </FormGroup>
         </Col>
-      </Row>
-      <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
             <Label htmlFor='methode'>Méthode de Paiement</Label>
@@ -358,36 +365,6 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
             {validation.touched.methode && validation.errors.methode ? (
               <FormFeedback type='invalid'>
                 {validation.errors.methode}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-        <Col md='6'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='statut'>Statut</Label>
-            <Input
-              name='statut'
-              placeholder='Paiement dédié pour les opérations chirugical.....'
-              type='select'
-              className='form-control'
-              id='statut'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.statut || ''}
-              invalid={
-                validation.touched.statut && validation.errors.statut
-                  ? true
-                  : false
-              }
-            >
-              <option value=''>Sélectionner le statut</option>
-              <option value='payé'>Payé</option>
-              <option value='partiel'>Partiellement payé</option>
-              <option value='non payé'>Non Payé</option>
-            </Input>
-            {validation.touched.statut && validation.errors.statut ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.statut}
               </FormFeedback>
             ) : null}
           </FormGroup>

@@ -9,7 +9,6 @@ import {
   capitalizeWords,
   formatPhoneNumber,
 } from '../components/capitalizeFunction';
-import { Link } from 'react-router-dom';
 import { deleteButton } from '../components/AlerteModal';
 
 export default function PatientsListe() {
@@ -26,13 +25,14 @@ export default function PatientsListe() {
   const filteredPatients = data?.filter((patient) => {
     const search = searchTerm.toLowerCase();
     return (
-      `${patient.firstName || ''} ${patient.lastName || ''}`
+      `${patient?.firstName || ''} ${patient?.lastName || ''}`
         .toLowerCase()
         .includes(search) ||
-      (patient.groupeSanguin || '').toLowerCase().includes(search) ||
-      (patient.adresse || '').toLowerCase().includes(search) ||
-      (patient.phoneNumber || '').toString().includes(search) ||
-      (patient.profession || '').toLowerCase().includes(search)
+      (patient?.groupeSanguin || '').toLowerCase().includes(search) ||
+      (patient?.adresse || '').toLowerCase().includes(search) ||
+      (patient?.phoneNumber || '').toString().includes(search) ||
+      (patient?.profession || '').toLowerCase().includes(search) ||
+      (patient?.ethnie || '').toLowerCase().includes(search)
     );
   });
 
@@ -104,12 +104,14 @@ export default function PatientsListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {data?.length === 0 && (
-                        <div className='text-center text-mutate'>
-                          Aucun patient pour le moment !
-                        </div>
-                      )}
-                      {!error && !isLoading && (
+                      {!error &&
+                        !isLoading &&
+                        filteredPatients?.length === 0 && (
+                          <div className='text-center text-mutate'>
+                            Aucun patient pour le moment !
+                          </div>
+                        )}
+                      {!error && !isLoading && filteredPatients?.length > 0 && (
                         <table
                           className='table align-middle table-nowrap table-hover'
                           id='patientTable'
@@ -127,63 +129,72 @@ export default function PatientsListe() {
                               <th data-sort='adresse'>Domicile</th>
                               <th data-sort='phone'>Téléphone</th>
                               <th data-sort='profession'>Profession</th>
+                              <th data-sort='ethni'>Ethnie</th>
                               <th data-sort='action'>Action</th>
                             </tr>
                           </thead>
                           <tbody className='list form-check-all text-center'>
                             {filteredPatients?.length > 0 &&
                               filteredPatients?.map((patient, index) => (
-                                <tr key={patient._id}>
+                                <tr key={patient?._id}>
                                   <th scope='row'>{index + 1}</th>
 
-                                  <td>{capitalizeWords(patient.firstName)} </td>
-                                  <td>{capitalizeWords(patient.lastName)} </td>
+                                  <td>
+                                    {capitalizeWords(patient?.firstName)}{' '}
+                                  </td>
+                                  <td>{capitalizeWords(patient?.lastName)} </td>
                                   <td className='badge bg-warning text-light'>
-                                    {capitalizeWords(patient.groupeSanguin)}{' '}
+                                    {capitalizeWords(patient?.groupeSanguin)}{' '}
                                   </td>
 
                                   <td>
-                                    {patient.age
-                                      ? capitalizeWords(patient.age)
+                                    {patient?.age
+                                      ? capitalizeWords(patient?.age)
                                       : '----'}
                                   </td>
 
                                   <td>
-                                    {patient.adresse
-                                      ? capitalizeWords(patient.adresse)
+                                    {patient?.adresse
+                                      ? capitalizeWords(patient?.adresse)
                                       : '------'}{' '}
                                   </td>
                                   <td>
-                                    {patient.phoneNumber
-                                      ? formatPhoneNumber(patient.phoneNumber)
+                                    {patient?.phoneNumber
+                                      ? formatPhoneNumber(patient?.phoneNumber)
                                       : '------'}
                                   </td>
                                   <td>
-                                    {patient.profession
-                                      ? capitalizeWords(patient.profession)
+                                    {patient?.profession
+                                      ? capitalizeWords(patient?.profession)
+                                      : '------'}
+                                  </td>
+                                  <td>
+                                    {patient?.ethnie
+                                      ? capitalizeWords(patient?.ethnie)
                                       : '------'}
                                   </td>
 
                                   <td>
-                                    <div className='d-flex gap-2'>
-                                      <div>
-                                        <button
-                                          className='btn btn-sm btn-success edit-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
-                                          onClick={() => {
-                                            setFormModalTitle(
-                                              'Modifier les données'
-                                            );
-                                            setpatientToUpdate(patient);
-                                            tog_form_modal();
-                                          }}
-                                        >
-                                          <i className='ri-pencil-fill text-white'></i>
-                                        </button>
-                                      </div>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
+                                    {isDeleting && <LoadingSpiner />}
+                                    {!isDeleting && (
+                                      <div className='d-flex gap-2'>
+                                        <div>
+                                          <button
+                                            className='btn btn-sm btn-success edit-item-btn'
+                                            data-bs-toggle='modal'
+                                            data-bs-target='#showModal'
+                                            onClick={() => {
+                                              setFormModalTitle(
+                                                'Modifier les données'
+                                              );
+                                              setpatientToUpdate(patient);
+                                              tog_form_modal();
+                                            }}
+                                          >
+                                            <i className='ri-pencil-fill text-white'></i>
+                                          </button>
+                                        </div>
+
                                         <div className='remove'>
                                           <button
                                             className='btn btn-sm btn-danger remove-item-btn'
@@ -191,10 +202,10 @@ export default function PatientsListe() {
                                             data-bs-target='#deleteRecordModal'
                                             onClick={() => {
                                               deleteButton(
-                                                patient._id,
-                                                patient.firstName +
+                                                patient?._id,
+                                                patient?.firstName +
                                                   ' ' +
-                                                  patient.lastName,
+                                                  patient?.lastName,
                                                 deletePatient
                                               );
                                             }}
@@ -202,8 +213,8 @@ export default function PatientsListe() {
                                             <i className='ri-delete-bin-fill text-white'></i>
                                           </button>
                                         </div>
-                                      )}
-                                    </div>
+                                      </div>
+                                    )}
                                   </td>
                                 </tr>
                               ))}

@@ -51,11 +51,11 @@ const SidebarData = [
     isMainMenu: true,
   },
   {
-    label: 'Transactions',
+    label: 'Comptablité',
     icon: 'fas fa-euro-sign',
     subItem: [
       { sublabel: 'Paiement', link: '/paiements' },
-      { sublabel: 'Factures', link: '/factures' },
+      { sublabel: 'Liste Factures', link: '/factures' },
       { sublabel: 'Dépense', link: '/depenses' },
     ],
   },
@@ -69,9 +69,9 @@ const SidebarData = [
     label: 'Pharmacie',
     icon: 'dripicons-pill',
     subItem: [
-      { sublabel: 'Médicament', link: '/medicaments' },
-      { sublabel: 'Approvisionnements', link: '/approvisonnements' },
+      { sublabel: 'Liste Médicament', link: '/medicaments' },
       { sublabel: 'Médicament Sans Stock', link: '/medicaments_no_stock' },
+      { sublabel: 'Historique Approvisionnements', link: '/approvisonnements' },
     ],
   },
 

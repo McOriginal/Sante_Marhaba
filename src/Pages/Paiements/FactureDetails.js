@@ -171,24 +171,25 @@ export default function FactureDetails() {
                 <h4 className='text-center'>Réçu</h4>
                 <div className='d-flex justify-content-around align-item-center'>
                   <div className='my-2 '>
-                    <h6 style={{ marginBottom: '20px' }}>Patient(e)</h6>
+                    <h6 style={{ marginBottom: '20px' }}>Patient</h6>
                     <CardText>
+                      <strong>Nom et Prénom: </strong>
                       {capitalizeWords(
-                        selectedPaiement?.traitement['patient'].firstName
+                        selectedPaiement?.traitement?.patient?.firstName
                       )}{' '}
                       {capitalizeWords(
-                        selectedPaiement?.traitement['patient'].lastName
+                        selectedPaiement?.traitement?.patient?.lastName
                       )}
                     </CardText>
                     <CardText>
-                      {new Date(
-                        selectedPaiement?.traitement['patient'].dateOfBirth
-                      ).toLocaleDateString()}
-                    </CardText>
-                    <CardText>
+                      <strong>Sexe: </strong>
                       {capitalizeWords(
-                        selectedPaiement?.traitement['patient'].gender
+                        selectedPaiement?.traitement?.patient?.gender
                       )}
+                    </CardText>
+                    <CardText>
+                      <strong>Age: </strong>
+                      {selectedPaiement?.traitement?.patient?.age}
                     </CardText>
                   </div>
                   {/* Bordure Séparateur */}
@@ -206,11 +207,12 @@ export default function FactureDetails() {
                     <h6 style={{ marginBottom: '20px' }}>Traitement</h6>
                     <CardText>
                       <strong> Maladie: </strong>{' '}
-                      {capitalizeWords(selectedPaiement?.traitement['motif'])}
+                      {capitalizeWords(selectedPaiement?.traitement?.motif)}
                     </CardText>
                     <CardText>
+                      <strong>Date de Maladie : </strong>
                       {new Date(
-                        selectedPaiement?.traitement['createdAt']
+                        selectedPaiement?.traitement?.createdAt
                       ).toLocaleDateString('fr-Fr', {
                         weekday: 'long',
                         year: 'numeric',
@@ -234,25 +236,27 @@ export default function FactureDetails() {
                       Somme Total:{' '}
                       <strong style={{ fontSize: '14px' }}>
                         {' '}
-                        {formatPrice(
-                          selectedPaiement.traitement['totalAmount']
-                        )}{' '}
-                        F{' '}
+                        {formatPrice(selectedPaiement?.totalAmount)} F{' '}
                       </strong>{' '}
                     </CardText>
                     <CardText className='text-center '>
                       Payé:
                       <strong style={{ fontSize: '14px' }}>
                         {' '}
-                        {formatPrice(selectedPaiement.totalAmount)} F{' '}
+                        {formatPrice(
+                          selectedPaiement?.traitement?.totalAmount
+                        )}{' '}
+                        F{' '}
                       </strong>{' '}
                     </CardText>
                     <CardText className='text-center '>
                       Réliqua:
                       <strong style={{ fontSize: '14px' }}>
                         {' '}
-                        {selectedPaiement.totalAmount -
-                          selectedPaiement.traitement['totalAmount']}{' '}
+                        {formatPrice(
+                          selectedPaiement?.totalAmount -
+                            selectedPaiement?.traitement?.totalAmount
+                        )}{' '}
                         F{' '}
                       </strong>
                     </CardText>

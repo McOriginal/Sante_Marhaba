@@ -63,7 +63,7 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
         .required('Ce champ est obligatoire'),
       speciality: Yup.string().required('Ce champ est obligatoire'),
       adresse: Yup.string()
-        .matches(/^[a-z0-9\s]+$/i, 'Veillez Entrez une valeur correct !')
+        .matches(/^[a-z0-9À-ÿ\\s]+$/i, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),
       salaire: Yup.number().typeError('Ce champ doit être un nombre'),
       guardDays: Yup.string(),
@@ -301,7 +301,7 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
             <Input
               name='phoneNumber'
               placeholder='70 00 00 00'
-              type='tel'
+              type='number'
               className='form-control'
               id='phoneNumber'
               onChange={validation.handleChange}
