@@ -8,7 +8,16 @@ exports.createOrdonnance = async (req, res) => {
   try {
     const { items, ...restOfData } = req.body;
 
-    // const cashierId = req.user?._id || null; // supposé que `req.user` est injecté par auth middleware
+    // Recherche Si il n'y a pas déjà une ORDONNANCES
+    const existingOrdonnance = await Ordonnance.findOne({
+      traitement: req.body.traitement,
+    });
+
+    if (existingOrdonnance) {
+      return res
+        .status(404)
+        .json({ message: 'Une Ordonnance existe déjà pour ce Traitement' });
+    }
 
     // Vérification des items et existence des produits
     if (!items || !Array.isArray(items) || items.length === 0) {

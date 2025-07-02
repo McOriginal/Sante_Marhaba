@@ -1,5 +1,7 @@
 const Medicament = require('../models/MedicamentModel');
 const Ordonnance = require('../models/OrdonanceModel');
+const Traitement = require('../models/TraitementModel');
+const Paiement = require('../models/PaiementModel');
 // Enregistrer une Medicament
 exports.createMedicament = async (req, res) => {
   try {
@@ -180,13 +182,14 @@ exports.decrementMultipleStocks = async (req, res) => {
   }
 };
 
+// annuler une ORDONNANCES et retablir le Stock
 exports.cancelOrdonnance = async (req, res) => {
   const session = await Medicament.startSession();
   session.startTransaction();
 
   try {
     const ordonnanceId = req.params.ordonnanceId;
-    const { items } = req.body; // [{ medicamentId, quantity }, ...]
+    const { items } = req.body;
 
     for (const { medicamentId, quantity } of items) {
       const medicament = await Medicament.findById(medicamentId).session(
@@ -205,6 +208,11 @@ exports.cancelOrdonnance = async (req, res) => {
     if (!deletedOrdonnance) {
       throw new Error('Ordonnance non trouvée');
     }
+
+    const trait = await Traitement.findById(deletedOrdonnance.traitement);
+
+    const deletedPaiement = await Paiement.findOne({ traitement: trait });
+    await Paiement.findByIdAndDelete(deletedPaiement);
 
     await session.commitTransaction();
     session.endSession();

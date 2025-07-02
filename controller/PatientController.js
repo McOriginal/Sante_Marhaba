@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 const Patient = require('../models/PatientModel');
+const Traitement = require('../models/TraitementModel');
+const Ordonnance = require('../models/OrdonanceModel');
+const Medicament = require('../models/MedicamentModel');
+const Paiement = require('../models/PaiementModel');
+const Appointment = require('../models/AppointementModel');
+
 const textValidator = require('./regexValidation');
 
 exports.newPatient = async (req, res) => {
@@ -168,7 +174,7 @@ exports.updatePatient = async (req, res) => {
     if (phoneNumber) {
       // Vérification des champs uniques
       const existingPatient = await Patient.findOne({
-        _id: { $ne: req.params.id }, // Exclure le patient en cours de mise à jour
+        _id: { $ne: req.params.id },
         phoneNumber,
       }).exec();
 
@@ -230,13 +236,93 @@ exports.updatePatient = async (req, res) => {
 // ################ Update One Patient ###########################
 
 exports.deletePatient = async (req, res) => {
+  const session = await Medicament.startSession();
+  session.startTransaction();
   try {
-    await Patient.findByIdAndDelete(req.params.id);
+    // ID de PATIENT
+    const patientID = req.params.id;
+
+    // Traitement à suppprimer
+    const deletedTrait = await Traitement.find({ patient: patientID });
+
+    // Vérfication si il y'a au moins un TRAITEMENT existe
+    if (deletedTrait) {
+      // On parcour chaque TRAITEMENT pour executer la suppression de l'ORDONNANCES et retablir le STOCK
+      for (const traitement of deletedTrait) {
+        // Trouvez les ORDONNANCES via le TRAITEMENT
+        const ordonnance = await Ordonnance.findOne({
+          traitement: deletedTrait,
+        });
+
+        // Vérification si il y'a au moins une ORDONNANCE
+        if (ordonnance) {
+          // ID ORDONNANCE à supprimer
+          const ordonnanceID = ordonnance._id;
+          // Les Items(médicaments) dans l'ORDONNANCE
+          const ordonnanceItems = ordonnance.items;
+
+          // On supprime toutes les ORDONNANCES trouvés et retablir le Stock
+          for (const { medicaments, quantity } of ordonnanceItems) {
+            // On trouve chaque MEDICAMENT via son ID
+            const medicament = await Medicament.findById(medicaments).session(
+              session
+            );
+
+            // Vérification si le MEDICAMENT existe
+            if (medicament) {
+              // On addition la quantité de chaque MEDICAMENT sur son stock
+              medicament.stock += quantity;
+              await medicament.save({ session });
+            }
+          }
+
+          // On Supprime l'ORDONNANCE
+          await Ordonnance.findByIdAndDelete(ordonnanceID, {
+            session,
+          });
+        }
+
+        // On supprime egalement le PAIEMENT lié à ce TRAITEMENT
+        const paiementToDelete = await Paiement.findOne({
+          traitement: traitement,
+        });
+
+        // Vérification si un PAIEMENT existe
+        if (paiementToDelete) {
+          // Si oui alors on le supprime
+          await Paiement.findByIdAndDelete(paiementToDelete);
+        }
+
+        // On vérifie si le TRAITEMENT existe
+        const existeTrait = await Traitement.findById(traitement._id);
+        if (existeTrait) {
+          // On supprime egalement Appointment lié uniquement si ça existe
+          const existeAppointement = await Appointment.find({
+            traitement: existeTrait,
+          });
+          // Si il y'a au moins un APPONTEMENT alors on parcours avec la boucle pour supprimer tous
+          if (existeAppointement) {
+            for (const appoint of existeAppointement) {
+              await Appointment.findByIdAndDelete(appoint._id);
+            }
+          }
+          //  supprime le Traitement
+          await Traitement.findByIdAndDelete(traitement._id);
+        }
+        // FIN DE BOUCLE
+      }
+    }
+    //  en fin on supprime le Patient
+    await Patient.findByIdAndDelete(patientID);
 
     res.status(200).json({
       status: 'succes',
       message: 'Patient supprimer avec succès',
     });
+
+    // On arrête la session
+    await session.commitTransaction();
+    session.endSession();
   } catch (e) {
     console.log('Erreur de  suppression de patient: ', e);
     res.status(404).json({

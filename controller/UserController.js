@@ -119,7 +119,7 @@ exports.sendVerifyCodePassword = async (req, res) => {
 
     // Générer un code aléatoire
     const code = Math.floor(1000 + Math.random() * 9000);
-    const expires = new Date(Date.now() + 2 * 60 * 1000); // 10 minutes
+    const expires = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes
 
     // Configuration transporteur
     const transporter = nodemailer.createTransport({
