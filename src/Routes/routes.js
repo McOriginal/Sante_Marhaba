@@ -68,6 +68,11 @@ const sharedRoutes = [
 
 // Routes pour les ADMINS
 const authProtectedRoutes = [
+  {
+    path: '/',
+    exact: true,
+    component: <Navigate to='/dashboard' />,
+  },
   //dashboard
   { path: '/dashboard', component: <Dashboard /> },
 
@@ -128,12 +133,6 @@ const authProtectedRoutes = [
   { path: '/pages-faqs', component: <FAQs /> },
   { path: '/pages-pricing', component: <Pricing /> },
 
-  {
-    path: '/',
-    exact: true,
-    component: <Navigate to='/dashboard' />,
-  },
-
   { path: '/register', component: <Register /> },
 ];
 
@@ -152,6 +151,7 @@ const publicRoutes = [
   // { path: '/unauthorized', component: <Unauthorized /> },
 
   // Authentication Page
+
   { path: '/login', component: <Login /> },
   { path: '/forgotPassword', component: <ForgetPasswordPage /> },
   { path: '/verifyCode', component: <VerifyCode /> },
