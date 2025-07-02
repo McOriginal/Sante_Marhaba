@@ -56,7 +56,6 @@ exports.getApprovisonementById = async (req, res) => {
     const approvisonement = await Approvisonement.findById(req.params.id)
       .populate('medicament')
       .populate('fournisseur');
-
     if (!approvisonement) {
       return res.status(404).json({ message: 'Approvisonement not found' });
     }

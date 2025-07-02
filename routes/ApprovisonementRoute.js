@@ -16,7 +16,7 @@ router.get(
 
 // Route pour récupérer un approvisionnement par son ID
 router.get(
-  '/getApprovisonement/:id',
+  '/getApprovisonnement/:id',
   approvisonementController.getApprovisonementById
 );
 
