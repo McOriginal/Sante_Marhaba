@@ -162,7 +162,6 @@ const Register = () => {
                             <option value=''>Sélectionner un rôle</option>
                             <option value='admin'>Administrateur</option>
                             <option value='medecin'>Médecin</option>
-                            <option value='secretaire'>Sécretaire</option>
                           </Input>
                           {validation.touched.role && validation.errors.role ? (
                             <FormFeedback type='invalid'>

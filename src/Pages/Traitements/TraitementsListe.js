@@ -131,7 +131,16 @@ export default function TraitementsListe() {
                         </div>
                       </Col>
                       <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
+                        <div className='d-flex justify-content-sm-end gap-3'>
+                          {searchTerm !== '' && (
+                            <Button
+                              color='warning'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              {' '}
+                              <i className='fas fa-window-close'></i>{' '}
+                            </Button>
+                          )}
                           <div className='search-box me-4'>
                             <input
                               type='text'

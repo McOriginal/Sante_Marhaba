@@ -104,7 +104,16 @@ export default function MedicamentListe() {
                         </div>
                       </Col>
                       <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
+                        <div className='d-flex justify-content-sm-end gap-3'>
+                          {searchTerm !== '' && (
+                            <Button
+                              color='warning'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              {' '}
+                              <i className='fas fa-window-close'></i>{' '}
+                            </Button>
+                          )}
                           <div className='search-box me-4'>
                             <input
                               type='text'
@@ -136,7 +145,7 @@ export default function MedicamentListe() {
               !isLoading &&
               filterSearchMedicaments?.length > 0 &&
               filterSearchMedicaments?.map((medica) => (
-                <Col sm={6} lg={4} key={medica._id}>
+                <Col sm={6} lg={4} key={medica?._id}>
                   <Card
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
@@ -180,7 +189,7 @@ export default function MedicamentListe() {
                           <DropdownItem
                             className='edit-item-btn'
                             onClick={() => {
-                              navigateToMedicamentApprovisonnement(medica._id);
+                              navigateToMedicamentApprovisonnement(medica?._id);
                             }}
                           >
                             <i className=' bx bx-analyse align-center me-2 text-muted'></i>
@@ -190,8 +199,8 @@ export default function MedicamentListe() {
                             className='remove-item-btn'
                             onClick={() => {
                               deleteButton(
-                                medica._id,
-                                medica.name,
+                                medica?._id,
+                                medica?.name,
                                 deleteMedicament
                               );
                             }}
@@ -211,8 +220,8 @@ export default function MedicamentListe() {
                         width: '30%',
                         objectFit: 'contain',
                       }}
-                      src={medica.imageUrl ? medica.imageUrl : imgMedicament}
-                      alt={medica.name}
+                      src={medica?.imageUrl ? medica?.imageUrl : imgMedicament}
+                      alt={medica?.name}
                     />
 
                     <CardBody>
@@ -220,12 +229,12 @@ export default function MedicamentListe() {
                         Nom:
                         <span style={{ color: 'gray' }}>
                           {' '}
-                          {capitalizeWords(medica.name)}
+                          {capitalizeWords(medica?.name)}
                         </span>{' '}
                       </CardTitle>
                       <CardTitle className='fs-6'>
                         Stock:
-                        {medica.stock >= 10 ? (
+                        {medica?.stock >= 10 ? (
                           <span style={{ color: 'gray' }}>
                             {' '}
                             {formatPrice(medica?.stock)}
@@ -242,7 +251,7 @@ export default function MedicamentListe() {
                         Prix:{' '}
                         <span style={{ color: 'gray' }}>
                           {' '}
-                          {formatPrice(medica.price)} F
+                          {formatPrice(medica?.price)} F
                         </span>{' '}
                       </CardTitle>
                     </CardBody>

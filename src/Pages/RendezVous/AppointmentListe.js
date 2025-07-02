@@ -7,7 +7,6 @@ import {
   capitalizeWords,
   formatPhoneNumber,
 } from '../components/capitalizeFunction';
-import { Link } from 'react-router-dom';
 import { deleteButton } from '../components/AlerteModal';
 import AppointmentForm from './AppointmentForm';
 import {
@@ -100,7 +99,16 @@ export default function AppointmentListe() {
                         </div>
                       </Col>
                       <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
+                        <div className='d-flex justify-content-sm-end gap-3'>
+                          {searchTerm !== '' && (
+                            <Button
+                              color='warning'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              {' '}
+                              <i className='fas fa-window-close'></i>{' '}
+                            </Button>
+                          )}
                           <div className='search-box ms-2'>
                             <input
                               type='text'

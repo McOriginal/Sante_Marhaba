@@ -84,7 +84,7 @@ const Index = () => {
           <Route
             path={route.path}
             element={
-              <PrivateRoute allowedRoles={['admin', 'medecin', 'secretaire']}>
+              <PrivateRoute allowedRoles={['admin', 'medecin']}>
                 <Layout>{route.component}</Layout>
               </PrivateRoute>
             }

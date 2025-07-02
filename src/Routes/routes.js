@@ -10,12 +10,6 @@ import ForgetPasswordPage from '../Pages/Authentication/ForgetPassword';
 import Register from '../Pages/Authentication/Register';
 import UserProfile from '../Pages/Authentication/user-profile';
 
-// Import Authentication Inner Pages
-import Login1 from '../Pages/AuthenticationPages/Login';
-import Register1 from '../Pages/AuthenticationPages/Register';
-import RecoverPassword from '../Pages/AuthenticationPages/RecoverPassword';
-import LockScreen from '../Pages/AuthenticationPages/LockScreen';
-
 // Import Utility Pages
 import StarterPage from '../Pages/Utility/Starter-Page';
 import Maintenance from '../Pages/Utility/Maintenance-Page';
@@ -68,6 +62,8 @@ const sharedRoutes = [
 
   // Changer le mot de passe
   { path: '/updatePassword', component: <UpdatePassword /> },
+
+  { path: '/userprofile', component: <UserProfile /> },
 ];
 
 // Routes pour les ADMINS
@@ -137,6 +133,8 @@ const authProtectedRoutes = [
     exact: true,
     component: <Navigate to='/dashboard' />,
   },
+
+  { path: '/register', component: <Register /> },
 ];
 
 // Routes pour les Médecins
@@ -148,28 +146,22 @@ const medecinsRoutes = [
   },
   //dashboard
   { path: '/dashboard-medecin', component: <Dashboard /> },
-  // Profile
-  { path: '/userprofile', component: <UserProfile /> },
-
-  // Routes Partagées
-  // ...sharedRoutes,
 ];
 
 const publicRoutes = [
   // { path: '/unauthorized', component: <Unauthorized /> },
 
   // Authentication Page
-  { path: '/register', component: <Register /> },
   { path: '/login', component: <Login /> },
   { path: '/forgotPassword', component: <ForgetPasswordPage /> },
   { path: '/verifyCode', component: <VerifyCode /> },
   { path: '/resetPassword', component: <ResetPassword /> },
 
   // Authentication Inner Pages
-  { path: '/auth-login', component: <Login1 /> },
-  { path: '/auth-register', component: <Register1 /> },
-  { path: '/auth-recoverpw', component: <RecoverPassword /> },
-  { path: '/auth-lock-screen', component: <LockScreen /> },
+  // { path: '/auth-login', component: <Login1 /> },
+  // { path: '/auth-register', component: <Register1 /> },
+  // { path: '/auth-recoverpw', component: <RecoverPassword /> },
+  // { path: '/auth-lock-screen', component: <LockScreen /> },
 
   // Utility Pages
   { path: '/pages-404', component: <Error404 /> },

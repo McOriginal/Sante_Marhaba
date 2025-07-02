@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
-import { Link } from 'react-router-dom';
 import LoadingSpiner from '../components/LoadingSpiner';
 import {
   capitalizeWords,
@@ -92,7 +91,16 @@ export default function FournisseurListe() {
                         </div>
                       </Col>
                       <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
+                        <div className='d-flex justify-content-sm-end gap-3'>
+                          {searchTerm !== '' && (
+                            <Button
+                              color='warning'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              {' '}
+                              <i className='fas fa-window-close'></i>{' '}
+                            </Button>
+                          )}
                           <div className='search-box me-4'>
                             <input
                               type='text'
@@ -244,21 +252,6 @@ export default function FournisseurListe() {
                             </tbody>
                           </table>
                         )}
-                    </div>
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </CardBody>

@@ -1,7 +1,6 @@
-import React from 'react';
-import { Card, CardBody, Col, Container, Row } from 'reactstrap';
+import React, { useState } from 'react';
+import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
-import { Link } from 'react-router-dom';
 import LoadingSpiner from '../components/LoadingSpiner';
 import {
   capitalizeWords,
@@ -16,12 +15,31 @@ import {
 
 export default function ApprovisonnementListe() {
   const {
-    data: ApprovisonnementData,
+    data: approvisonnementData,
     isLoading,
     error,
   } = useAllApprovisonnement();
   const { mutate: deleteApprovisonnement, isDeleting } =
     useDeleteApprovisonnement();
+
+  // Recherche State
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Fontion pour Rechercher
+  const filterSearchApprovisonnement = approvisonnementData?.filter((appro) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      `${appro?.fournisseur?.firstName} ${appro?.fournisseur?.firstName}`
+        .toLowerCase()
+        .includes(search) ||
+      (appro?.fournisseur?.phoneNumber || '').toString().includes(search) ||
+      appro?.medicament?.name.toString().toLowerCase().includes(search) ||
+      appro?.price.toString().includes(search) ||
+      appro?.quantity.toString().includes(search) ||
+      new Date(appro?.deliveryDate).toLocaleDateString('fr-Fr').includes(search)
+    );
+  });
 
   return (
     <React.Fragment>
@@ -32,11 +50,29 @@ export default function ApprovisonnementListe() {
           <Row>
             <Col lg={12}>
               <Card>
-                <h5 className='text-center my-4'>
-                  Liste des Approvisionnements
-                </h5>
                 <CardBody>
                   <div id='approvisonnementList'>
+                    <div className='d-flex justify-content-sm-end gap-3'>
+                      {searchTerm !== '' && (
+                        <Button
+                          color='warning'
+                          onClick={() => setSearchTerm('')}
+                        >
+                          {' '}
+                          <i className='fas fa-window-close'></i>{' '}
+                        </Button>
+                      )}
+                      <div className='search-box me-4'>
+                        <input
+                          type='text'
+                          className='form-control search border border-dark rounded'
+                          placeholder='Rechercher...'
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
                     {error && (
                       <div className='text-danger text-center'>
                         Erreur de chargement des données
@@ -45,7 +81,7 @@ export default function ApprovisonnementListe() {
                     {isLoading && <LoadingSpiner />}
 
                     <div className='table-responsive table-card mt-3 mb-1'>
-                      {!ApprovisonnementData?.length &&
+                      {!filterSearchApprovisonnement?.length &&
                         !isLoading &&
                         !error && (
                           <div className='text-center text-mutate'>
@@ -53,7 +89,7 @@ export default function ApprovisonnementListe() {
                           </div>
                         )}
                       {!error &&
-                        ApprovisonnementData?.length > 0 &&
+                        filterSearchApprovisonnement?.length > 0 &&
                         !isLoading && (
                           <table
                             className='table align-middle table-nowrap table-hover'
@@ -81,87 +117,74 @@ export default function ApprovisonnementListe() {
                             </thead>
 
                             <tbody className='list form-check-all text-center'>
-                              {ApprovisonnementData?.map((appro, index) => (
-                                <tr key={appro._id}>
-                                  <th scope='row'>{index + 1}</th>
-                                  <td>
-                                    {capitalizeWords(appro.medicament['name'])}
-                                  </td>
+                              {filterSearchApprovisonnement?.map(
+                                (appro, index) => (
+                                  <tr key={appro._id}>
+                                    <th scope='row'>{index + 1}</th>
+                                    <td>
+                                      {capitalizeWords(appro?.medicament?.name)}
+                                    </td>
 
-                                  <td>{formatPrice(appro.quantity)}</td>
-                                  <td>
-                                    {formatPrice(appro.price)}
-                                    {' F '}
-                                  </td>
+                                    <td>{formatPrice(appro?.quantity)}</td>
+                                    <td>
+                                      {formatPrice(appro?.price)}
+                                      {' F '}
+                                    </td>
 
-                                  <td>
-                                    {new Date(
-                                      appro.deliveryDate
-                                    ).toLocaleDateString('fr-Fr', {
-                                      year: 'numeric',
-                                      month: '2-digit',
-                                      day: '2-digit',
-                                      weekday: 'short',
-                                    })}
-                                  </td>
-                                  <td>
-                                    {capitalizeWords(
-                                      appro.fournisseur['firstName']
-                                    )}{' '}
-                                    {capitalizeWords(
-                                      appro.fournisseur['lastName']
-                                    )}{' '}
-                                  </td>
+                                    <td>
+                                      {new Date(
+                                        appro?.deliveryDate
+                                      ).toLocaleDateString('fr-Fr', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                        weekday: 'short',
+                                      })}
+                                    </td>
+                                    <td>
+                                      {capitalizeWords(
+                                        appro?.fournisseur?.firstName
+                                      )}{' '}
+                                      {capitalizeWords(
+                                        appro.fournisseur?.lastName
+                                      )}{' '}
+                                    </td>
 
-                                  <td>
-                                    {formatPhoneNumber(
-                                      appro.fournisseur['phoneNumber']
-                                    )}
-                                  </td>
-
-                                  <td>
-                                    <div className='d-flex gap-2'>
-                                      {isDeleting && <LoadingSpiner />}
-                                      {!isDeleting && (
-                                        <div className='remove'>
-                                          <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
-                                            data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
-                                            onClick={() => {
-                                              deleteButton(
-                                                appro._id,
-                                                appro.medicament['name'],
-                                                deleteApprovisonnement
-                                              );
-                                            }}
-                                          >
-                                            <i className='ri-delete-bin-fill text-white'></i>
-                                          </button>
-                                        </div>
+                                    <td>
+                                      {formatPhoneNumber(
+                                        appro?.fournisseur?.phoneNumber
                                       )}
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
+                                    </td>
+
+                                    <td>
+                                      <div className='d-flex gap-2'>
+                                        {isDeleting && <LoadingSpiner />}
+                                        {!isDeleting && (
+                                          <div className='remove'>
+                                            <button
+                                              className='btn btn-sm btn-danger remove-item-btn'
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#deleteRecordModal'
+                                              onClick={() => {
+                                                deleteButton(
+                                                  appro?._id,
+                                                  appro?.medicament?.name,
+                                                  deleteApprovisonnement
+                                                );
+                                              }}
+                                            >
+                                              <i className='ri-delete-bin-fill text-white'></i>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                )
+                              )}
                             </tbody>
                           </table>
                         )}
-                    </div>
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </CardBody>

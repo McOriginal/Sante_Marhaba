@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 
 import classnames from 'classnames';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   useCreateTraitement,
   useUpdateTraitement,

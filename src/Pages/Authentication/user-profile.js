@@ -13,8 +13,8 @@ import Breadcrumb from '../../components/Common/Breadcrumb';
 import avatar from '../../assets/images/doc_man_avatar.jpg';
 import {
   connectedUserEmail,
-  connectedUserId,
   connectedUserName,
+  connectedUserRole,
 } from './userInfos';
 import { AuthContext } from '../../Auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -63,6 +63,17 @@ const UserProfile = () => {
                     </div>
 
                     <div className='mt-4 d-flex flex-column gap-4'>
+                      {/* Bouton Créer un nouveau Compte */}
+                      {connectedUserRole === 'admin' && (
+                        <Button
+                          color='secondary'
+                          onClick={() => navigate('/register')}
+                        >
+                          Créer un Compte
+                        </Button>
+                      )}
+                      {/* FIN de Bouton Créer un nouveau Compte */}
+
                       <Button
                         color='warning'
                         onClick={() => navigate('/updatePassword')}

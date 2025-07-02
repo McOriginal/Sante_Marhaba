@@ -23,9 +23,11 @@ import { useAllFournisseur } from '../../Api/queriesFournisseur';
 import {
   capitalizeWords,
   formatPhoneNumber,
+  formatPrice,
 } from '../components/capitalizeFunction';
 import { useCreateApprovisonnement } from '../../Api/queriesApprovisonnement';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
+import { useOneMedicament } from '../../Api/queriesMedicament';
 
 const ApprovisonnementForm = () => {
   // Récupération de l'ID du médicament depuis les paramètres de l'URL
@@ -34,6 +36,14 @@ const ApprovisonnementForm = () => {
   // Matériels Query pour créer la Medicament
   const { mutate: createApprovisonement } = useCreateApprovisonnement();
 
+  // Selected Medicament DATA
+  const {
+    data: selectedMedicament,
+    isLoading: isFetchingMedicament,
+    error: isErrorToFetch,
+  } = useOneMedicament(id);
+
+  // Forunisseur DATA
   const {
     data: fournisseurData,
     isLoading: fourniLoading,
@@ -126,6 +136,19 @@ const ApprovisonnementForm = () => {
                 padding: '20px',
               }}
             >
+              {isFetchingMedicament && <LoadingSpiner />}
+              {!isFetchingMedicament && isErrorToFetch && (
+                <p className='text-center'>Erreur de trouver le médicament</p>
+              )}
+
+              {!isErrorToFetch && !isErrorToFetch && (
+                <div className='mb-3 text-center'>
+                  <h5>{capitalizeWords(selectedMedicament?.name)} </h5>
+                  <h6 className='text-warning'>
+                    {formatPrice(selectedMedicament?.price)} F{' '}
+                  </h6>
+                </div>
+              )}
               <Form
                 className='needs-validation'
                 onSubmit={(e) => {

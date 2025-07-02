@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
-import { Link, useNavigate } from 'react-router-dom';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import { deleteButton } from '../components/AlerteModal';
 import { useAllPaiements, useDeletePaiement } from '../../Api/queriesPaiement';
 import PaiementForm from './PaiementForm';
+import { useNavigate } from 'react-router-dom';
 
 export default function PaiementsListe() {
   const [form_modal, setForm_modal] = useState(false);
@@ -94,7 +94,16 @@ export default function PaiementsListe() {
                         </div>
                       </Col>
                       <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
+                        <div className='d-flex justify-content-sm-end gap-3'>
+                          {searchTerm !== '' && (
+                            <Button
+                              color='warning'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              {' '}
+                              <i className='fas fa-window-close'></i>{' '}
+                            </Button>
+                          )}
                           <div className='search-box me-4'>
                             <input
                               type='text'
@@ -287,36 +296,6 @@ export default function PaiementsListe() {
                             </tbody>
                           </table>
                         )}
-                      <div className='noresult' style={{ display: 'none' }}>
-                        <div className='text-center'>
-                          <lord-icon
-                            src='https://cdn.lordicon.com/msoeawqm.json'
-                            trigger='loop'
-                            colors='primary:#121331,secondary:#08a88a'
-                            style={{ width: '75px', height: '75px' }}
-                          ></lord-icon>
-                          <h5 className='mt-2'>Sorry! No Result Found</h5>
-                          <p className='text-muted mb-0'>
-                            We've searched more than 150+ Orders We did not find
-                            any orders for you search.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </CardBody>

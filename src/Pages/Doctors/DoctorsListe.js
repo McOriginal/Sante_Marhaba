@@ -3,7 +3,6 @@ import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import FormModal from '../components/FormModal';
 import DoctorForm from './DoctorForm';
-import { Link } from 'react-router-dom';
 import { useAllDoctors, useDeleteDoctor } from '../../Api/queriesDoctors';
 import LoadingSpiner from '../components/LoadingSpiner';
 import {
@@ -27,14 +26,14 @@ export default function DoctorsListe() {
   const filterSearchData = doctorsData?.filter((doctor) => {
     const search = searchTerm.toLowerCase();
     return (
-      `${doctor.firstName || ''} ${doctor.lastName || ''}`
+      `${doctor?.firstName || ''} ${doctor?.lastName || ''}`
         .toLowerCase()
         .includes(search) ||
-      (doctor.emailAdresse || '').toLowerCase().includes(search) ||
-      doctor.speciality.toLowerCase().includes(search) ||
-      (doctor.phoneNumber || '').toString().includes(search) ||
-      (doctor.guardDays || '').toLowerCase().includes(search) ||
-      (doctor.statut || '').toLowerCase().includes(search)
+      (doctor?.emailAdresse || '').toLowerCase().includes(search) ||
+      doctor?.speciality.toLowerCase().includes(search) ||
+      (doctor?.phoneNumber || '').toString().includes(search) ||
+      (doctor?.guardDays || '').toLowerCase().includes(search) ||
+      (doctor?.statut || '').toLowerCase().includes(search)
     );
   });
 
@@ -86,7 +85,16 @@ export default function DoctorsListe() {
                         </div>
                       </Col>
                       <Col className='col-sm'>
-                        <div className='d-flex justify-content-sm-end'>
+                        <div className='d-flex justify-content-sm-end gap-3'>
+                          {searchTerm !== '' && (
+                            <Button
+                              color='warning'
+                              onClick={() => setSearchTerm('')}
+                            >
+                              {' '}
+                              <i className='fas fa-window-close'></i>{' '}
+                            </Button>
+                          )}
                           <div className='search-box ms-2'>
                             <input
                               type='text'
@@ -143,33 +151,41 @@ export default function DoctorsListe() {
                             <tbody className='list form-check-all text-center'>
                               {filterSearchData?.length > 0 &&
                                 filterSearchData?.map((doctor, index) => (
-                                  <tr key={doctor._id}>
+                                  <tr key={doctor?._id}>
                                     <th scope='row'>{index + 1}</th>
 
                                     <td>
-                                      {capitalizeWords(doctor.firstName)}{' '}
-                                    </td>
-                                    <td>{capitalizeWords(doctor.lastName)} </td>
-                                    <td>{capitalizeWords(doctor.gender)} </td>
-                                    <td>{capitalizeWords(doctor.statut)} </td>
-                                    <td>{formatPrice(doctor.salaire)} F </td>
-                                    <td>
-                                      {capitalizeWords(doctor.guardDays)}{' '}
+                                      {capitalizeWords(doctor?.firstName)}{' '}
                                     </td>
                                     <td>
-                                      {capitalizeWords(doctor.speciality)}{' '}
+                                      {capitalizeWords(doctor?.lastName)}{' '}
                                     </td>
-                                    <td>{doctor.emailAdresse} </td>
+                                    <td>{capitalizeWords(doctor?.gender)} </td>
+                                    <td>{capitalizeWords(doctor?.statut)} </td>
+                                    <td>
+                                      {doctor?.salaire
+                                        ? formatPrice(doctor?.salaire) + ' F'
+                                        : '----'}{' '}
+                                    </td>
+                                    <td>
+                                      {doctor?.guardDays
+                                        ? capitalizeWords(doctor?.guardDays)
+                                        : '----'}{' '}
+                                    </td>
+                                    <td>
+                                      {capitalizeWords(doctor?.speciality)}{' '}
+                                    </td>
+                                    <td>{doctor?.emailAdresse} </td>
 
                                     <td>
                                       {new Date(
-                                        doctor.dateOfBirth
+                                        doctor?.dateOfBirth
                                       ).toLocaleDateString()}{' '}
                                     </td>
 
-                                    <td>{capitalizeWords(doctor.adresse)} </td>
+                                    <td>{capitalizeWords(doctor?.adresse)} </td>
                                     <td>
-                                      {formatPhoneNumber(doctor.phoneNumber)}
+                                      {formatPhoneNumber(doctor?.phoneNumber)}
                                     </td>
 
                                     <td>
@@ -199,10 +215,10 @@ export default function DoctorsListe() {
                                               data-bs-target='#deleteRecordModal'
                                               onClick={() => {
                                                 deleteButton(
-                                                  doctor._id,
-                                                  doctor.firstName +
+                                                  doctor?._id,
+                                                  doctor?.firstName +
                                                     ' ' +
-                                                    doctor.lastName,
+                                                    doctor?.lastName,
                                                   deleteDoctor
                                                 );
                                               }}
@@ -218,38 +234,8 @@ export default function DoctorsListe() {
                             </tbody>
                           </table>
                         )}
-                        <div className='noresult' style={{ display: 'none' }}>
-                          <div className='text-center'>
-                            <lord-icon
-                              src='https://cdn.lordicon.com/msoeawqm.json'
-                              trigger='loop'
-                              colors='primary:#121331,secondary:#08a88a'
-                              style={{ width: '75px', height: '75px' }}
-                            ></lord-icon>
-                            <h5 className='mt-2'>Sorry! No Result Found</h5>
-                            <p className='text-muted mb-0'>
-                              We've searched more than 150+ Orders We did not
-                              find any orders for you search.
-                            </p>
-                          </div>
-                        </div>
                       </div>
                     )}
-
-                    <div className='d-flex justify-content-end'>
-                      <div className='pagination-wrap hstack gap-2'>
-                        <Link
-                          className='page-item pagination-prev disabled'
-                          to='#'
-                        >
-                          Previous
-                        </Link>
-                        <ul className='pagination listjs-pagination mb-0'></ul>
-                        <Link className='page-item pagination-next' to='#'>
-                          Next
-                        </Link>
-                      </div>
-                    </div>
                   </div>
                 </CardBody>
               </Card>
